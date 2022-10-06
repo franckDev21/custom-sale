@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.scss';
 import { Routes, Route } from 'react-router-dom';
-import AuthLayout from './templates/AuthLayout';
+import Layout from './templates/Layout';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -12,7 +12,7 @@ import RequireAuth from './molecules/RequireAuth';
 function App() {
   return (
     <Routes>
-      <Route path='/' element={<AuthLayout />}>
+      <Route path='/' element={<Layout />}>
         {/* public route */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

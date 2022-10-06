@@ -1,19 +1,15 @@
-import React from 'react'
-import { useSelector } from 'react-redux';
-import { Outlet} from 'react-router-dom';
+import React, { FC } from 'react'
+import Header from '../../molecules/Header/Header'
 
-type AuthLayoutType = {}
+type TypeAuthLayout = {
+  children : React.ReactNode
+}
 
-const AuthLayout: React.FC<AuthLayoutType> = () => {
-
-  const auth = useSelector((state :any) => state.auth)
-  console.log(auth)
-
-  return (
-    <main>
-      <Outlet />
-    </main>
-  )
+const AuthLayout: FC<TypeAuthLayout> = ({ children }) => {
+  return <>
+    <Header />
+    {children}
+  </>
 }
 
 export default AuthLayout
