@@ -12,6 +12,11 @@ body{
   }
 }
 
+.disabled{
+  opacity: .7;
+  pointer-events: none;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
