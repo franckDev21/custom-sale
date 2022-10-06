@@ -1,9 +1,9 @@
-import React, { FC, useEffect,useState } from 'react'
+import React, { FC,useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { Link} from 'react-router-dom'
 import Auth from '../../service/Auth'
-import { logout, setAuth } from '../../store/features/auth/authSlice'
+import { logout } from '../../store/features/auth/authSlice'
 
 type TypeHeader = {
   classname ?: string
