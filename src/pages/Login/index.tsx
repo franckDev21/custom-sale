@@ -18,6 +18,7 @@ type FormType = {
 }
 
 const LOGIN_URL = 'auth/login'
+
 const Login: FC<LoginType> = () => {
 
   // state
@@ -143,7 +144,7 @@ const Login: FC<LoginType> = () => {
             </button>
             <p className="mt-4 text-sm">
               You don't have an account yet?{" "}
-              <span className="underline cursor-pointer"> Sign up</span>
+              <Link to='/register' className="underline cursor-pointer"> Sign up</Link>
             </p>
           </div>
         </div>

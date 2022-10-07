@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
 import RequireAuth from './molecules/RequireAuth';
+import Profil from './pages/User/Profil';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         {/* we want to protect these routes */}
         <Route element={<RequireAuth />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profil" element={<Profil />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

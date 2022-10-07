@@ -17,7 +17,7 @@ const Header:FC<TypeHeader> = ({ classname='' }) => {
   const dispatch = useDispatch()
 
   const logoutUser = () => {
-    dispatch(logout)
+    dispatch(logout())
     Auth.logout()
   }
 
@@ -30,15 +30,23 @@ const Header:FC<TypeHeader> = ({ classname='' }) => {
         <div className='ml-4 text-sm'>
           {((auth.token && auth.user) || Auth.isLogin() ) ?
             <>
-              {init && <button onClick={_=>{
+              <button onClick={_=>{
                 logoutUser()
                 setInit(false)
-              }} className='px-4 py-2 font-bold active:scale-[96%] inline-block hover:bg-[#ffffff20] border-2 border-transparent rounded-md mr-2 bg-opacity-50 transition' >Se deconnecter </button>}
-              {!init && <Link to='/login' className='px-4 py-2 font-bold active:scale-[96%] inline-block hover:bg-[#ffffff20] border-2 border-transparent rounded-md mr-2 bg-opacity-50 transition' >Se connecter </Link>}
+              }} className='px-4 py-2 font-bold active:scale-[96%] inline-block hover:bg-[#ffffff20] border-2 border-transparent rounded-md mr-2 bg-opacity-50 transition' >Se deconnecter</button>
             </> : 
             <Link to='/login' className='px-4 py-2 font-bold active:scale-[96%] inline-block hover:bg-[#ffffff20] border-2 border-transparent rounded-md mr-2 bg-opacity-50 transition' >Se connecter </Link>
           } 
-          <Link to='/start' className='px-4 py-2 bg-[#5c3652] active:scale-[96%] inline-block hover:bg-[#5c3852] hover:border-transparent transition border-2 border-[#442a3d] rounded-md font-bold' >Essai Gratuit </Link>
+
+          {((auth.token && auth.user) || Auth.isLogin() ) ?
+            <>
+              {init && <Link to='/dashboard' className='px-4 py-2 bg-[#5c3652] active:scale-[96%] inline-block hover:bg-[#5c3852] hover:border-transparent transition border-2 border-[#442a3d] rounded-md font-bold' >Dashboard </Link>}
+              {!init && <Link to='/start' className='px-4 py-2 bg-[#5c3652] active:scale-[96%] inline-block hover:bg-[#5c3852] hover:border-transparent transition border-2 border-[#442a3d] rounded-md font-bold' >Essai Gratuit </Link>}
+            </> : 
+           <Link to='/start' className='px-4 py-2 bg-[#5c3652] active:scale-[96%] inline-block hover:bg-[#5c3852] hover:border-transparent transition border-2 border-[#442a3d] rounded-md font-bold' >Essai Gratuit </Link>
+          } 
+
+          
         </div>
       </div>
     </header>

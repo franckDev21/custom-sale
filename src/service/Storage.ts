@@ -14,7 +14,7 @@ class Storage {
     if(value){
       return isParse ? JSON.parse(value) : value
     }
-    return null
+    return ''
   }
 
   removeStorage(name: string){
