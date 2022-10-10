@@ -1,4 +1,7 @@
+import Company from "./Company";
+
 export default interface User {
+  id ?: string|number,
   photo ?: string,
   firstname ?: string,
   lastname  ?: string,
@@ -9,5 +12,7 @@ export default interface User {
   as_company   ?: boolean,
   company_id   ?: number,
   created_at ?: string,
-  updated_at ?: string
+  updated_at ?: string,
+  company ?: Company,
+  active ?: boolean
 }

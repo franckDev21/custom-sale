@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import SUPER from '../../assets/SUPER.png'
 import LOGO from '../../assets/img/logo/logo2.png'
 import Auth from '../../service/Auth'
@@ -32,23 +32,22 @@ const HeaderDashboard = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
-              <div className="flex-shrink-0 text-gray-200 font-bold uppercase text-xl">
-                <img src={LOGO} alt="" width={100} />
+              <div className="flex-shrink-0 text-gray-200 opacity-95 font-bold uppercase text-xl">
+                <img src={LOGO} alt="" width={65} />
               </div>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
-                  {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-                  <Link to="/" className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Dashboard</Link>
+                  <NavLink to="/dashboard" className="nav-link" aria-current="page">Dashboard</NavLink>
 
-                  <Link to="/users" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Users</Link>
+                  <NavLink to="/users" className="nav-link">Users</NavLink>
 
-                  <Link to="/products" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Products</Link>
+                  <NavLink to="/products" className="nav-link">Products</NavLink>
                   
-                  <Link to="/customers" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Customers</Link>
+                  <NavLink to="/customers" className="nav-link">Customers</NavLink>
                   
-                  <Link to="/orders" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Orders</Link>
+                  <NavLink to="/orders" className="nav-link">Orders</NavLink>
                   
-                  <Link to="/cashier" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Cashier</Link>
+                  <NavLink to="/cashier" className="nav-link">Cashier</NavLink>
 
                 </div>
               </div>

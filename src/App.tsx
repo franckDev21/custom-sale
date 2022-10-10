@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
 import RequireAuth from './molecules/RequireAuth';
 import Profil from './pages/User/Profil';
+import UserList from './pages/User/List';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route element={<RequireAuth />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profil" element={<Profil />} />
+          <Route path="/users" element={<UserList />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

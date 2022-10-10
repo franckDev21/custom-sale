@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { Link} from 'react-router-dom'
 import Auth from '../../service/Auth'
 import { logout } from '../../store/features/auth/authSlice'
-import LOGO from '../../assets/img/logo/logo2.png'
+import LOGO from '../../assets/img/logo/logo1.png'
 
 type TypeHeader = {
   classname ?: string
@@ -26,7 +26,7 @@ const Header:FC<TypeHeader> = ({ classname='' }) => {
     <header className={`${classname} header py-4 bg-cyan-900`}>
       <div className="container flex items-center justify-between text-white">
         <div className="logo header__logo uppercase font-bold text-xl text-gray-400">
-          <img src={LOGO} width={100} alt="" />
+          <img src={LOGO} width={80} alt="" />
         </div>
         <div className='ml-4 text-sm'>
           {((auth.token && auth.user) || Auth.isLogin() ) ?
