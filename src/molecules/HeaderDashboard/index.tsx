@@ -1,13 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import SUPER from '../../assets/SUPER.png'
+import LOGO from '../../assets/img/logo/logo2.png'
 import Auth from '../../service/Auth'
-import { logout } from '../../store/features/auth/authSlice'
+import { logout, setAuth } from '../../store/features/auth/authSlice'
+import Storage from '../../service/Storage'
+import { useSelector } from 'react-redux'
+
+const API_STORAGE_URL = "http://localhost:8000/storage";
 
 const HeaderDashboard = () => {
 
   const [showDrop,setShowDrop] = useState(false)
+  const auth = useSelector((state:any) => state.auth)
   const dispatch = useDispatch();
   const navigate = useNavigate()
 
@@ -17,13 +23,17 @@ const HeaderDashboard = () => {
     navigate('/')
   }
 
+  useEffect(() => {
+    dispatch(setAuth(Storage.getStorage('auth')))    
+  },[dispatch])
+
   return (
     <nav className="bg-gray-800">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
               <div className="flex-shrink-0 text-gray-200 font-bold uppercase text-xl">
-                LOGO.company
+                <img src={LOGO} alt="" width={100} />
               </div>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
@@ -58,7 +68,7 @@ const HeaderDashboard = () => {
                   <div>
                     <button onClick={_=>setShowDrop(!showDrop)} type="button" className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none ring-2 ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                       <span className="sr-only">Open user menu</span>
-                      <img className="h-8 w-8 rounded-full" src={SUPER} alt="" />
+                      <img className="h-8 w-8 rounded-full" src={(auth.user ? (auth.user.photo ? `${API_STORAGE_URL}/`+auth.user.photo : SUPER) : SUPER)} alt="" />
                     </button>
                   </div>
 

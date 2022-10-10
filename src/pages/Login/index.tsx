@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Storage from "../../service/Storage";
 import Auth from "../../service/Auth";
+import LOGO from '../../assets/img/logo/logo3.png'
 
 type LoginType = {};
 
@@ -83,9 +84,9 @@ const Login: FC<LoginType> = () => {
         <div className="absolute w-48 h-48 rounded-xl bg-[#a96798] -bottom-6 -right-10 transform rotate-12 hidden md:block"></div>
         <div className="py-12 px-12 bg-white rounded-2xl shadow-xl z-20">
           <div>
-            <Link to='/' className="text-xl block opacity-25 font-bold text-center mb-4 cursor-pointer">
+            <Link to='/' className="text-xl flex justify-center items-center font-bold text-center mb-4 cursor-pointer">
               {/* Create An Account */}
-              LOGO.COMPANY
+              <img src={LOGO} width={100} alt="" />
             </Link>
             <h1 className="text-3xl font-bold text-center mb-4 cursor-pointer">
               {/* Create An Account */}
@@ -139,7 +140,7 @@ const Login: FC<LoginType> = () => {
             </div>
           </div>
           <div className="text-center mt-6">
-            <button type="submit" className={`${loading ? 'disabled':''} py-3 text-center inline-flex justify-center items-center w-64 text-xl text-white bg-[#5c3652] rounded-2xl`}>
+            <button type="submit" className={`${loading ? 'disabled':''} py-3 active:scale-[98%] text-center inline-flex justify-center items-center w-64 text-xl text-white bg-[#ac3265] rounded-2xl`}>
               {!loading ? 'Sin in': <Loader className="text-white text-2xl" />}
             </button>
             <p className="mt-4 text-sm">

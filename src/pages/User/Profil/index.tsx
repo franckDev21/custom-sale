@@ -15,6 +15,8 @@ import User from "../../../Model/User";
 import Storage from "../../../service/Storage";
 import DashboardLayout from "../../../templates/DashboardLayout";
 import { http_client } from "../../../utils/axios-custum";
+import { useDispatch } from "react-redux";
+import { setAuth } from "../../../store/features/auth/authSlice";
 
 type TypeProfil = {};
 
@@ -27,9 +29,9 @@ type TypePassword = {
 const GET_INFO_USER_URL = "auth/user/info";
 const UPDATE_INFO_USER_URL = "auth/user";
 const UPDATE_USER_PASSWORD_URL = "auth/user/password";
-const UPDATE_PICTURE_USER_URL = 'auth/user/picture';
+const UPDATE_PICTURE_USER_URL = "auth/user/picture";
 
-const API_STORAGE_URL = 'http://localhost:8000/storage';
+const API_STORAGE_URL = "http://localhost:8000/storage";
 
 const Profil: FC<TypeProfil> = () => {
   const [user, setUser] = useState<User>({});
@@ -40,8 +42,12 @@ const Profil: FC<TypeProfil> = () => {
   const [sending2, setSending2] = useState(false);
   const [errorUpdateInfo, setErrorUpdateInfo] = useState("");
   const [errorUpdatePass, setErrorUpdatePass] = useState("");
-  const [urlImg,setUrlImg] = useState('https://ernglobal.org/wp-content/uploads/2017/10/default-user-image.png');
-  const [imgSending,setImgSending] = useState(false)
+  const [urlImg, setUrlImg] = useState(
+    "https://ernglobal.org/wp-content/uploads/2017/10/default-user-image.png"
+  );
+  const [imgSending, setImgSending] = useState(false);
+
+  const dispatch = useDispatch()
 
   // method
   const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -102,17 +108,17 @@ const Profil: FC<TypeProfil> = () => {
   };
 
   const handleUpdatePassword = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setSending2(true)
+    e.preventDefault();
+    setSending2(true);
     // update user info
     http_client(Storage.getStorage("auth").token)
       .post(UPDATE_USER_PASSWORD_URL, password)
       .then((res) => {
         setSending2(false);
-        if(res.data.message){
+        if (res.data.message) {
           toast.success(res.data.message);
           setEditing(false);
-        }else{
+        } else {
           setErrorUpdatePass(res.data);
         }
       })
@@ -121,30 +127,44 @@ const Profil: FC<TypeProfil> = () => {
         setErrorUpdateInfo(err.response.data.message);
         console.log(err);
       });
-  }
+  };
 
   const handleChangImageFile = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0]
-    if(!file){
-      setUrlImg('https://ernglobal.org/wp-content/uploads/2017/10/default-user-image.png')
-      return
+    const file = e.target.files && e.target.files[0];
+    if (!file) {
+      setUrlImg(
+        "https://ernglobal.org/wp-content/uploads/2017/10/default-user-image.png"
+      );
+      return;
     }
 
-    const formData = new FormData()
-    formData.append('image',file)
+    const formData = new FormData();
+    formData.append("image", file);
 
-    setImgSending(true)
+    setImgSending(true);
     // update user info
     http_client(Storage.getStorage("auth").token)
       .post(UPDATE_PICTURE_USER_URL, formData)
       .then((res) => {
         setImgSending(false);
-        if(res.data.message){
+        if (res.data.message) {
           toast.success(res.data.message);
           setEditing(false);
-          let url  = URL.createObjectURL(file);
-          setUrlImg(url)
-        }else{
+          let url = URL.createObjectURL(file);
+          setUrlImg(url);
+
+          let {user, token} = Storage.getStorage('auth')
+
+          let auth = {
+            user : {...user,photo: res.data.path},
+            token : token
+          }
+
+          Storage.setStorage('auth',auth)
+
+          dispatch(setAuth(Storage.getStorage('auth')))      
+              
+        } else {
           setErrorUpdatePass(res.data);
         }
       })
@@ -153,15 +173,15 @@ const Profil: FC<TypeProfil> = () => {
         toast.error(err.response.data.message);
         console.log(err);
       });
-  }
+  };
 
   useEffect(() => {
     http_client(Storage.getStorage("auth").token)
       .post(GET_INFO_USER_URL)
       .then((res) => {
         setUser(res.data);
-        if(res.data.photo){
-          setUrlImg(`${API_STORAGE_URL}/${res.data.photo}`)
+        if (res.data.photo) {
+          setUrlImg(`${API_STORAGE_URL}/${res.data.photo}`);
         }
         setLoading(false);
       });
@@ -173,7 +193,7 @@ const Profil: FC<TypeProfil> = () => {
       title="Welcome 👋 😊 "
       headerContent={
         <>
-          <div className="ml-4 w-[80%] font-bold text-2xl text-[#5c3652] flex items-center justify-between">
+          <div className="ml-4 w-[80%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
             <span>
               {" "}
               {!loading && (
@@ -183,7 +203,7 @@ const Profil: FC<TypeProfil> = () => {
               )}
             </span>
 
-            <button className="flex disabled justify-start text-sm border-4 border-[#4f3047] items-center space-x-2 rounded px-2 py-1 text-white bg-[#5c3652] w-auto">
+            <button className="flex disabled justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto">
               See my company <HiEye className="ml-2" />
             </button>
           </div>
@@ -226,7 +246,15 @@ const Profil: FC<TypeProfil> = () => {
               <div className="flex justify-start space-x-4">
                 <label htmlFor="image" className=" cursor-pointer ">
                   <div className="w-[150px] flex justify-center items-center overflow-hidden bg-gray-50 h-[150px] relative rounded-t-md">
-                    {imgSending ? <Loader className=" text-4xl" /> : <img className=" absolute top-0 bottom-0 left-0 right-0 w-full h-full object-cover " src={urlImg} alt="" />}
+                    {imgSending ? (
+                      <Loader className=" text-4xl" />
+                    ) : (
+                      <img
+                        className=" absolute top-0 bottom-0 left-0 right-0 w-full h-full object-cover "
+                        src={urlImg}
+                        alt=""
+                      />
+                    )}
                   </div>
 
                   <button className="py-2 uppercase rounded-b-md text-xs inline-block bg-gray-700 text-white w-full">
@@ -234,7 +262,15 @@ const Profil: FC<TypeProfil> = () => {
                   </button>
                 </label>
 
-                <input accept="image/*" name="image" onChange={handleChangImageFile} type="file" id="image" hidden className="hidden" />
+                <input
+                  accept="image/*"
+                  name="image"
+                  onChange={handleChangImageFile}
+                  type="file"
+                  id="image"
+                  hidden
+                  className="hidden"
+                />
 
                 {!editing ? (
                   <div className="text-lg items-start flex flex-col space-y-2">
@@ -249,7 +285,7 @@ const Profil: FC<TypeProfil> = () => {
                     </div>
                     <button
                       onClick={(_) => setEditing(!editing)}
-                      className="flex justify-start text-sm border-4 border-[#4f3047] items-center space-x-2 rounded px-2 py-1 text-white bg-[#5c3652] w-auto"
+                      className="flex justify-start text-sm border-4 border-[#ac3265] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto"
                     >
                       Edition form <FaPen className="ml-2" />
                     </button>
@@ -317,7 +353,10 @@ const Profil: FC<TypeProfil> = () => {
                         </button>
                       </div>
                     </form>
-                    <form onSubmit={handleUpdatePassword} className="text-lg w-[40%] flex flex-col space-y-2">
+                    <form
+                      onSubmit={handleUpdatePassword}
+                      className="text-lg w-[40%] flex flex-col space-y-2"
+                    >
                       {errorUpdatePass && (
                         <div className="px-4 text-center py-3 text-sm bg-red-100 rounded-md mb-4 text-red-500 font-semibold">
                           {errorUpdatePass}
@@ -329,7 +368,7 @@ const Profil: FC<TypeProfil> = () => {
                           name="old_password"
                           className="w-full inline-block  py-2 rounded-md px-3"
                           placeholder="current password"
-                          value={password.old_password || ''}
+                          value={password.old_password || ""}
                           onChange={handlePassWordOnchange}
                           required
                         />
@@ -340,7 +379,7 @@ const Profil: FC<TypeProfil> = () => {
                           name="new_password"
                           className="w-full inline-block  py-2 rounded-md px-3"
                           placeholder="new password "
-                          value={password.new_password || ''}
+                          value={password.new_password || ""}
                           onChange={handlePassWordOnchange}
                           required
                         />
@@ -351,7 +390,7 @@ const Profil: FC<TypeProfil> = () => {
                           name="confirm_password"
                           className="w-full inline-block  py-2 rounded-md px-3"
                           placeholder="confirm new password"
-                          value={password.confirm_password || ''}
+                          value={password.confirm_password || ""}
                           onChange={handlePassWordOnchange}
                           required
                         />
@@ -364,9 +403,11 @@ const Profil: FC<TypeProfil> = () => {
                           {sending2 ? (
                             <Loader className="text-lg" />
                           ) : (
-                            <>Save password <RiLockPasswordFill className="ml-2" /></>
+                            <>
+                              Save password{" "}
+                              <RiLockPasswordFill className="ml-2" />
+                            </>
                           )}
-                          
                         </button>
                       </div>
                     </form>

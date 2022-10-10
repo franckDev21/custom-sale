@@ -1,7 +1,7 @@
 
 class Storage {
 
-  setStorage(name: string, value: string,isTringify = true):void{
+  setStorage(name: string, value: any,isTringify = true):void{
     if(isTringify){
       localStorage.setItem(`${name}`, `${JSON.stringify(value)}`);
     }else{

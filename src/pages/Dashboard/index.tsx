@@ -5,6 +5,9 @@ import { HiUserGroup } from 'react-icons/hi'
 type TypeDashboard = {}
 
 const Dashboard: React.FC<TypeDashboard> = () => {
+
+  // if the component is destroyed, we delete the local Storage => we disconnect it
+
   return (
   <DashboardLayout title='Dashboard' headerContent={
     <>
@@ -19,8 +22,8 @@ const Dashboard: React.FC<TypeDashboard> = () => {
           <div className="bg-white cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start">
             <span className='inline-block overflow-hidden'><HiUserGroup className='text-5xl text-[#603d57]' /></span>
             <div className='ml-2'>
-              <h1 className='text-2xl font-bold text-gray-600 pb-1 border-b-2'>45 Utilisateurs</h1>
-              <h2 className='text-sm font-bold text-[#603d57]'>Gestions des utilisateurs</h2>
+              <h1 className='text-2xl font-bold text-gray-600 pb-1 border-b-2'>45 Users</h1>
+              <h2 className='text-sm font-bold text-[#603d57]'>Management of the users</h2>
             </div>
           </div>
           </div>
