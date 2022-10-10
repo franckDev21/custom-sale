@@ -1,6 +1,6 @@
 import React from 'react'
 import HeaderDashboard from '../../molecules/HeaderDashboard'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 type TypeDashboardLayout = {

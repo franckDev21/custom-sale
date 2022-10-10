@@ -1,8 +1,8 @@
 import { Alert } from "flowbite-react";
 import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
-import { FaPen, FaUserAlt } from "react-icons/fa";
-import { RiLockPasswordFill } from 'react-icons/ri';
-import { toast } from 'react-toastify';
+import { FaPen } from "react-icons/fa";
+import { RiLockPasswordFill } from "react-icons/ri";
+import { toast } from "react-toastify";
 
 import {
   HiChevronDoubleLeft,
@@ -19,78 +19,140 @@ import { http_client } from "../../../utils/axios-custum";
 type TypeProfil = {};
 
 type TypePassword = {
-  old_password ?: string,
-  new_password  ?: string,
-  confirm_password ?: string
-}
+  old_password?: string;
+  new_password?: string;
+  confirm_password?: string;
+};
 
 const GET_INFO_USER_URL = "auth/user/info";
 const UPDATE_INFO_USER_URL = "auth/user";
+const UPDATE_USER_PASSWORD_URL = "auth/user/password";
+const UPDATE_PICTURE_USER_URL = 'auth/user/picture';
+
+const API_STORAGE_URL = 'http://localhost:8000/storage';
 
 const Profil: FC<TypeProfil> = () => {
   const [user, setUser] = useState<User>({});
   const [password, setPassword] = useState<TypePassword>({});
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
-  const [sending,setSending] = useState(false)
-  const [errorUpdateInfo,setErrorUpdateInfo] = useState('')
-
+  const [sending, setSending] = useState(false);
+  const [sending2, setSending2] = useState(false);
+  const [errorUpdateInfo, setErrorUpdateInfo] = useState("");
+  const [errorUpdatePass, setErrorUpdatePass] = useState("");
+  const [urlImg,setUrlImg] = useState('https://ernglobal.org/wp-content/uploads/2017/10/default-user-image.png');
+  const [imgSending,setImgSending] = useState(false)
 
   // method
   const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (errorUpdateInfo) setErrorUpdateInfo("");
     switch (e.target.name) {
-      case 'email':
-        setUser({...user,email : e.target.value})
+      case "email":
+        setUser({ ...user, email: e.target.value });
         break;
-      case 'firstname':
-        setUser({...user,firstname : e.target.value})
+      case "firstname":
+        setUser({ ...user, firstname: e.target.value });
         break;
-      case 'lastname':
-        setUser({...user,lastname : e.target.value})
+      case "lastname":
+        setUser({ ...user, lastname: e.target.value });
         break;
     }
-  }
+  };
 
   const handlePassWordOnchange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (errorUpdatePass) setErrorUpdatePass("");
     switch (e.target.name) {
-      case 'old_password':
-        setPassword({...password,old_password : e.target.value})
+      case "old_password":
+        setPassword({ ...password, old_password: e.target.value });
         break;
-      case 'new_password':
-        setPassword({...password,new_password : e.target.value})
+      case "new_password":
+        setPassword({ ...password, new_password: e.target.value });
         break;
-      case 'confirm_password':
-        setPassword({...password,confirm_password : e.target.value})
+      case "confirm_password":
+        setPassword({ ...password, confirm_password: e.target.value });
         break;
     }
-  }
+  };
 
   const handleUpdateInfo = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setSending(true)
+    e.preventDefault();
+    setSending(true);
 
     const userInfo = {
-      firstname : user.firstname,
-      lastname  : user.lastname,
-      email     : user.email
-    }
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+    };
 
     // update user info
     http_client(Storage.getStorage("auth").token)
-      .post(UPDATE_INFO_USER_URL,userInfo)
+      .post(UPDATE_INFO_USER_URL, userInfo)
       .then((res) => {
         // setUser(res.data);
         setSending(false);
         setUser(res.data);
-        toast.success("Your information has been successfully updated !")
-        setEditing(false)
+        toast.success("Your information has been successfully updated !");
+        setEditing(false);
       })
-      .catch(err => {
-        setSending(false)
-        setErrorUpdateInfo(err.response.data.message)
+      .catch((err) => {
+        setSending(false);
+        setErrorUpdateInfo(err.response.data.message);
         console.log(err);
-        
+      });
+  };
+
+  const handleUpdatePassword = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setSending2(true)
+    // update user info
+    http_client(Storage.getStorage("auth").token)
+      .post(UPDATE_USER_PASSWORD_URL, password)
+      .then((res) => {
+        setSending2(false);
+        if(res.data.message){
+          toast.success(res.data.message);
+          setEditing(false);
+        }else{
+          setErrorUpdatePass(res.data);
+        }
       })
+      .catch((err) => {
+        setSending2(false);
+        setErrorUpdateInfo(err.response.data.message);
+        console.log(err);
+      });
+  }
+
+  const handleChangImageFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0]
+    if(!file){
+      setUrlImg('https://ernglobal.org/wp-content/uploads/2017/10/default-user-image.png')
+      return
+    }
+
+    const formData = new FormData()
+    formData.append('image',file)
+
+    setImgSending(true)
+    // update user info
+    http_client(Storage.getStorage("auth").token)
+      .post(UPDATE_PICTURE_USER_URL, formData)
+      .then((res) => {
+        setImgSending(false);
+        if(res.data.message){
+          toast.success(res.data.message);
+          setEditing(false);
+          let url  = URL.createObjectURL(file);
+          setUrlImg(url)
+        }else{
+          setErrorUpdatePass(res.data);
+        }
+      })
+      .catch((err) => {
+        setImgSending(false);
+        toast.error(err.response.data.message);
+        console.log(err);
+      });
   }
 
   useEffect(() => {
@@ -98,6 +160,9 @@ const Profil: FC<TypeProfil> = () => {
       .post(GET_INFO_USER_URL)
       .then((res) => {
         setUser(res.data);
+        if(res.data.photo){
+          setUrlImg(`${API_STORAGE_URL}/${res.data.photo}`)
+        }
         setLoading(false);
       });
   }, []);
@@ -159,14 +224,17 @@ const Profil: FC<TypeProfil> = () => {
             </div>
             <div className="px-4 py-6 sm:px-0">
               <div className="flex justify-start space-x-4">
-                <div>
-                  <div className="w-[150px] bg-gray-50 h-[150px] relative rounded-t-md">
-                    <FaUserAlt className="text-8xl text-gray-400 -translate-y-1/2 top-1/2 absolute -translate-x-1/2 left-1/2" />
+                <label htmlFor="image" className=" cursor-pointer ">
+                  <div className="w-[150px] flex justify-center items-center overflow-hidden bg-gray-50 h-[150px] relative rounded-t-md">
+                    {imgSending ? <Loader className=" text-4xl" /> : <img className=" absolute top-0 bottom-0 left-0 right-0 w-full h-full object-cover " src={urlImg} alt="" />}
                   </div>
+
                   <button className="py-2 uppercase rounded-b-md text-xs inline-block bg-gray-700 text-white w-full">
                     update my picture
                   </button>
-                </div>
+                </label>
+
+                <input accept="image/*" name="image" onChange={handleChangImageFile} type="file" id="image" hidden className="hidden" />
 
                 {!editing ? (
                   <div className="text-lg items-start flex flex-col space-y-2">
@@ -188,12 +256,15 @@ const Profil: FC<TypeProfil> = () => {
                   </div>
                 ) : (
                   <>
-                    <form onSubmit={handleUpdateInfo} className="text-lg w-[40%] flex flex-col space-y-2">
-                      {errorUpdateInfo && 
+                    <form
+                      onSubmit={handleUpdateInfo}
+                      className="text-lg w-[40%] flex flex-col space-y-2"
+                    >
+                      {errorUpdateInfo && (
                         <div className="px-4 text-center py-3 text-sm bg-red-100 rounded-md mb-4 text-red-500 font-semibold">
                           {errorUpdateInfo}
                         </div>
-                      }
+                      )}
                       <div className="flex justify-start items-center space-x-2 rounded px-2 py-1 bg-gray-50">
                         <input
                           type="text"
@@ -238,18 +309,27 @@ const Profil: FC<TypeProfil> = () => {
                           type="submit"
                           className="flex self-start justify-start text-sm border-4 border-green-500 items-center space-x-2 rounded px-4 uppercase font-bold py-1 text-white bg-green-400 w-auto"
                         >
-                          {sending ? <Loader className="text-lg" />:'Save changes'}
+                          {sending ? (
+                            <Loader className="text-lg" />
+                          ) : (
+                            "Save changes"
+                          )}
                         </button>
                       </div>
                     </form>
-                    <form className="text-lg w-[40%] flex flex-col space-y-2">
+                    <form onSubmit={handleUpdatePassword} className="text-lg w-[40%] flex flex-col space-y-2">
+                      {errorUpdatePass && (
+                        <div className="px-4 text-center py-3 text-sm bg-red-100 rounded-md mb-4 text-red-500 font-semibold">
+                          {errorUpdatePass}
+                        </div>
+                      )}
                       <div className="flex justify-start items-center space-x-2 rounded px-2 py-1 bg-gray-50">
                         <input
                           type="password"
                           name="old_password"
                           className="w-full inline-block  py-2 rounded-md px-3"
                           placeholder="current password"
-                          value={password.old_password}
+                          value={password.old_password || ''}
                           onChange={handlePassWordOnchange}
                           required
                         />
@@ -260,7 +340,7 @@ const Profil: FC<TypeProfil> = () => {
                           name="new_password"
                           className="w-full inline-block  py-2 rounded-md px-3"
                           placeholder="new password "
-                          value={password.new_password}
+                          value={password.new_password || ''}
                           onChange={handlePassWordOnchange}
                           required
                         />
@@ -271,7 +351,7 @@ const Profil: FC<TypeProfil> = () => {
                           name="confirm_password"
                           className="w-full inline-block  py-2 rounded-md px-3"
                           placeholder="confirm new password"
-                          value={password.confirm_password}
+                          value={password.confirm_password || ''}
                           onChange={handlePassWordOnchange}
                           required
                         />
@@ -281,7 +361,12 @@ const Profil: FC<TypeProfil> = () => {
                           type="submit"
                           className="flex self-start justify-start text-sm border-4 border-blue-500 items-center space-x-2 rounded px-4 uppercase font-bold py-1 text-white bg-blue-400 w-auto"
                         >
-                          Save password <RiLockPasswordFill className="ml-2" />
+                          {sending2 ? (
+                            <Loader className="text-lg" />
+                          ) : (
+                            <>Save password <RiLockPasswordFill className="ml-2" /></>
+                          )}
+                          
                         </button>
                       </div>
                     </form>
