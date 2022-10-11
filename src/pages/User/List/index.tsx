@@ -11,26 +11,36 @@ import { FaTrash } from "react-icons/fa";
 import { MdOutgoingMail } from "react-icons/md";
 
 import "./List.scss";
-import { Button, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { toast } from "react-toastify";
 
 type TypeUserList = {};
 
 const GET_USERS_URL = "users/companies";
+const DELETE_USERS_COMPANY_URL = "users/companies";
+const TOGGLE_ACTIVE_USERS_COMPANY_URL = "users/companies/toggle-active";
 
 const UserList: React.FC<TypeUserList> = () => {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<User[]>([]);
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
-  const [showModal,setShowModal] = useState(false)
-  
+  const [showModal, setShowModal] = useState(false);
+  const [currentIdComapany, setCurrentIdCompany] = useState<string | null>(
+    null
+  );
+  const [deleting, setDeleting] = useState(false);
+  const [activations, setActivations] = useState(false);
+
   const filteredItems = users.filter(
     (item) =>
       (item.company?.name &&
         item.company.name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item.company?.country &&
-        item.company.country.toLowerCase().includes(filterText.toLowerCase())) ||
+        item.company.country
+          .toLowerCase()
+          .includes(filterText.toLowerCase())) ||
       (item.company?.city &&
         item.company.city.toLowerCase().includes(filterText.toLowerCase())) ||
       (item.firstname &&
@@ -72,7 +82,7 @@ const UserList: React.FC<TypeUserList> = () => {
             onChange={(e) => setFilterText(e.target.value)}
             type="text"
             id="table-search"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focuslue-500 block w-80 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focuslue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focuslue-500 block w-80 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focuslue-500"
             placeholder="Search htmlFor items"
           />
           <span className=" absolute" onClick={handleClear}>
@@ -96,18 +106,18 @@ const UserList: React.FC<TypeUserList> = () => {
 
   const columns: TableColumn<User>[] = [
     {
-      name: <span className=" text-gray-500 text-sm uppercase">Name</span>,
+      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Name</span>,
       selector: (row) => row.company?.name || "",
       sortable: true,
     },
     {
-      name: <span className=" text-gray-500 text-sm uppercase">Email</span>,
+      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Email</span>,
       selector: (row) => row.email || "",
       sortable: true,
     },
     {
       name: (
-        <span className=" text-gray-500 text-sm uppercase">Country city</span>
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">Country city</span>
       ),
       cell: (row) => (
         <h1 className="py-4">
@@ -120,7 +130,7 @@ const UserList: React.FC<TypeUserList> = () => {
       sortable: true,
     },
     {
-      name: <span className=" text-gray-500 text-sm uppercase">User </span>,
+      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">User </span>,
       cell: (row) => (
         <h1 className="flex flex-col min-w-[200px]">
           <span className="font-medium text-gray-900 inline-block pb-1">
@@ -132,20 +142,33 @@ const UserList: React.FC<TypeUserList> = () => {
     },
     {
       name: (
-        <span className="text-gray-500 text-sm uppercase translate-x-5">
+        <span className=" font-bold text-xs text-[#ac3265] uppercase translate-x-5">
           State
         </span>
       ),
       cell: (row) => (
         <h1 className="pl-3 translate-x-4">
-          <span className="w-14 cursor-pointer rounded-full flex justify-end items-center h-6 bg-green-200 py-1.5 px-0.5">
+          <span
+            onClick={(_) => toggleActive(row.id || "1")}
+            className={`w-14 ${
+              activations && "disabled"
+            } cursor-pointer rounded-full flex items-center h-6 ${
+              row.active
+                ? "bg-green-200 justify-end"
+                : "bg-red-200 justify-start"
+            }  py-1.5 px-0.5`}
+          >
             <span className="w-5 h-5 bg-white shadow rounded-full"></span>
           </span>
         </h1>
       ),
     },
     {
-      name: "Created at",
+      name: (
+        <span className=" font-bold text-xs text-[#ac3265] uppercase translate-x-5">
+          Created at
+        </span>
+      ),
       selector: (row) => formatDate(row.created_at || ""),
     },
     {
@@ -158,28 +181,76 @@ const UserList: React.FC<TypeUserList> = () => {
           >
             <MdOutgoingMail />
           </a>
-          <a
-            href="/"
-            className="font-medium ml-2 text-red-500 p-2 bg-red-100 rounded-full inline-block dark:text-red-500 hover:underline"
+          <button
+            onClick={(_) => onClick(row.id || "1")}
+            className="font-medium ml-2 text-red-500 w-8 h-8 justify-center items-center  bg-red-100 rounded-full inline-flex dark:text-red-500 hover:underline"
           >
             <FaTrash />
-          </a>
+          </button>
         </h1>
       ),
     },
   ];
 
-  const onClick = () => {
-    setShowModal(!showModal)
-  }
+  const onClick = (id: string) => {
+    setCurrentIdCompany(id);
+    setShowModal(!showModal);
+  };
 
   const confirmDelete = () => {
-  }
+    setShowModal(false);
+
+    setDeleting(true);
+    // delete user company
+    http_client(Storage.getStorage("auth").token)
+      .delete(`${DELETE_USERS_COMPANY_URL}/${currentIdComapany}`)
+      .then((res) => {
+        setDeleting(false);
+        deleteUser(currentIdComapany || "1");
+        toast.success(res.data.message);
+      })
+      .catch((err: any) => {
+        setDeleting(false);
+        console.log(err);
+      });
+  };
+
+  const deleteUser = (id: string) => {
+    let usersFilter = users.filter((user) => user.id !== id);
+    setUsers(usersFilter);
+  };
+
+  const updateActive = (id: string) => {
+    let userFind = users.find((user) => user.id === id);
+    let usersFilter = users.filter((user) => user.id !== id);
+    let newUser: User = {
+      ...userFind,
+      active: userFind?.active ? false : true,
+    };
+    let newUsersTab = [...usersFilter, newUser];
+    console.log(newUsersTab);
+
+    setUsers(newUsersTab);
+  };
+
+  const toggleActive = (id: string) => {
+    setActivations(true);
+    http_client(Storage.getStorage("auth").token)
+      .post(`${TOGGLE_ACTIVE_USERS_COMPANY_URL}/${id}`)
+      .then((res) => {
+        setActivations(false);
+        updateActive(id || "1");
+        toast.success(res.data.message);
+      })
+      .catch((err: any) => {
+        setActivations(false);
+        console.log(err);
+      });
+  };
 
   const onClose = () => {
-    setShowModal(false)
-  }
-
+    setShowModal(false);
+  };
 
   return (
     <DashboardLayout
@@ -193,11 +264,8 @@ const UserList: React.FC<TypeUserList> = () => {
       }
     >
       <React.Fragment>
-        <Button onClick={onClick}>
-          Toggle modal
-        </Button>
         <Modal
-          show={showModal}
+          show={showModal || deleting}
           size="md"
           popup={true}
           onClose={onClose}
@@ -213,14 +281,18 @@ const UserList: React.FC<TypeUserList> = () => {
                 <button
                   color="failure"
                   className="bg-red-500 text-white rounded-md px-4 py-2"
-                  onClick={onClick}
+                  onClick={confirmDelete}
                 >
-                  Yes, I'm sure
+                  {deleting ? (
+                    <Loader className="flex justify-center items-center" />
+                  ) : (
+                    "Yes, I'm sure"
+                  )}
                 </button>
                 <button
                   color="gray"
-                  onClick={onClick}
-                  className='bg-gray-500 text-white rounded-md px-4 py-2'
+                  onClick={onClose}
+                  className="bg-gray-500 text-white rounded-md px-4 py-2"
                 >
                   No, cancel
                 </button>
