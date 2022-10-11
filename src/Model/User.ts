@@ -1,7 +1,7 @@
 import Company from "./Company";
 
 export default interface User {
-  id ?: string|number,
+  id ?: string,
   photo ?: string,
   firstname ?: string,
   lastname  ?: string,

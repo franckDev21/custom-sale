@@ -11,20 +11,28 @@ import { FaTrash } from "react-icons/fa";
 import { MdOutgoingMail } from "react-icons/md";
 
 import "./List.scss";
+import { Button, Modal } from "flowbite-react";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 type TypeUserList = {};
 
-const GET_USERS_URL = "/users";
+const GET_USERS_URL = "users/companies";
 
 const UserList: React.FC<TypeUserList> = () => {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<User[]>([]);
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
+  const [showModal,setShowModal] = useState(false)
+  
   const filteredItems = users.filter(
     (item) =>
       (item.company?.name &&
         item.company.name.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item.company?.country &&
+        item.company.country.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item.company?.city &&
+        item.company.city.toLowerCase().includes(filterText.toLowerCase())) ||
       (item.firstname &&
         item.firstname.toLowerCase().includes(filterText.toLowerCase())) ||
       (item.lastname &&
@@ -143,7 +151,7 @@ const UserList: React.FC<TypeUserList> = () => {
     {
       name: "",
       cell: (row) => (
-        <h1>
+        <h1 className=" flex items-center justify-center">
           <a
             href="/"
             className="font-medium ml-2 text-base text-blue-500 p-2 bg-blue-100 rounded-full inline-block dark:text-blue-500 hover:underline"
@@ -161,6 +169,18 @@ const UserList: React.FC<TypeUserList> = () => {
     },
   ];
 
+  const onClick = () => {
+    setShowModal(!showModal)
+  }
+
+  const confirmDelete = () => {
+  }
+
+  const onClose = () => {
+    setShowModal(false)
+  }
+
+
   return (
     <DashboardLayout
       title="Users"
@@ -172,6 +192,43 @@ const UserList: React.FC<TypeUserList> = () => {
         </>
       }
     >
+      <React.Fragment>
+        <Button onClick={onClick}>
+          Toggle modal
+        </Button>
+        <Modal
+          show={showModal}
+          size="md"
+          popup={true}
+          onClose={onClose}
+        >
+          <Modal.Header />
+          <Modal.Body>
+            <div className="text-center">
+              <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
+              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                Are you sure you want to delete this company ?
+              </h3>
+              <div className="flex justify-center gap-4">
+                <button
+                  color="failure"
+                  className="bg-red-500 text-white rounded-md px-4 py-2"
+                  onClick={onClick}
+                >
+                  Yes, I'm sure
+                </button>
+                <button
+                  color="gray"
+                  onClick={onClick}
+                  className='bg-gray-500 text-white rounded-md px-4 py-2'
+                >
+                  No, cancel
+                </button>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+      </React.Fragment>
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         {!loading ? (
           <>
