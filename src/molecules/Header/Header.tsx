@@ -25,9 +25,9 @@ const Header:FC<TypeHeader> = ({ classname='' }) => {
   return (
     <header className={`${classname} header py-4 bg-cyan-900`}>
       <div className="container flex items-center justify-between text-white">
-        <div className="logo header__logo uppercase font-bold text-xl text-gray-400">
+        <Link to='/' className="logo block header__logo uppercase font-bold text-xl text-gray-400">
           <img src={LOGO} width={80} alt="" />
-        </div>
+        </Link>
         <div className='ml-4 text-sm'>
           {((auth.token && auth.user) || Auth.isLogin() ) ?
             <>

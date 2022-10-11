@@ -32,9 +32,9 @@ const HeaderDashboard = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
-              <div className="flex-shrink-0 text-gray-200 opacity-95 font-bold uppercase text-xl">
+              <Link to='/' className="flex-shrink-0 block text-gray-200 opacity-95 font-bold uppercase text-xl">
                 <img src={LOGO} alt="" width={65} />
-              </div>
+              </Link>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
                   <NavLink to="/dashboard" className="nav-link" aria-current="page">Dashboard</NavLink>

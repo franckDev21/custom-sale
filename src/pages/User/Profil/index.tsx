@@ -1,6 +1,6 @@
 import { Alert } from "flowbite-react";
 import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
-import { FaPen } from "react-icons/fa";
+import { FaBuilding, FaPen } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { toast } from "react-toastify";
 
@@ -9,7 +9,6 @@ import {
   HiEye,
   HiInformationCircle,
 } from "react-icons/hi";
-import { MdOutlineFormatAlignRight } from "react-icons/md";
 import Loader from "../../../atoms/Loader";
 import User from "../../../Model/User";
 import Storage from "../../../service/Storage";
@@ -17,6 +16,8 @@ import DashboardLayout from "../../../templates/DashboardLayout";
 import { http_client } from "../../../utils/axios-custum";
 import { useDispatch } from "react-redux";
 import { setAuth } from "../../../store/features/auth/authSlice";
+import { BsBuilding } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 type TypeProfil = {};
 
@@ -97,6 +98,12 @@ const Profil: FC<TypeProfil> = () => {
         // setUser(res.data);
         setSending(false);
         setUser(res.data);
+
+        Storage.setStorage('auth',{
+          'token': Storage.getStorage("auth").token,
+          'user' : res.data
+        });
+
         toast.success("Your information has been successfully updated !");
         setEditing(false);
       })
@@ -202,10 +209,9 @@ const Profil: FC<TypeProfil> = () => {
                 </>
               )}
             </span>
+            
 
-            <button className="flex disabled justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto">
-              See my company <HiEye className="ml-2" />
-            </button>
+            <div className="flex items-center justify-end"><BsBuilding /> <button className="flex disabled justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3">see my company <HiEye className="ml-2" /></button></div>
           </div>
         </>
       }
@@ -225,13 +231,14 @@ const Profil: FC<TypeProfil> = () => {
                       company information
                     </div>
                     <div className="flex">
-                      <button
+                      <Link 
+                        to={`/my/company`}
                         type="button"
                         className="mr-2 inline-flex items-center rounded-lg bg-blue-700 px-3 py-1.5 text-center text-xs font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-800 dark:hover:bg-blue-900"
                       >
                         Create your company{" "}
-                        <MdOutlineFormatAlignRight className="-mr-0.5 ml-2" />
-                      </button>
+                        <FaBuilding className="-mr-0.5 ml-2" />
+                      </Link>
                     </div>
                   </React.Fragment>
                 }

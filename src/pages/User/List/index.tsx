@@ -9,10 +9,11 @@ import Loader from "../../../atoms/Loader";
 import { extraiText, formatDate } from "../../../utils/function";
 import { FaTrash } from "react-icons/fa";
 import { MdOutgoingMail } from "react-icons/md";
+import { BsBuilding } from 'react-icons/bs';
 
 import "./List.scss";
 import { Modal } from "flowbite-react";
-import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { HiEye, HiOutlineExclamationCircle } from "react-icons/hi";
 import { toast } from "react-toastify";
 
 type TypeUserList = {};
@@ -254,11 +255,12 @@ const UserList: React.FC<TypeUserList> = () => {
 
   return (
     <DashboardLayout
+      titleClass="w-[6%]"
       title="Users"
       headerContent={
         <>
-          <div className="ml-4 w-[80%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
-            | List of users
+          <div className="ml-4 w-[94%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
+           <span>| List of users</span> <div className="flex items-center justify-end"><BsBuilding /> <button className="flex disabled justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3">see my company <HiEye className="ml-2" /></button></div>
           </div>
         </>
       }

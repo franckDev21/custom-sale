@@ -10,6 +10,7 @@ import NotFound from './pages/NotFound';
 import RequireAuth from './molecules/RequireAuth';
 import Profil from './pages/User/Profil';
 import UserList from './pages/User/List';
+import Company from './pages/Company';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profil" element={<Profil />} />
           <Route path="/users" element={<UserList />} />
+          <Route path="/my/company" element={<Company />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

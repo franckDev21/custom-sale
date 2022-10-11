@@ -65,7 +65,7 @@ const Login: FC<LoginType> = () => {
       })
       .catch((err: any) => {
         setLoading(false)
-        setErrorMessage(err.response.data.message)
+        setErrorMessage(err.response?.data?.message || err.message)
         console.log(err)
       })
   }

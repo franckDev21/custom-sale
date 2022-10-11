@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import DashboardLayout from '../../templates/DashboardLayout'
 import { HiUserGroup } from 'react-icons/hi'
+import User from '../../Model/User'
+import UserService from '../../service/UserService'
 
 type TypeDashboard = {}
 
@@ -8,10 +10,16 @@ const Dashboard: React.FC<TypeDashboard> = () => {
 
   // if the component is destroyed, we delete the local Storage => we disconnect it
 
+  const [user,setUser] = useState<User>({})
+
+  useEffect(() => {
+    setUser(UserService.getUser())
+  },[])
+
   return (
   <DashboardLayout title='Dashboard' headerContent={
     <>
-      <div className="ml-4 font-bold text-2xl text-[#5c3652]"> | Welcome <span className='uppercase'>All heights</span></div>
+      <div className="ml-4 font-bold text-2xl text-[#5c3652]"> | Welcome <span className='uppercase'>{user.firstname} {user.lastname}</span></div>
     </>
   }>
 
