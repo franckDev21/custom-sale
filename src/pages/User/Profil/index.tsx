@@ -48,8 +48,8 @@ const Profil: FC<TypeProfil> = () => {
   );
   const [imgSending, setImgSending] = useState(false);
 
-  const dispatch = useDispatch()
-
+  const dispatch = useDispatch();
+  
   // method
   const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
     if (errorUpdateInfo) setErrorUpdateInfo("");
@@ -211,7 +211,7 @@ const Profil: FC<TypeProfil> = () => {
             </span>
             
 
-            <div className="flex items-center justify-end"><BsBuilding /> <button className="flex disabled justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3">see my company <HiEye className="ml-2" /></button></div>
+            <div className="flex items-center justify-end"><BsBuilding /> <Link to='/my/company/view' className={`flex ${(user.role === 'ENTREPRISE' && !user.as_company) && 'disabled'} justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}>see my company <HiEye className="ml-2" /></Link></div>
           </div>
         </>
       }
@@ -219,7 +219,7 @@ const Profil: FC<TypeProfil> = () => {
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         {!loading ? (
           <>
-            <div className="">
+            {(user.role !== 'SUPER' && !user.as_company && !user.company_id) && <div className="">
               <Alert
                 color="info"
                 additionalContent={
@@ -232,7 +232,7 @@ const Profil: FC<TypeProfil> = () => {
                     </div>
                     <div className="flex">
                       <Link 
-                        to={`/my/company`}
+                        to={`/my/company/create`}
                         type="button"
                         className="mr-2 inline-flex items-center rounded-lg bg-blue-700 px-3 py-1.5 text-center text-xs font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-800 dark:hover:bg-blue-900"
                       >
@@ -248,7 +248,7 @@ const Profil: FC<TypeProfil> = () => {
                   Incomplete registration
                 </h3>
               </Alert>
-            </div>
+            </div>}
             <div className="px-4 py-6 sm:px-0">
               <div className="flex justify-start space-x-4">
                 <label htmlFor="image" className=" cursor-pointer ">

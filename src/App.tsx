@@ -26,7 +26,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profil" element={<Profil />} />
           <Route path="/users" element={<UserList />} />
-          <Route path="/my/company" element={<Company />} />
+          <Route path="/my/company/:action" element={<Company />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

@@ -6,9 +6,10 @@ export default interface Company {
   email     ?: string,
   address ?: string,
   country  ?: string,
+  postal_code  ?: string|null,
   city ?: string,
   tel      ?: string,
-  number_of_employees   ?: boolean,
+  number_of_employees   ?: number|string,
   created_at ?: string,
   updated_at ?: string,
 }
