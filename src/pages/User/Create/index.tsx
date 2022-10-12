@@ -11,12 +11,11 @@ const CreateUser:React.FC<TypeCreateUser> = () => {
         <>
           <div className="ml-4 w-[70%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
            <span>| add a new user</span> 
-           
           </div>
         </>
       }
     >
-      
+
 
     </DashboardLayout>
   )
