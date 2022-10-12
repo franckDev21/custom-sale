@@ -23,7 +23,7 @@ type TypeMyUserList = {};
 
 const GET_USERS_URL = "users";
 const DELETE_USERS_COMPANY_URL = "users/companies";
-const TOGGLE_ACTIVE_USERS_COMPANY_URL = "users/companies/toggle-active";
+const TOGGLE_ACTIVE_USER_URL = "user/toggle-active";
 
 const MyUserList: React.FC<TypeMyUserList> = () => {
   const [loading, setLoading] = useState(true);
@@ -114,11 +114,10 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
         <span className="  font-bold text-xs text-[#ac3265] uppercase">Photo</span>
       ),
       cell: (row) => (
-        <h1 className="py-4 w-5 h-5 bg-gray-400">
-          
+        <h1 className="py-4 w-10 h-10 bg-gray-100 relative overflow-hidden">
+          <img src="https://image.shutterstock.com/image-vector/default-avatar-profile-trendy-style-260nw-1759726295.jpg" className=" absolute object-cover w-full h-full top-0 " alt="" />
         </h1>
-      ),
-      sortable: true,
+      )
     },
     {
       name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Name</span>,
@@ -220,15 +219,13 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
       active: userFind?.active ? false : true,
     };
     let newUsersTab = [...usersFilter, newUser];
-    console.log(newUsersTab);
-
     setUsers(newUsersTab);
   };
 
   const toggleActive = (id: string) => {
     setActivations(true);
     http_client(Storage.getStorage("auth").token)
-      .post(`${TOGGLE_ACTIVE_USERS_COMPANY_URL}/${id}`)
+      .post(`${TOGGLE_ACTIVE_USER_URL}/${id}`)
       .then((res) => {
         setActivations(false);
         updateActive(id || "1");
