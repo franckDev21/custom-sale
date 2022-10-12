@@ -211,7 +211,7 @@ const Profil: FC<TypeProfil> = () => {
             </span>
             
 
-            <div className="flex items-center justify-end"><BsBuilding /> <Link to='/my/company/view' className={`flex ${(user.role === 'ENTREPRISE' && !user.as_company) && 'disabled'} justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}>see my company <HiEye className="ml-2" /></Link></div>
+            <div className="flex items-center justify-end"><BsBuilding /> <Link to='/my/company/view' className={`flex ${user.role === 'ENTREPRISE' ? (!user.as_company && 'disabled') : 'disabled'} justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}>see my company <HiEye className="ml-2" /></Link></div>
           </div>
         </>
       }

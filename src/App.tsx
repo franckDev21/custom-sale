@@ -11,6 +11,8 @@ import RequireAuth from './molecules/RequireAuth';
 import Profil from './pages/User/Profil';
 import UserList from './pages/User/List';
 import Company from './pages/Company';
+import MyUserList from './pages/User/MyUserList';
+import CreateUser from './pages/User/Create';
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profil" element={<Profil />} />
           <Route path="/users" element={<UserList />} />
+          <Route path="/users/create" element={<CreateUser />} />
+          <Route path="/users/company" element={<MyUserList />} />
           <Route path="/my/company/:action" element={<Company />} />
         </Route>
 

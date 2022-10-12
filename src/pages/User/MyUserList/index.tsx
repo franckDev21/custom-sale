@@ -9,22 +9,23 @@ import Loader from "../../../atoms/Loader";
 import { extraiText, formatDate } from "../../../utils/function";
 import { FaTrash } from "react-icons/fa";
 import { MdOutgoingMail } from "react-icons/md";
-import { BsBuilding } from "react-icons/bs";
+import { BsBuilding } from 'react-icons/bs';
 
 import "./List.scss";
 import { Modal } from "flowbite-react";
 import { HiEye, HiOutlineExclamationCircle } from "react-icons/hi";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import UserService from "../../../service/UserService";
+import { BiUserPlus } from "react-icons/bi";
 
-type TypeUserList = {};
+type TypeMyUserList = {};
 
-const GET_USERS_URL = "users/companies";
+const GET_USERS_URL = "users";
 const DELETE_USERS_COMPANY_URL = "users/companies";
 const TOGGLE_ACTIVE_USERS_COMPANY_URL = "users/companies/toggle-active";
 
-const UserList: React.FC<TypeUserList> = () => {
+const MyUserList: React.FC<TypeMyUserList> = () => {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<User[]>([]);
   const [filterText, setFilterText] = useState("");
@@ -35,8 +36,6 @@ const UserList: React.FC<TypeUserList> = () => {
   );
   const [deleting, setDeleting] = useState(false);
   const [activations, setActivations] = useState(false);
-
-  const navigate = useNavigate();
 
   const filteredItems = users.filter(
     (item) =>
@@ -87,7 +86,7 @@ const UserList: React.FC<TypeUserList> = () => {
             onChange={(e) => setFilterText(e.target.value)}
             type="text"
             id="table-search"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focuslue-500 block w-80 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focuslue-500"
+            className="bg-gray-100 border border-none focus:ring-2 text-gray-900 text-xs rounded-lg focus:ring-gray-700 focuslue-500 block w-80 pl-10 p-3 focus:bg-white  dark:bg-gray-700 dark:border-gray-600 ring-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-700 "
             placeholder="Search htmlFor items"
           />
           <span className=" absolute" onClick={handleClear}>
@@ -99,9 +98,6 @@ const UserList: React.FC<TypeUserList> = () => {
   }, [filterText, resetPaginationToggle]);
 
   useEffect(() => {
-    if (UserService.getUser().role !== "SUPER") {
-      navigate("/users/company");
-    }
     const fetUsers = async () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
         GET_USERS_URL
@@ -110,57 +106,31 @@ const UserList: React.FC<TypeUserList> = () => {
       setLoading(false);
     };
     fetUsers();
-  }, [navigate]);
+  }, []);
 
   const columns: TableColumn<User>[] = [
     {
       name: (
-        <span className="  font-bold text-xs text-[#ac3265] uppercase">
-          Name
-        </span>
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">Photo</span>
       ),
-      selector: (row) => row.company?.name || "",
+      cell: (row) => (
+        <h1 className="py-4 w-5 h-5 bg-gray-400">
+          
+        </h1>
+      ),
       sortable: true,
     },
     {
-      name: (
-        <span className="  font-bold text-xs text-[#ac3265] uppercase">
-          Email
-        </span>
-      ),
+      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Name</span>,
+      cell: (row) => <span className="font-bold">
+        {row.firstname} {row.lastname}
+      </span>,
+      sortable: true,
+    },
+    {
+      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Email</span>,
       selector: (row) => row.email || "",
       sortable: true,
-    },
-    {
-      name: (
-        <span className="  font-bold text-xs text-[#ac3265] uppercase">
-          Country city
-        </span>
-      ),
-      cell: (row) => (
-        <h1 className="py-4">
-          <span className="font-semibold inline-block pb-1">
-            {row.company?.country || ""}
-          </span>{" "}
-          <br /> {row.company?.city || ""}
-        </h1>
-      ),
-      sortable: true,
-    },
-    {
-      name: (
-        <span className="  font-bold text-xs text-[#ac3265] uppercase">
-          User{" "}
-        </span>
-      ),
-      cell: (row) => (
-        <h1 className="flex flex-col min-w-[200px]">
-          <span className="font-medium text-gray-900 inline-block pb-1">
-            {row.firstname} {row.lastname}
-          </span>
-          <span>{extraiText(row.email || "")}</span>
-        </h1>
-      ),
     },
     {
       name: (
@@ -250,6 +220,8 @@ const UserList: React.FC<TypeUserList> = () => {
       active: userFind?.active ? false : true,
     };
     let newUsersTab = [...usersFilter, newUser];
+    console.log(newUsersTab);
+
     setUsers(newUsersTab);
   };
 
@@ -274,25 +246,17 @@ const UserList: React.FC<TypeUserList> = () => {
 
   return (
     <DashboardLayout
-      titleClass="w-[6%]"
-      title="Users"
+      titleClass="w-[11%]"
+      title="My users"
       headerContent={
         <>
-          <div className="ml-4 w-[94%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
-            <span>| List of users</span>{" "}
+          <div className="ml-4 w-[88%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
+           <span>| List of users</span> 
             <div className="flex items-center justify-end">
-              <BsBuilding />{" "}
-              <Link
-                to="/my/company/view"
-                className={`flex ${
-                  UserService.getUser().role === "ENTREPRISE"
-                    ? !UserService.getUser().as_company && "disabled"
-                    : "disabled"
-                } justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}
-              >
-                see my company <HiEye className="ml-2" />
-              </Link>
+              <Link to='/my/company/view' className={`flex ${(UserService.getUser().role === 'ENTREPRISE' && !UserService.getUser().as_company) && 'disabled'}  justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}><BsBuilding className="mr-2" />  see my company </Link>
+              <Link to='/users/create' className={`flex ${(UserService.getUser().role === 'ENTREPRISE' && !UserService.getUser().as_company) && 'disabled'}  justify-start text-sm border-4 border-gray-700 items-center space-x-2 rounded px-2 py-1 text-white bg-gray-700 hover:bg-gray-800 transition w-auto ml-3`}>Create a new user <BiUserPlus className="ml-2 text-lg" /></Link>
             </div>
+           
           </div>
         </>
       }
@@ -340,7 +304,7 @@ const UserList: React.FC<TypeUserList> = () => {
           <>
             <DataTable
               className=" rounded-md overflow-hidden"
-              title="Companies"
+              title="Users"
               pagination
               columns={columns}
               data={filteredItems}
@@ -361,4 +325,4 @@ const UserList: React.FC<TypeUserList> = () => {
   );
 };
 
-export default UserList;
+export default MyUserList;
