@@ -8,7 +8,7 @@ export default interface Company {
   country  ?: string,
   postal_code  ?: string|null,
   city ?: string,
-  tel      ?: string,
+  tel      ?: string|null,
   number_of_employees   ?: number|string,
   created_at ?: string,
   updated_at ?: string,

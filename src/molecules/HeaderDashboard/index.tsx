@@ -7,6 +7,7 @@ import Auth from '../../service/Auth'
 import { logout, setAuth } from '../../store/features/auth/authSlice'
 import Storage from '../../service/Storage'
 import { useSelector } from 'react-redux'
+import UserService from '../../service/UserService'
 
 const API_STORAGE_URL = "http://localhost:8000/storage";
 
@@ -39,7 +40,7 @@ const HeaderDashboard = () => {
                 <div className="ml-10 flex items-baseline space-x-4">
                   <NavLink to="/dashboard" className="nav-link" aria-current="page">Dashboard</NavLink>
 
-                  <NavLink to="/users" className="nav-link">Users</NavLink>
+                  {UserService.getUser().role !== 'USER' && <NavLink to="/users" className="nav-link">Users</NavLink>}
 
                   <NavLink to="/products" className="nav-link">Products</NavLink>
                   

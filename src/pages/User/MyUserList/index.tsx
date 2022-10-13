@@ -15,7 +15,7 @@ import "./List.scss";
 import { Modal } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserService from "../../../service/UserService";
 import { BiUserPlus } from "react-icons/bi";
 
@@ -36,6 +36,8 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
   );
   const [deleting, setDeleting] = useState(false);
   const [activations, setActivations] = useState(false);
+
+  const navigate = useNavigate()
 
   const filteredItems = users.filter(
     (item) =>
@@ -98,6 +100,10 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
   }, [filterText, resetPaginationToggle]);
 
   useEffect(() => {
+    if(UserService.getUser().role === 'USER'){
+      navigate("/notfound");
+    }
+
     const fetUsers = async () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
         GET_USERS_URL

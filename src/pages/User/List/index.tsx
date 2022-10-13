@@ -100,7 +100,11 @@ const UserList: React.FC<TypeUserList> = () => {
 
   useEffect(() => {
     if (UserService.getUser().role !== "SUPER") {
-      navigate("/users/company");
+      if(UserService.getUser().role === 'ENTREPRISE'){
+        navigate("/users/company");
+      }else{
+        navigate("/notfound");
+      }
     }
     const fetUsers = async () => {
       const res = await http_client(Storage.getStorage("auth").token).get(

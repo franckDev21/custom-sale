@@ -3,23 +3,46 @@ import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
 import Steper from "../../molecules/Steper";
 import LOGO from "../../assets/img/logo/logo2.png";
 import "./Star.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiFillCheckCircle } from "react-icons/ai";
 import User from "../../Model/User";
 import Company from "../../Model/Company";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import axiosCustum, { http_client } from "../../utils/axios-custum";
+import Storage from "../../service/Storage";
+import { toast } from "react-toastify";
+import { setAuth } from "../../store/features/auth/authSlice";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import Loader from "../../atoms/Loader";
 
 type TypeStar = {};
+
+const REGISTER_URL = 'auth/register'
+const CREATE_COMPANY_URL = "my/company";
 
 const Star: FC<TypeStar> = () => {
   const [step, setStep] = useState(1);
   const [errForm, setErrForm] = useState('');
+  const [sending,setSending] = useState(false);
 
   const [showPassword,setShowPassword] = useState(false)
   const inputPassword = useRef(null)
 
-  const [user,setUser]  = useState<User>({})
-  const [company,setCompany]  = useState<Company>({})
+  const [user,setUser]  = useState<User>({
+    type : 'ENTREPRISE'
+  })
+
+  const [company,setCompany]  = useState<Company>({
+    tel: null
+  })
+
+  // redux
+  const dispatch = useDispatch()
+  const auth = useSelector((state: any) => state.auth)
+
+      //
+  const navigate = useNavigate()
 
   const next = () => {
     if (step <= 3) {
@@ -94,6 +117,49 @@ const Star: FC<TypeStar> = () => {
     next()
   }
 
+  const submitForm = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setSending(true)
+    axiosCustum.post(REGISTER_URL,user)
+      .then(res => {
+        
+        dispatch(setAuth(res.data))
+        Storage.setStorage('auth',res.data)
+
+        toast.success(res.data.message)
+        
+        http_client(Storage.getStorage('auth').token).post(`${CREATE_COMPANY_URL}`,company)
+          .then(res => {
+            toast.success(res.data.message)
+
+            let user: User = Storage.getStorage('auth').user
+            let newUser : User = { ...user, as_company: true, company_id: res.data.company_id }
+
+            Storage.setStorage('auth',{
+              'token' : Storage.getStorage('auth').token,
+              'user' : newUser
+            })
+
+            setSending(false);
+
+            navigate('/dashboard')
+            
+          })
+          .catch(err => {
+            console.log(err);
+            setSending(false);
+          })
+      })
+      .catch((err: any) => {
+        setSending(false)
+        setErrForm(err.response.data.message)
+        console.log(err)
+      })
+
+    console.log(user,company);
+    
+  }
+
   return (
     <div className="relative min-h-screen flex overflow-hidden">
       <Link to="/" className="absolute z-20 inline-block top-3 left-3">
@@ -161,6 +227,7 @@ const Star: FC<TypeStar> = () => {
                       <input
                         onChange={handleOnchange} 
                         name='firstname'
+                        min={2}
                         value={user.firstname || ''}
                         className=" w-full px-4 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type=""
@@ -175,6 +242,7 @@ const Star: FC<TypeStar> = () => {
                       <input
                         onChange={handleOnchange} 
                         name='lastname'
+                        min={2}
                         value={user.lastname || ''}
                         className=" w-full px-4 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type=""
@@ -191,8 +259,8 @@ const Star: FC<TypeStar> = () => {
                       onChange={handleOnchange} 
                       name='email'
                       value={user.email || ''}
-                      className=" w-full px-4 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
-                      type=""
+                      className=" w-full focus:ring-0 border-t-0 border-x-0  px-4 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
+                      type="email"
                       placeholder="mail@gmail.com"
                       required
                     />
@@ -205,6 +273,7 @@ const Star: FC<TypeStar> = () => {
                       <input
                         ref={inputPassword}
                         onChange={handleOnchange} 
+                        min={2}
                         name='password'
                         value={user.password || ''}
                         className="w-full border-x-0 border-t-0 ring-0 focus:ring-0 outline-none  content-center text-base px-4 py-2 border-b  border-gray-300 focus:outline-none focus:border-indigo-500"
@@ -250,6 +319,7 @@ const Star: FC<TypeStar> = () => {
                       <input
                         onChange={handleOnchangeTwo}
                         name='name'
+                        min={2}
                         value={company.name || ''}
                         className=" w-full px-4 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type=""
@@ -354,14 +424,16 @@ const Star: FC<TypeStar> = () => {
             )}
             {step === 3 && (
               <>
-                <form className="mt-0 relative">
+                <form onSubmit={submitForm} className="mt-0 relative">
                   <div className="p-3 bg-green-700 text-white text-center font-bold rounded-sm">
                     <div className="flex items-center justify-center">
                     <AiFillCheckCircle className="mr-3 text-2xl" /> <span>corfirmation </span>
                     </div>
-                   
+                    
                   </div>
-                  <button className="px-6 py-3 bg-gray-700 border-4 rounded-full mt-3 block mx-auto text-white">Click here to finish 😊</button>
+                  <button className={`px-6 justify-center ${sending && 'disabled'} items-center flex py-3 bg-gray-700 border-4 rounded-full mt-3 min-w-[250px] mx-auto text-white`}>
+                    {sending ? <Loader className="text-2xl" />:'Click here to finish 😊'}
+                  </button>
                   <div className="pt-8 flex items-center justify-center space-x-4">
                     <button
                       onClick={(_) => prev()}
@@ -371,7 +443,6 @@ const Star: FC<TypeStar> = () => {
                       <span>Previous step</span>
                     </button>
                     <button
-                      onClick={(_) => next()}
                       type="submit"
                       className=" items-center opacity-0 disabled  flex justify-center min-w-[200px] bg-gradient-to-r from-[#ac3265] to-[#ac3265ee]  hover:bg-gradient-to-l hover:from-gray-700 hover:to-gray-600 text-gray-100 px-6 py-2  rounded-md tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
                     >

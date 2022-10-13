@@ -17,4 +17,5 @@ export default interface User {
   updated_at ?: string,
   company ?: Company,
   active ?: boolean
+  type ?: string|null
 }

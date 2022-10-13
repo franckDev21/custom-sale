@@ -73,6 +73,7 @@ const Login: FC<LoginType> = () => {
       .then(res => {
         setLoading(false)
         dispatch(setAuth(res.data))
+        Storage.removeStorage('auth')
         Storage.setStorage('auth',res.data)
         console.log(res.data)
       })
