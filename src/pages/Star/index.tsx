@@ -1,15 +1,25 @@
-import React, { FC, useState } from "react";
+import React, { ChangeEvent, FC, FormEvent, useRef, useState } from "react";
 import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
 import Steper from "../../molecules/Steper";
 import LOGO from "../../assets/img/logo/logo2.png";
 import "./Star.scss";
 import { Link } from "react-router-dom";
 import { AiFillCheckCircle } from "react-icons/ai";
+import User from "../../Model/User";
+import Company from "../../Model/Company";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 type TypeStar = {};
 
 const Star: FC<TypeStar> = () => {
   const [step, setStep] = useState(1);
+  const [errForm, setErrForm] = useState('');
+
+  const [showPassword,setShowPassword] = useState(false)
+  const inputPassword = useRef(null)
+
+  const [user,setUser]  = useState<User>({})
+  const [company,setCompany]  = useState<Company>({})
 
   const next = () => {
     if (step <= 3) {
@@ -22,6 +32,67 @@ const Star: FC<TypeStar> = () => {
       setStep((s) => s - 1);
     }
   };
+
+  const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
+    if(errForm) setErrForm('');
+
+    switch (e.target.name) {
+      case 'firstname':
+        setUser({...user,firstname : e.target.value})
+        break;
+      case 'lastname':
+        setUser({...user,lastname : e.target.value})
+        break;
+      case 'email':
+        setUser({...user,email : e.target.value})
+        break;
+      case 'tel':
+        setUser({...user,tel : e.target.value})
+        break;
+      case 'password':
+        setUser({...user,password : e.target.value})
+        break;
+      case 'active':
+          setUser({...user,active : e.target.checked === true})
+          break;
+      default:
+        setUser({...user,password_confirmation : e.target.value})
+        break;
+    }
+  }
+
+  const handleOnchangeTwo = (e: ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
+    switch (e.target.name) {
+      case 'name':
+        setCompany({...company,name : e.target.value})
+        break;
+      case 'email':
+        setCompany({...company,email : e.target.value})
+          break;
+      case 'address':
+        setCompany({...company,address : e.target.value})
+          break;
+      case 'country':
+        setCompany({...company,country : e.target.value})
+          break;
+      case 'city':
+        setCompany({...company,city : e.target.value})
+          break;
+      case 'number_of_employees':
+        setCompany({...company,number_of_employees : e.target.value})
+          break;
+    }
+  }
+
+  const sumitFormOne = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    next()
+  }
+
+  const sumitFormTwo = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    next()
+  }
 
   return (
     <div className="relative min-h-screen flex overflow-hidden">
@@ -81,16 +152,20 @@ const Star: FC<TypeStar> = () => {
 
             {step === 1 && (
               <>
-                <form className="mt-0 relative">
+                <form onSubmit={sumitFormOne} className="mt-0 relative">
                   <div className="relative flex justify-between items-start space-x-3">
                     <div>
                       <label className="ml-3 text-sm font-bold text-gray-700 tracking-wide">
                         First name
                       </label>
                       <input
+                        onChange={handleOnchange} 
+                        name='firstname'
+                        value={user.firstname || ''}
                         className=" w-full px-4 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type=""
                         placeholder="Enter your first name"
+                        required
                       />
                     </div>
                     <div>
@@ -98,9 +173,13 @@ const Star: FC<TypeStar> = () => {
                         Last name
                       </label>
                       <input
+                        onChange={handleOnchange} 
+                        name='lastname'
+                        value={user.lastname || ''}
                         className=" w-full px-4 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type=""
                         placeholder="Enter your last name"
+                        required
                       />
                     </div>
                   </div>
@@ -109,24 +188,47 @@ const Star: FC<TypeStar> = () => {
                       Email
                     </label>
                     <input
+                      onChange={handleOnchange} 
+                      name='email'
+                      value={user.email || ''}
                       className=" w-full px-4 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
                       type=""
                       placeholder="mail@gmail.com"
+                      required
                     />
                   </div>
                   <div className="mt-4 content-center">
                     <label className="ml-3 text-sm font-bold text-gray-700 tracking-wide">
                       Password
                     </label>
-                    <input
-                      className="w-full content-center text-base px-4 py-2 border-b  border-gray-300 focus:outline-none focus:border-indigo-500"
-                      type=""
-                      placeholder="Enter your password"
-                    />
+                    <div className="relative">
+                      <input
+                        ref={inputPassword}
+                        onChange={handleOnchange} 
+                        name='password'
+                        value={user.password || ''}
+                        className="w-full border-x-0 border-t-0 ring-0 focus:ring-0 outline-none  content-center text-base px-4 py-2 border-b  border-gray-300 focus:outline-none focus:border-indigo-500"
+                        type="password"
+                        placeholder="Enter your password"
+                        required
+                      />
+                      <span onClick={_=>{
+                        if(inputPassword.current){
+                          if((inputPassword.current as any).type === 'text'){
+                                (inputPassword.current as any).type = 'password'
+                                setShowPassword(false)
+                              }else {
+                                (inputPassword.current as any).type = 'text'
+                                setShowPassword(true)
+                              }
+                            }
+                          }} className=" text-[#5c3652] text-xl cursor-pointer absolute top-1/2 -translate-y-1/2 right-2">
+                        {showPassword ? <FaEyeSlash /> : <FaEye/>}
+                      </span>
+                    </div>
                   </div>
                   <div className="pt-8">
                     <button
-                      onClick={(_) => next()}
                       type="submit"
                       className="w-full items-center  flex justify-center bg-gradient-to-r from-[#ac3265] to-[#ac3265ee]  hover:bg-gradient-to-l hover:from-gray-700 hover:to-gray-600 text-gray-100 p-4  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
                     >
@@ -139,16 +241,19 @@ const Star: FC<TypeStar> = () => {
             )}
             {step === 2 && (
               <>
-                <form className="mt-0 relative">
+                <form onSubmit={sumitFormTwo} className="mt-0 relative">
                   <div className="relative flex justify-between items-start space-x-4">
                     <div className="w-1/2">
                       <label className="ml-3 text-sm font-bold text-gray-700 tracking-wide">
                         Company name
                       </label>
                       <input
+                        onChange={handleOnchangeTwo}
+                        name='name'
+                        value={company.name || ''}
                         className=" w-full px-4 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type=""
-                        placeholder="Enter your first name"
+                        placeholder="company name"
                         required
                       />
                     </div>
@@ -157,6 +262,9 @@ const Star: FC<TypeStar> = () => {
                         Email of your company 
                       </label>
                       <input
+                        onChange={handleOnchangeTwo}
+                        name='email'
+                        value={company.email || ''}
                         className=" w-full px-4 border-x-0 border-t-0 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type="email"
                         placeholder="mail@gmail.com"
@@ -167,9 +275,12 @@ const Star: FC<TypeStar> = () => {
                   <div className="relative flex justify-between items-start space-x-4 mt-4">
                     <div className="w-1/2">
                       <label className="ml-3 text-sm font-bold text-gray-700 tracking-wide">
-                      Number of employees
+                        Number of employees
                       </label>
                       <input
+                        onChange={handleOnchangeTwo}
+                        name='number_of_employees'
+                        value={company.number_of_employees || ''}
                         className=" w-full focus:ring-0 border-t-0 border-x-0 text-sm px-4 py-2 border-b border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type="number"
                         min={1}
@@ -182,6 +293,9 @@ const Star: FC<TypeStar> = () => {
                         Address
                       </label>
                       <input
+                        onChange={handleOnchangeTwo}
+                        name='address'
+                        value={company.address || ''}
                         className=" w-full px-4 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type=""
                         placeholder="2622 El Camino Real"
@@ -195,6 +309,9 @@ const Star: FC<TypeStar> = () => {
                       Country
                       </label>
                       <input
+                        onChange={handleOnchangeTwo}
+                        name='country'
+                        value={company.country || ''}
                         className=" w-full outline-none ring-0 focus:ring-0 border-t-0 border-x-0 text-sm px-4 py-2 border-b border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type="text"
                         placeholder="in which country is your company?"
@@ -206,6 +323,9 @@ const Star: FC<TypeStar> = () => {
                         City
                       </label>
                       <input
+                        onChange={handleOnchangeTwo}
+                        name='city'
+                        value={company.city || ''}
                         className=" w-full px-4 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type=""
                         placeholder="City of your company"
@@ -222,7 +342,6 @@ const Star: FC<TypeStar> = () => {
                       <span>Previous step</span>
                     </button>
                     <button
-                      onClick={(_) => next()}
                       type="submit"
                       className=" items-center  flex justify-center min-w-[200px] bg-gradient-to-r from-[#ac3265] to-[#ac3265ee]  hover:bg-gradient-to-l hover:from-gray-700 hover:to-gray-600 text-gray-100 px-6 py-2  rounded-md tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
                     >
