@@ -13,6 +13,7 @@ import UserList from './pages/User/List';
 import Company from './pages/Company';
 import MyUserList from './pages/User/MyUserList';
 import CreateUser from './pages/User/Create';
+import Star from './pages/Star';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/star" element={<Star />} />
 
         {/* we want to protect these routes */}
         <Route element={<RequireAuth />}>

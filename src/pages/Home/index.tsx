@@ -19,7 +19,7 @@ const Home: React.FC<typeHome> = () => {
             des applications intégrées, simples et appréciées par des millions d'utilisateurs satisfaits.
           </p>
           <div className='ml-4 text-lg mt-10'>
-            <Link to='/' className='px-4 py-2 bg-[#ac3265] active:scale-[96%] inline-block hover:bg-[#5c3852] hover:border-transparent transition border-2 border-[#7e3151] rounded-md font-bold' >Demarer maintenant</Link>
+            <Link to='/star' className='px-4 py-2 bg-[#ac3265] active:scale-[96%] inline-block hover:bg-[#5c3852] hover:border-transparent transition border-2 border-[#7e3151] rounded-md font-bold' >Demarer maintenant</Link>
             <Link to='/' className='px-4 py-2 font-bold active:scale-[96%] inline-block bg-[#ffffff20] border-2 border-transparent rounded-md ml-2 bg-opacity-50 transition' > contactez nous </Link>
           </div>
         </div>
