@@ -6,14 +6,14 @@ import { http_client } from "../../../utils/axios-custum";
 
 import DataTable, { TableColumn } from "react-data-table-component";
 import Loader from "../../../atoms/Loader";
-import { extraiText, formatDate } from "../../../utils/function";
+import { formatDate } from "../../../utils/function";
 import { FaTrash } from "react-icons/fa";
 import { MdOutgoingMail } from "react-icons/md";
 import { BsBuilding } from 'react-icons/bs';
 
 import "./List.scss";
 import { Modal } from "flowbite-react";
-import { HiEye, HiOutlineExclamationCircle } from "react-icons/hi";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import UserService from "../../../service/UserService";
