@@ -14,6 +14,8 @@ import Company from './pages/Company';
 import MyUserList from './pages/User/MyUserList';
 import CreateUser from './pages/User/Create';
 import Star from './pages/Star';
+import CustomerList from './pages/Customer/List';
+import AddCustomer from './pages/Customer/create';
 
 function App() {
   return (
@@ -33,6 +35,9 @@ function App() {
           <Route path="/users/create" element={<CreateUser />} />
           <Route path="/users/company" element={<MyUserList />} />
           <Route path="/my/company/:action" element={<Company />} />
+          <Route path="/customers" element={<CustomerList />} />
+          <Route path="/customers/create" element={<AddCustomer />} />
+          {/* custumers/create */}
         </Route>
 
         <Route path="*" element={<NotFound />} />

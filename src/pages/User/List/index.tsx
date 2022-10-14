@@ -84,6 +84,7 @@ const UserList: React.FC<TypeUserList> = () => {
             </svg>
           </div>
           <input
+            autoFocus
             onChange={(e) => setFilterText(e.target.value)}
             type="text"
             id="table-search"

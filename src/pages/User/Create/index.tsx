@@ -106,7 +106,7 @@ const CreateUser:React.FC<TypeCreateUser> = () => {
             <div className="flex justify-between items-start space-x-4 mb-4">
               <div className=' flex-col flex w-1/2'>
                 <label htmlFor="firstname">User's first name</label>
-                <input required onChange={handleOnchange} name='firstname' value={user.firstname || ''} type="text" placeholder='Enter your first name' className='px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full' />
+                <input autoFocus required onChange={handleOnchange} name='firstname' value={user.firstname || ''} type="text" placeholder='Enter your first name' className='px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full' />
               </div>
               <div className=' flex-col flex w-1/2'>
                 <label htmlFor="lastname">User last name</label>
