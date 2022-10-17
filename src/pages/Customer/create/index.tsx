@@ -58,7 +58,7 @@ const AddCustomer:FC<TypeAddCustomer> = () => {
         toast.success(res.data.message)
         console.log(res.data);
         
-        // setSuccess(true);
+        setSuccess(true);
       })
       .catch(err => {
         setSending(false);

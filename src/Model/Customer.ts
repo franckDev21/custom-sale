@@ -1,5 +1,5 @@
 export default interface Customer {
-  id ?: string|number,
+  id ?: string,
   firstname ?: string,
   lastname ?: string,
   company_id ?: number,

@@ -1,16 +1,26 @@
+import { Modal } from 'flowbite-react'
 import React, { FC, useEffect, useState } from 'react'
+import DataTable, { TableColumn } from 'react-data-table-component'
 import { BiUserPlus } from 'react-icons/bi'
 import { BsBuilding } from 'react-icons/bs'
+import { FaEye, FaTrash } from 'react-icons/fa'
+import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import Loader from '../../../atoms/Loader'
 import Customer from '../../../Model/Customer'
 import Storage from '../../../service/Storage'
 import UserService from '../../../service/UserService'
 import DashboardLayout from '../../../templates/DashboardLayout'
 import { http_client } from '../../../utils/axios-custum'
+import { formatDate } from '../../../utils/function'
 
 type TypeCustomerList = {}
 
 const GET_CUSTOMER_URL = '/customers'
+const GET_USERS_URL = "users";
+const DELETE_USERS_COMPANY_URL = "users/companies";
+const TOGGLE_ACTIVE_USER_URL = "user/toggle-active";
 
 const CustomerList:FC<TypeCustomerList> = () => {
 
@@ -45,6 +55,134 @@ const CustomerList:FC<TypeCustomerList> = () => {
         item.email.toLowerCase().includes(filterText.toLowerCase()))
   );
 
+  const subHeaderComponentMemo = React.useMemo(() => {
+    const handleClear = () => {
+      if (filterText) {
+        setResetPaginationToggle(!resetPaginationToggle);
+        setFilterText("");
+      }
+    };
+
+    return (
+      <>
+        <div className="relative mt-1">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <svg
+              className="w-5 h-5 text-gray-500 dark:text-gray-400"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                clipRule="evenodd"
+              ></path>
+            </svg>
+          </div>
+          <input
+            autoFocus
+            onChange={(e) => setFilterText(e.target.value)}
+            type="text"
+            id="table-search"
+            className="bg-gray-100 border border-none focus:ring-2 text-gray-900 text-xs rounded-lg focus:ring-gray-700 focuslue-500 block w-80 pl-10 p-3 focus:bg-white  dark:bg-gray-700 dark:border-gray-600 ring-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-700 "
+            placeholder="Search htmlFor items"
+          />
+          <span className=" absolute" onClick={handleClear}>
+            x
+          </span>
+        </div>
+      </>
+    );
+  }, [filterText, resetPaginationToggle]);
+
+  const onClick = (id: string) => {
+    setCurrentIdCompany(id);
+    setShowModal(!showModal);
+  };
+
+  const confirmDelete = () => {
+    setShowModal(false);
+
+    setDeleting(true);
+    // delete user company
+    http_client(Storage.getStorage("auth").token)
+      .delete(`${DELETE_USERS_COMPANY_URL}/${currentIdComapany}`)
+      .then((res) => {
+        setDeleting(false);
+        deleteUser(currentIdComapany || "1");
+        toast.success(res.data.message);
+      })
+      .catch((err: any) => {
+        setDeleting(false);
+        console.log(err);
+      });
+  };
+
+  const deleteUser = (id: string) => {
+    let usersFilter = users.filter((user) => user.id !== id);
+    setUsers(usersFilter);
+  };
+
+
+  const onClose = () => {
+    setShowModal(false);
+  };
+
+  const columns: TableColumn<Customer>[] = [
+
+    {
+      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Name</span>,
+      cell: (row) => <span className="font-bold">
+        {row.firstname} {row.lastname}
+      </span>,
+      sortable: true,
+    },
+    {
+      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Tel</span>,
+      cell: (row) => <span className="">
+        {row.tel || "Aucun"}
+      </span>,
+      sortable: true,
+    },
+    {
+      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Email</span>,
+      selector: (row) => row.email || "Aucun",
+      sortable: true,
+    },
+    {
+      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Total order</span>,
+      selector: (row) => "0 Order",
+      sortable: true,
+    },
+    {
+      name: (
+        <span className=" font-bold text-xs text-[#ac3265] uppercase translate-x-5">
+          Created at
+        </span>
+      ),
+      selector: (row) => formatDate(row.created_at || ""),
+    },
+    {
+      name: "",
+      cell: (row) => (
+        <h1 className=" flex items-center justify-center">
+          <a
+            href="/"
+            className="font-medium ml-2 text-base text-blue-500 p-2 bg-blue-100 rounded-full inline-block dark:text-blue-500 hover:underline"
+          >
+            <FaEye />
+          </a>
+          <button
+            onClick={(_) => onClick(row.id || "1")}
+            className="font-medium ml-2 text-red-500 w-8 h-8 justify-center items-center  bg-red-100 rounded-full inline-flex dark:text-red-500 hover:underline"
+          >
+            <FaTrash />
+          </button>
+        </h1>
+      ),
+    },
+  ];
 
 
   useEffect(() => {
@@ -74,6 +212,67 @@ const CustomerList:FC<TypeCustomerList> = () => {
         </>
       }
     >
+
+      <React.Fragment>
+        <Modal
+          show={showModal || deleting}
+          size="md"
+          popup={true}
+          onClose={onClose}
+        >
+          <Modal.Header />
+          <Modal.Body>
+            <div className="text-center">
+              <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
+              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                Are you sure you want to delete this company ?
+              </h3>
+              <div className="flex justify-center gap-4">
+                <button
+                  color="failure"
+                  className="bg-red-500 text-white rounded-md px-4 py-2"
+                  onClick={confirmDelete}
+                >
+                  {deleting ? (
+                    <Loader className="flex justify-center items-center" />
+                  ) : (
+                    "Yes, I'm sure"
+                  )}
+                </button>
+                <button
+                  color="gray"
+                  onClick={onClose}
+                  className="bg-gray-500 text-white rounded-md px-4 py-2"
+                >
+                  No, cancel
+                </button>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+      </React.Fragment>
+      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        {!loading ? (
+          <>
+            <DataTable
+              className=" rounded-md overflow-hidden"
+              title="Users"
+              pagination
+              columns={columns}
+              data={filteredItems}
+              paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
+              subHeader
+              subHeaderComponent={subHeaderComponentMemo}
+              persistTableHead
+              responsive
+            />
+          </>
+        ) : (
+          <div className="h-[400px] flex justify-center items-center text-8xl text-[#5c3652]">
+            <Loader />
+          </div>
+        )}
+      </div>
 
     </DashboardLayout>
   )
