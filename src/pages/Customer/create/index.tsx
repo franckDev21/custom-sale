@@ -1,7 +1,7 @@
-import React, { ChangeEvent, FC, FormEvent, useState } from 'react'
+import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react'
 import { FaCheckCircle } from 'react-icons/fa';
 import { HiOutlineArrowNarrowLeft } from 'react-icons/hi';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loader from '../../../atoms/Loader';
 import Customer from '../../../Model/Customer';
@@ -13,14 +13,17 @@ import { http_client } from '../../../utils/axios-custum';
 type TypeAddCustomer = {}
 
 const CREATE_CUSTOMERS_URL = '/customers';
+const GET_CUSTOMER_URL = 'customer'
 
 const AddCustomer:FC<TypeAddCustomer> = () => {
 
   const [sending, setSending] = useState(false);
   const [errForm, setErrForm] = useState('');
+  const [editing, setEditiong] = useState(false);
   const [success,setSuccess]  = useState(false)
   const [customer,setCustomer] = useState<Customer>({});
-  
+
+  const { action } = useParams()
 
   const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
     if(errForm) setErrForm('');
@@ -52,20 +55,50 @@ const AddCustomer:FC<TypeAddCustomer> = () => {
     e.preventDefault();
     setSending(true);
     setErrForm('')
-    http_client(Storage.getStorage('auth').token).post(CREATE_CUSTOMERS_URL,customer)
-      .then(res => {
-        setSending(false);
-        toast.success(res.data.message)
-        console.log(res.data);
-        
-        setSuccess(true);
-      })
-      .catch(err => {
-        setSending(false);
-        setErrForm(err.response.data.message)
-        console.log(err);
-      });
+    if(editing){
+      http_client(Storage.getStorage('auth').token).post(`${GET_CUSTOMER_URL}/${parseInt(action || '0',10)}`,customer)
+        .then(res => {
+          setSending(false);
+          toast.success(res.data.message)
+          console.log(res.data);
+          
+          setSuccess(true);
+        })
+        .catch(err => {
+          setSending(false);
+          setErrForm(err.response.data.message)
+          console.log(err);
+        });
+    }else{
+      http_client(Storage.getStorage('auth').token).post(CREATE_CUSTOMERS_URL,customer)
+        .then(res => {
+          setSending(false);
+          toast.success(res.data.message)
+          console.log(res.data);
+          
+          setSuccess(true);
+        })
+        .catch(err => {
+          setSending(false);
+          setErrForm(err.response.data.message)
+          console.log(err);
+        });
+    }
+    
   }
+
+  useEffect(() => {
+    if(action && Number.isInteger(parseInt(action,10))){
+      setEditiong(true)
+      http_client(Storage.getStorage('auth').token).get(`${GET_CUSTOMER_URL}/${parseInt(action,10)}`)
+      .then(res => {
+          setCustomer(res.data)
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  },[action])
 
   return (
     <DashboardLayout
@@ -74,7 +107,9 @@ const AddCustomer:FC<TypeAddCustomer> = () => {
       headerContent={
         <>
           <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
-            <span>|  <span className='ml-2'>add a new customer</span></span>{" "}
+            <span>| {' '} 
+              {editing ? <>Editing customer information <span className='text-gray-500'>{customer.firstname} {customer.lastname}</span></>:<span className='ml-2'>add a new customer</span>}
+            </span>
           </div>
         </>
       }
@@ -130,7 +165,9 @@ const AddCustomer:FC<TypeAddCustomer> = () => {
 
             <div className="flex items-center justify-end">
               <button type='submit' className={`px-4 ${sending && 'disabled'} flex justify-center items-center py-[0.48rem] bg-[#ac3265] hover:bg-[#951f50] transition min-w-[200px] text-white text-sm font-semibold rounded-md`}>
-                {sending ? <Loader className=' inline-block text-xl' /> : 'Register new customer'}
+                {sending ? <Loader className=' inline-block text-xl' /> : <>
+                  {editing ? "update your client":"'Register new customer'"}
+                </>}
               </button>
             </div>
 

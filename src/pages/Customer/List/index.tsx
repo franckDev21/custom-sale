@@ -18,9 +18,7 @@ import { formatDate } from '../../../utils/function'
 type TypeCustomerList = {}
 
 const GET_CUSTOMER_URL = '/customers'
-const GET_USERS_URL = "users";
-const DELETE_USERS_COMPANY_URL = "users/companies";
-const TOGGLE_ACTIVE_USER_URL = "user/toggle-active";
+const DELETE_CUSTOMER_COMPANY_URL = "customers";
 
 const CustomerList:FC<TypeCustomerList> = () => {
 
@@ -33,7 +31,6 @@ const CustomerList:FC<TypeCustomerList> = () => {
     null
   );
   const [deleting, setDeleting] = useState(false);
-  const [activations, setActivations] = useState(false);
 
   const navigate = useNavigate();
 
@@ -107,7 +104,7 @@ const CustomerList:FC<TypeCustomerList> = () => {
     setDeleting(true);
     // delete user company
     http_client(Storage.getStorage("auth").token)
-      .delete(`${DELETE_USERS_COMPANY_URL}/${currentIdComapany}`)
+      .delete(`${DELETE_CUSTOMER_COMPANY_URL}/${currentIdComapany}`)
       .then((res) => {
         setDeleting(false);
         deleteUser(currentIdComapany || "1");
@@ -167,12 +164,12 @@ const CustomerList:FC<TypeCustomerList> = () => {
       name: "",
       cell: (row) => (
         <h1 className=" flex items-center justify-center">
-          <a
-            href="/"
+          <Link
+            to={`/customers/create/${row.id}`}
             className="font-medium ml-2 text-base text-blue-500 p-2 bg-blue-100 rounded-full inline-block dark:text-blue-500 hover:underline"
           >
             <FaEye />
-          </a>
+          </Link>
           <button
             onClick={(_) => onClick(row.id || "1")}
             className="font-medium ml-2 text-red-500 w-8 h-8 justify-center items-center  bg-red-100 rounded-full inline-flex dark:text-red-500 hover:underline"
@@ -206,7 +203,7 @@ const CustomerList:FC<TypeCustomerList> = () => {
             <span>|  <span className='ml-2'>List</span></span>{" "}
             <div className="flex items-center justify-end">
               <Link to='/my/company/view' className={`flex ${(UserService.getUser().role === 'ENTREPRISE' && !UserService.getUser().as_company) && 'disabled'}  justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}><BsBuilding className="mr-2" />  see my company </Link>
-              <Link to='/customers/create' className={`flex ${(UserService.getUser().role === 'ENTREPRISE' && !UserService.getUser().as_company) && 'disabled'}  justify-start text-sm border-4 border-gray-700 items-center space-x-2 rounded px-2 py-1 text-white bg-gray-700 hover:bg-gray-800 transition w-auto ml-3`}>Create a new customer <BiUserPlus className="ml-2 text-lg" /></Link>
+              <Link to='/customers/create/new' className={`flex ${(UserService.getUser().role === 'ENTREPRISE' && !UserService.getUser().as_company) && 'disabled'}  justify-start text-sm border-4 border-gray-700 items-center space-x-2 rounded px-2 py-1 text-white bg-gray-700 hover:bg-gray-800 transition w-auto ml-3`}>Create a new customer <BiUserPlus className="ml-2 text-lg" /></Link>
             </div>
           </div>
         </>
@@ -225,7 +222,7 @@ const CustomerList:FC<TypeCustomerList> = () => {
             <div className="text-center">
               <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Are you sure you want to delete this company ?
+                Are you sure you want to delete this Customer ?
               </h3>
               <div className="flex justify-center gap-4">
                 <button
