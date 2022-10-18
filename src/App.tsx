@@ -16,6 +16,7 @@ import CreateUser from './pages/User/Create';
 import Star from './pages/Star';
 import CustomerList from './pages/Customer/List';
 import AddCustomer from './pages/Customer/create';
+import ProducList from './pages/Product/List';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="/my/company/:action" element={<Company />} />
           <Route path="/customers" element={<CustomerList />} />
           <Route path="/customers/create/:action" element={<AddCustomer />} />
+          <Route path="/products" element={<ProducList />} />
           {/* custumers/create */}
         </Route>
 
