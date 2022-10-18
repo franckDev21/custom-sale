@@ -15,7 +15,6 @@ import { formatDate, formatCurrency } from '../../../utils/function'
 import { Modal } from 'flowbite-react'
 import Loader from '../../../atoms/Loader'
 import { BiPencil } from 'react-icons/bi'
-import { AiOutlineDropbox } from 'react-icons/ai'
 
 import DefautProductImage from '../../../assets/img/default-product.png';
 
