@@ -6,6 +6,8 @@ export default interface Product {
   id ?: string,
   name ?: string,
   qte_en_stock ?: string|number,
+  qte_stock_alert ?: string|number ,
+  is_stock ?: boolean,
   prix_unitaire ?: string|number,
   image     ?: string,
   poids ?: number,

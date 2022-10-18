@@ -15,7 +15,7 @@ export const extraiText = (text: string, maxLength: number = 25) => {
 };
 
 export const formatCurrency = (number: number,currency: string = 'USD') => {
- return '$'+(new Intl.NumberFormat("de-DE", {style: "currency", currency}).format(number)).replace('$','');
+ return (new Intl.NumberFormat("de-DE", {style: "currency", currency}).format(number)).replace('$','');
 }
 
 
