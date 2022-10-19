@@ -23,6 +23,7 @@ type TypeProducList = {}
 const GET_PRODUCT_URL = '/products'
 const DELETE_CUSTOMER_COMPANY_URL = "products";
 const API_STORAGE_URL = "http://localhost:8000/storage";
+const DELETE_PRODUCT_URL = 'product'
 
 
 const ProducList:FC<TypeProducList> = () => {
@@ -113,7 +114,9 @@ const ProducList:FC<TypeProducList> = () => {
     },
     {
       name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Quantité</span>,
-      cell: (row) => <span>{row.qte_en_stock} {row.type_approvisionnement}{(row.qte_en_stock || 0) > 1 && 's'} </span>,
+      cell: (row) => <span>{row.qte_en_stock} {row.type_approvisionnement}{(row.qte_en_stock || 0) > 1 && 's'} 
+      {row.product_type?.name === 'VENDU_PAR_NOMBRE_PAR_CONTENEUR' && ` de ${row.nbre_par_carton} et ${row.unite_restante || 0} Unité${(row.unite_restante || 0) > 1 ? 's':''} restante`} 
+      </span>,
       sortable: true,
     },
     {
@@ -151,14 +154,14 @@ const ProducList:FC<TypeProducList> = () => {
         <h1 className=" flex items-center justify-center">
           <Link
             title={`View ${row.name}`}
-            to={`/customers/create/${row.id}`}
+            to={`/customers/show/${row.id}`}
             className="font-medium ml-1 text-base text-blue-500 p-2 bg-blue-100 rounded-md inline-block dark:text-blue-500 hover:underline"
           >
             <FaEye />
           </Link>
           <Link
             title={`Edit ${row.name}`}
-            to={`/customers/create/${row.id}`}
+            to={`/customers/edit/${row.id}`}
             className="font-medium ml-1 text-base text-gray-700 p-2 bg-gray-200 rounded-md inline-block dark:text-gray-500 hover:underline"
           >
             <BiPencil />
@@ -185,10 +188,10 @@ const ProducList:FC<TypeProducList> = () => {
     setDeleting(true);
     // delete user company
     http_client(Storage.getStorage("auth").token)
-      .delete(`${DELETE_CUSTOMER_COMPANY_URL}/${currentIdComapany}`)
+      .delete(`${DELETE_PRODUCT_URL}/${currentIdComapany}`)
       .then((res) => {
         setDeleting(false);
-        deleteUser(currentIdComapany || "1");
+        deleteProduct(currentIdComapany || "1");
         toast.success(res.data.message);
       })
       .catch((err: any) => {
@@ -197,7 +200,7 @@ const ProducList:FC<TypeProducList> = () => {
       });
   };
   
-  const deleteUser = (id: string) => {
+  const deleteProduct = (id: string) => {
     let usersFilter = products.filter((product) => product.id !== id);
     setProducts(usersFilter);
   };

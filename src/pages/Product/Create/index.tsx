@@ -56,7 +56,12 @@ const ProductCreate: FC<TypeProductCreate> = () => {
       .then(res => {
         setSending(false)
         toast.success(res.data.message)
-        navigate('/products')
+        setLoading(true)
+        let id = window.setTimeout(() => {
+          navigate('/products')
+          window.clearTimeout(id)
+        },6000)
+        
       })
       .catch(err => {
         setSending(false)
