@@ -22,6 +22,7 @@ type TypeProducList = {}
 
 const GET_PRODUCT_URL = '/products'
 const DELETE_CUSTOMER_COMPANY_URL = "products";
+const API_STORAGE_URL = "http://localhost:8000/storage";
 
 
 const ProducList:FC<TypeProducList> = () => {
@@ -81,7 +82,7 @@ const ProducList:FC<TypeProducList> = () => {
             type="text"
             id="table-search"
             className="bg-gray-100 border border-none focus:ring-2 text-gray-900 text-xs rounded-lg focus:ring-gray-700 focuslue-500 block w-80 pl-10 p-3 focus:bg-white  dark:bg-gray-700 dark:border-gray-600 ring-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-700 "
-            placeholder="Search htmlFor items"
+            placeholder="Search your product"
           />
           <span className=" absolute" onClick={handleClear}>
             x
@@ -95,9 +96,9 @@ const ProducList:FC<TypeProducList> = () => {
 
     {
       name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Name</span>,
-      cell: (row) => <div className="font-bold flex space-x-2">
+      cell: (row) => <div className="font-bold flex space-y-1 flex-col justify-start items-start">
         <div className=' relative flex justify-center items-center'>
-          {row.image ? <img src={row.image} alt='productimage' />:<img width={50} height={50} src={DefautProductImage} className='opacity-50' alt='default-product' />}
+          {row.image ? <img width={70} height={70} src={`${API_STORAGE_URL}/${row.image}`} alt='productimage' />:<img width={70} height={70} src={DefautProductImage} className='opacity-50' alt='default-product' />}
         </div>
         <span>{row.name} </span>
       </div>,
@@ -112,12 +113,12 @@ const ProducList:FC<TypeProducList> = () => {
     },
     {
       name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Quantité</span>,
-      cell: (row) => <span>{row.qte_en_stock} {row.type_approvisionnement}</span>,
+      cell: (row) => <span>{row.qte_en_stock} {row.type_approvisionnement}{(row.qte_en_stock || 0) > 1 && 's'} </span>,
       sortable: true,
     },
     {
       name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Encore en stock</span>,
-      cell: (row) => <div>{row.is_stock ? <span className='px-1 inline-block text-xs py-1 text-green-600 bg-green-100 rounded-full'>Oui en stock</span>:<span className='px-1 inline-block text-xs py-1 text-red-500 bg-red-100 rounded-full'>Non</span>}</div>,
+      cell: (row) => <div>{row.is_stock ? <span className='px-1 inline-block text-xs py-1 text-green-600 bg-green-100 rounded-full'>Yes in stock </span>:<span className='px-1 inline-block text-xs py-1 text-red-500 bg-red-100 rounded-full'>No stock sold out</span>}</div>,
       sortable: true,
     },
     {
