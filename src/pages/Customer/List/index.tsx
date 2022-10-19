@@ -1,27 +1,26 @@
-import { Modal } from 'flowbite-react'
-import React, { FC, useEffect, useState } from 'react'
-import DataTable, { TableColumn } from 'react-data-table-component'
-import { BiUserPlus } from 'react-icons/bi'
-import { BsBuilding } from 'react-icons/bs'
-import { FaEye, FaTrash } from 'react-icons/fa'
-import { HiOutlineExclamationCircle } from 'react-icons/hi'
-import { Link, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import Loader from '../../../atoms/Loader'
-import Customer from '../../../Model/Customer'
-import Storage from '../../../service/Storage'
-import UserService from '../../../service/UserService'
-import DashboardLayout from '../../../templates/DashboardLayout'
-import { http_client } from '../../../utils/axios-custum'
-import { formatDate } from '../../../utils/function'
+import { Modal } from "flowbite-react";
+import React, { FC, useEffect, useState } from "react";
+import DataTable, { TableColumn } from "react-data-table-component";
+import { BiUserPlus } from "react-icons/bi";
+import { BsBuilding } from "react-icons/bs";
+import { FaEye, FaTrash } from "react-icons/fa";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Loader from "../../../atoms/Loader";
+import Customer from "../../../Model/Customer";
+import Storage from "../../../service/Storage";
+import UserService from "../../../service/UserService";
+import DashboardLayout from "../../../templates/DashboardLayout";
+import { http_client } from "../../../utils/axios-custum";
+import { formatDate } from "../../../utils/function";
 
-type TypeCustomerList = {}
+type TypeCustomerList = {};
 
-const GET_CUSTOMER_URL = '/customers'
+const GET_CUSTOMER_URL = "/customers";
 const DELETE_CUSTOMER_COMPANY_URL = "customers";
 
-const CustomerList:FC<TypeCustomerList> = () => {
-
+const CustomerList: FC<TypeCustomerList> = () => {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<Customer[]>([]);
   const [filterText, setFilterText] = useState("");
@@ -39,9 +38,7 @@ const CustomerList:FC<TypeCustomerList> = () => {
       (item.firstname &&
         item.firstname.toLowerCase().includes(filterText.toLowerCase())) ||
       (item.lastname &&
-        item.lastname
-          .toLowerCase()
-          .includes(filterText.toLowerCase())) ||
+        item.lastname.toLowerCase().includes(filterText.toLowerCase())) ||
       (item?.city &&
         item.city.toLowerCase().includes(filterText.toLowerCase())) ||
       (item?.address &&
@@ -121,34 +118,48 @@ const CustomerList:FC<TypeCustomerList> = () => {
     setUsers(usersFilter);
   };
 
-
   const onClose = () => {
     setShowModal(false);
   };
 
   const columns: TableColumn<Customer>[] = [
-
     {
-      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Name</span>,
-      cell: (row) => <span className="font-bold">
-        {row.firstname} {row.lastname}
-      </span>,
+      name: (
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">
+          Name
+        </span>
+      ),
+      cell: (row) => (
+        <span className="font-bold">
+          {row.firstname} {row.lastname}
+        </span>
+      ),
       sortable: true,
     },
     {
-      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Tel</span>,
-      cell: (row) => <span className="">
-        {row.tel || "Aucun"}
-      </span>,
+      name: (
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">
+          Tel
+        </span>
+      ),
+      cell: (row) => <span className="">{row.tel || "Aucun"}</span>,
       sortable: true,
     },
     {
-      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Email</span>,
+      name: (
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">
+          Email
+        </span>
+      ),
       selector: (row) => row.email || "Aucun",
       sortable: true,
     },
     {
-      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Total order</span>,
+      name: (
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">
+          Total order
+        </span>
+      ),
       selector: (row) => "0 Order",
       sortable: true,
     },
@@ -181,7 +192,6 @@ const CustomerList:FC<TypeCustomerList> = () => {
     },
   ];
 
-
   useEffect(() => {
     const fetUsers = async () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
@@ -196,20 +206,39 @@ const CustomerList:FC<TypeCustomerList> = () => {
   return (
     <DashboardLayout
       titleClass="w-[30%]"
-      title='Customer management'
+      title="Customer management"
       headerContent={
         <>
           <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
-            <span>|  <span className='ml-2'>List</span></span>{" "}
+            <span>
+              | <span className="ml-2">List</span>
+            </span>{" "}
             <div className="flex items-center justify-end">
-              <Link to='/my/company/view' className={`flex ${(UserService.getUser().role === 'ENTREPRISE' && !UserService.getUser().as_company) && 'disabled'}  justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}><BsBuilding className="mr-2" />  see my company </Link>
-              <Link to='/customers/create/new' className={`flex ${(UserService.getUser().role === 'ENTREPRISE' && !UserService.getUser().as_company) && 'disabled'}  justify-start text-sm border-4 border-gray-700 items-center space-x-2 rounded px-2 py-1 text-white bg-gray-700 hover:bg-gray-800 transition w-auto ml-3`}>Create a new customer <BiUserPlus className="ml-2 text-lg" /></Link>
+              <Link
+                to="/my/company/view"
+                className={`flex ${
+                  UserService.getUser().role === "ENTREPRISE" &&
+                  !UserService.getUser().as_company &&
+                  "disabled"
+                }  justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}
+              >
+                <BsBuilding className="mr-2" /> see my company{" "}
+              </Link>
+              <Link
+                to="/customers/create/new"
+                className={`flex ${
+                  UserService.getUser().role === "ENTREPRISE" &&
+                  !UserService.getUser().as_company &&
+                  "disabled"
+                }  justify-start text-sm border-4 border-gray-700 items-center space-x-2 rounded px-2 py-1 text-white bg-gray-700 hover:bg-gray-800 transition w-auto ml-3`}
+              >
+                Create a new customer <BiUserPlus className="ml-2 text-lg" />
+              </Link>
             </div>
           </div>
         </>
       }
     >
-
       <React.Fragment>
         <Modal
           show={showModal || deleting}
@@ -253,7 +282,7 @@ const CustomerList:FC<TypeCustomerList> = () => {
           <>
             <DataTable
               className=" rounded-md overflow-hidden"
-              title="Users"
+              title="Customers"
               pagination
               columns={columns}
               data={filteredItems}
@@ -270,9 +299,8 @@ const CustomerList:FC<TypeCustomerList> = () => {
           </div>
         )}
       </div>
-
     </DashboardLayout>
-  )
-}
+  );
+};
 
-export default CustomerList
+export default CustomerList;

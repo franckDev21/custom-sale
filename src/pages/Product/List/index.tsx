@@ -239,7 +239,7 @@ const ProducList:FC<TypeProducList> = () => {
         <div className="flex space-x-4 font-bold items-center">
         <Link to='/approvisionnement' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <TbArrowsRightLeft size={16} className='inline-block  mr-1' /> History of entries</Link>
         <Link to='/approvisionnement' className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> Print the list of products</Link>
-        <Link to='/approvisionnement' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaBoxOpen size={16} className='inline-block mr-1' /> Add new product</Link>
+        <Link to='/products/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaBoxOpen size={16} className='inline-block mr-1' /> Add new product</Link>
         <Link to='/approvisionnement' className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></Link>
         </div>
       </div>
@@ -256,7 +256,7 @@ const ProducList:FC<TypeProducList> = () => {
             <div className="text-center">
               <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Are you sure you want to delete this Customer ?
+                Are you sure you want to delete this Product ?
               </h3>
               <div className="flex justify-center gap-4">
                 <button
@@ -289,7 +289,7 @@ const ProducList:FC<TypeProducList> = () => {
           <>
             <DataTable
               className=" rounded-md overflow-hidden"
-              title="Users"
+              title="Products"
               pagination
               columns={columns}
               data={filteredItems}
