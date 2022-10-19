@@ -21,7 +21,6 @@ import DefautProductImage from '../../../assets/img/default-product.png';
 type TypeProducList = {}
 
 const GET_PRODUCT_URL = '/products'
-const DELETE_CUSTOMER_COMPANY_URL = "products";
 const API_STORAGE_URL = "http://localhost:8000/storage";
 const DELETE_PRODUCT_URL = 'product'
 
