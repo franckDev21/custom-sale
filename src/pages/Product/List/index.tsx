@@ -161,7 +161,7 @@ const ProducList:FC<TypeProducList> = () => {
           </Link>
           <Link
             title={`Edit ${row.name}`}
-            to={`/products/edit/${row.id}`}
+            to={`/products/edit/${row.id}/${row.name?.split(' ').join('-').toLowerCase()}`}
             className="font-medium ml-1 text-base text-gray-700 p-2 bg-gray-200 rounded-md inline-block dark:text-gray-500 hover:underline"
           >
             <BiPencil />

@@ -19,6 +19,7 @@ import AddCustomer from './pages/Customer/create';
 import ProducList from './pages/Product/List';
 import ProductCreate from './pages/Product/Create';
 import ProductDetail from './pages/Product/Detail';
+import ProductEdit from './pages/Product/Edit';
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
           <Route path="/products" element={<ProducList />} />
           <Route path="/products/create" element={<ProductCreate />} />
           <Route path="/products/show/:id/:slug" element={<ProductDetail />} />
+          <Route path="/products/edit/:id/:slug" element={<ProductEdit />} />
           {/* custumers/create */}
         </Route>
 
