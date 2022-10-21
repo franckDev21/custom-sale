@@ -37,8 +37,6 @@ const ProducList:FC<TypeProducList> = () => {
   );
   const [deleting, setDeleting] = useState(false);
 
-  const navigate = useNavigate();
-
   const filteredItems = products.filter(
     (item) =>
       (item.name &&
