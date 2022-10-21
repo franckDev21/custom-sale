@@ -225,7 +225,7 @@ const ProducList:FC<TypeProducList> = () => {
       headerContent={
         <>
           <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
-            <Link to='/approvisionnement' className='text-sm text-white px-4 rounded-md bg-cyan-700 py-2'> <TbArrowsRightLeft size={16} className='inline-block rotate-90 mr-1' /> Procurement history</Link>
+            <Link to='/products/procurements' className='text-sm text-white px-4 rounded-md bg-cyan-700 py-2'> <TbArrowsRightLeft size={16} className='inline-block rotate-90 mr-1' /> Procurement history</Link>
             <form className='flex justify-between space-x-2 w-[60%]'>
               <div className='relative w-[90%]'>
                 <ImSearch className='absolute top-1/2 -translate-y-1/2 right-4 opacity-80' size={20} />
