@@ -121,7 +121,7 @@ const ProductHistory:React.FC<TypeProductHistory> = () => {
       ),
       cell: (row) =>  row.type,
     },
-    {
+    { 
       name: (
         <span className=" font-bold text-xs text-[#ac3265] uppercase">
           MOTIF
