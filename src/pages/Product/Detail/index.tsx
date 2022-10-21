@@ -3,6 +3,7 @@ import React, { useState, useEffect, FormEvent, ChangeEvent } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { RiArrowLeftRightFill } from "react-icons/ri";
 import { Link, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import Loader from "../../../atoms/Loader";
 import Product from "../../../Model/Product";
 import Storage from "../../../service/Storage";
@@ -25,6 +26,8 @@ type TypeOutputForm = {
 
 const GET_PRODUIT_URL = "product";
 const API_STORAGE_URL = "http://localhost:8000/storage";
+const POST_SUPPLY_URL = "products/add";
+// products/add/{product}/input/supply
 
 const ProductDetail: React.FC<TypeProductDetail> = () => {
   const [loading, setLoading] = useState(true);
@@ -32,26 +35,60 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
   const [showInputModal, setShowInputModal] = useState(false);
   const [showOutputModal, setShowOutputModal] = useState(false);
   const [sending, setSending] = useState(false);
+  const [sending2, setSending2] = useState(false);
   const [modalType, setModalType] = useState('INPUT');
   const [dataInputForm,setDataInputForm] = useState<TypeInputForm>({})
-  const [dataOutputForm,setDataOutputForm] = useState<TypeOutputForm>({})
+  const [dataOutputForm,setDataOutputForm] = useState<TypeOutputForm>({
+    type : 'CONTENEUR'
+  })
 
   const { id } = useParams();
 
   const confirmAddInput = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setSending(true)
-
     // add inPut
+    http_client(Storage.getStorage("auth").token).post(`${POST_SUPPLY_URL}/${id}/input/supply`,dataInputForm)
+      .then(res => {
+        setSending(false)
+        setShowInputModal(false);
+        setDataInputForm({quantite:'',prix_achat: ''})
+        toast.success(res.data.message)
+        setProduct(res.data.product)
+      })
+      .catch(err => {
+        setSending(false)
+        console.log(err);
+      })
     
   }
 
   const confirmAddOutput = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setSending(true)
-
-    // add inPut
+    setSending2(true)
     
+    // add inPut
+    http_client(Storage.getStorage("auth").token).post(`${POST_SUPPLY_URL}/${id}/output/`,dataOutputForm)
+      .then(res => {
+        setSending2(false)
+        setShowOutputModal(false);
+        setDataOutputForm({quantite:'',type: '',motif: ''})
+
+        if(res.data.message){
+          toast.success(res.data.message)
+          setProduct(res.data.product)
+        }else if(res.data.error){
+          toast.error(res.data.error)
+        }else{
+          console.log(res.data);
+          
+        }
+        
+      })
+      .catch(err => {
+        setSending2(false)
+        console.log(err);
+      })
   }
 
   const handleOnchange = (e: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
@@ -113,21 +150,24 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
       headerContent={
         <>
           <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
-            {!loading && <>
-              <span>| {product.name}</span>
+            {!loading && 
+              <>
+                <span>| {product.name}</span>
 
-              <div className="flex space-x-4 font-bold items-center">
-                <button onClick={_ => {
-                  onClick('OUTPUT')
-                  setModalType('OUTPUT')
-                }} className='text-sm text-white px-4 rounded-md bg-red-400 py-2'> <FaMinus size={16} className='inline-block  mr-1' />Add an output</button>
-                <button onClick={_ => {
-                  onClick()
-                  setModalType('INPUT')
-                }} className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaPlus size={16} className='inline-block mr-1' />Add an entry</button>
-                <Link to='/approvisionnement' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <RiArrowLeftRightFill size={20} className='inline-block rotate-90  mr-1' />History of entries</Link>
-              </div>
-            </>}
+                <div className="flex space-x-4 font-bold items-center">
+                  <button onClick={_ => {
+                    onClick('OUTPUT')
+                    setModalType('OUTPUT')
+                  }} className='text-sm text-white px-4 rounded-md bg-red-400 py-2'> <FaMinus size={16} className='inline-block  mr-1' />Add an output</button>
+                  <button onClick={_ => {
+                    onClick('INPUT')
+                    setModalType('INPUT')
+                  }} className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaPlus size={16} className='inline-block mr-1' />Add an entry</button>
+                  <Link to='/approvisionnement' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <RiArrowLeftRightFill size={20} className='inline-block rotate-90  mr-1' />History of entries</Link>
+                </div>
+              </>
+            }
+
           </div>
         </>
       }
@@ -137,7 +177,7 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
         {/* modal add an output */}
         <React.Fragment>
           <Modal
-            show={showOutputModal || sending}
+            show={showOutputModal || sending2}
             size="xl"
             popup={true}
             onClose={onClose}
@@ -150,17 +190,20 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
                 </h3>
                 <div className="flex flex-col space-y-4 mt-4 mb-6">
                   <div>
-                    <label htmlFor="quantite" className="inline-block mb-2 font-semibold text-gray-700">Quantity <span className=" italic text-sm font-light ">({product.type_approvisionnement})</span></label>
+                    <label htmlFor="quantite" className="inline-block mb-2 font-semibold text-gray-700">Quantity</label>
                     <input name="quantite" onChange={handleOnchange} value={dataOutputForm.quantite || ''} required autoFocus type="number" id="quantite" placeholder="Quantity of supply" min={0} className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600' />
                   </div>
-                  <div>
-                    <label htmlFor="price" className="inline-block mb-2 font-semibold text-gray-700">Output type  </label>
-                    <select name="type" onChange={handleOnchange} value={dataOutputForm.type || ''} required  id="price" placeholder="price (FCFA)" className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600'>
-                      <option value=""> -- SELECT --</option>
-                      <option value="UNIT">In units</option>
-                      <option value="CONTENEUR">{product.type_approvisionnement}</option>
-                    </select>
-                  </div>
+                  {product.product_type?.name !== 'VENDU_PAR_PIECE' &&
+                    <div>
+                      <label htmlFor="price" className="inline-block mb-2 font-semibold text-gray-700">Output type  </label>
+                      <select name="type" onChange={handleOnchange} value={dataOutputForm.type || ''} required  id="price" placeholder="price (FCFA)" className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600'>
+                        <option value=""> -- SELECT --</option>
+                        <option value="UNITE">In units</option>
+                        <option value="CONTENEUR">{product.type_approvisionnement}</option>
+                      </select>
+                    </div>
+                  }
+                  {product.product_type?.name === 'VENDU_PAR_PIECE' && <input type='hidden' className='hidden' name='type' hidden value={dataOutputForm.type} />}
                   <div>
                     <label htmlFor="motif" className="inline-block mb-2 font-semibold text-gray-700">Your reason</label>
                     <textarea name="motif" onChange={handleOnchange} value={dataOutputForm.motif || ''} required id="quantite" placeholder="Enter your reason" className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600' rows={6}></textarea>
@@ -169,12 +212,12 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
                 <div className="flex justify-center space-x-3">
                   <button
                     color="failure"
-                    className={`bg-green-500 ${sending && 'disabled'} hover:bg-green-700 transition text-white rounded-md px-3 font-semibold uppercase py-2 w-1/2 inline-block`}
+                    className={`bg-green-500 ${sending2 && 'disabled'} hover:bg-green-700 transition text-white rounded-md px-3 font-semibold uppercase py-2 w-1/2 inline-block`}
                   >
-                    {sending ? (
+                    {sending2 ? (
                       <Loader className="flex justify-center text-lg items-center" />
                     ) : (
-                      "Confirm registration"
+                      "Confirm output"
                     )}
                   </button>
                   <button
@@ -255,7 +298,7 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
             <div className="w-[calc(100%-300px)] flex flex-col">
               <div>
                 <label htmlFor="desc" className="mb-1 inline-block">Description</label>
-                <div className="p-2 rounded-md bg-slate-100">{product.description}</div>
+                <div className="p-2 rounded-md bg-slate-100">{product.description || 'Empty'}</div>
               </div>
 
               <div className="flex items-center space-x-3 mt-3 text-xl">
@@ -268,6 +311,8 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
                 <div className="p-2 rounded-md bg-slate-100">
                   {product.qte_en_stock} {product.type_approvisionnement}{(product.qte_en_stock || 0) > 1 && 's'}
                   {product.product_type?.name === 'VENDU_PAR_NOMBRE_PAR_CONTENEUR' && ` de ${product.nbre_par_carton} et ${product.unite_restante || 0} Unité${(product.unite_restante || 0) > 1 ? 's':''} restante`}
+                  {product.product_type?.name === 'VENDU_PAR_LITRE' && ` de ${product.qte_en_litre} ${product.product_type.unite_de_mesure} et ${product.unite_restante || 0} Unité${(product.unite_restante || 0) > 1 ? 's':''} restante`}
+                  {product.product_type?.name === 'VENDU_PAR_KG' && ` de ${product.poids} ${product.product_type.unite_de_mesure} et ${product.unite_restante || 0} Unité${(product.unite_restante || 0) > 1 ? 's':''} restante`}
                 </div>
               </div>
 

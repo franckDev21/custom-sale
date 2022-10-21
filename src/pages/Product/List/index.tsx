@@ -51,6 +51,7 @@ const ProducList:FC<TypeProducList> = () => {
         item.category.name.toLowerCase().includes(filterText.toLowerCase()))
   );
 
+
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
       if (filterText) {
