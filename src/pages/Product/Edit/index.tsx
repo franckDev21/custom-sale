@@ -24,7 +24,7 @@ type TypeProductEdit = {};
 const GET_CATEGORIES_URL = "categories";
 const GET_PRODUCT_TYPE_URL = "products/types";
 const GET_PRODUCT_SUPPLIER_URL = "products/suppliers";
-const CREATE_PRODUCT_URL = "products";
+const EDIT_PRODUCT_URL = "product";
 const GET_PRODUIT_URL = "product";
 const API_STORAGE_URL = "http://localhost:8000/storage";
 
@@ -65,13 +65,13 @@ const ProductEdit: FC<TypeProductEdit> = () => {
 
     setSending(true);
     http_client(Storage.getStorage("auth").token)
-      .post(CREATE_PRODUCT_URL, formData)
+      .post(`${EDIT_PRODUCT_URL}/${id}`, formData)
       .then((res) => {
         setSending(false);
         toast.success(res.data.message);
         setLoading(true);
         let id = window.setTimeout(() => {
-          navigate("/products");
+          navigate(`/products/show/${product.id}/${product.name?.split(' ').join('-').toLowerCase()}`);
           window.clearTimeout(id);
         }, 6000);
       })

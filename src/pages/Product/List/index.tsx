@@ -219,7 +219,7 @@ const ProducList:FC<TypeProducList> = () => {
       setLoading(false);
     };
     fetUsers();
-  }, [navigate]);
+  }, []);
 
   return (
     <DashboardLayout
@@ -241,7 +241,7 @@ const ProducList:FC<TypeProducList> = () => {
     >
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center">
-          <Link to='/approvisionnement' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <TbArrowsRightLeft size={16} className='inline-block  mr-1' /> History of entries</Link>
+          <Link to='/products/history/all' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <TbArrowsRightLeft size={16} className='inline-block  mr-1' /> History of entries</Link>
           <Link to='/approvisionnement' className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> Print the list of products</Link>
           <Link to='/products/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaBoxOpen size={16} className='inline-block mr-1' /> Add new product</Link>
           <Link to='/approvisionnement' className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></Link>
