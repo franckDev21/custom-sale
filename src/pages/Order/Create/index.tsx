@@ -5,6 +5,7 @@ import Loader from "../../../atoms/Loader";
 import Customer from "../../../Model/Customer";
 import Product from "../../../Model/Product";
 import ProductCart from "../../../Model/ProductCart";
+import CustomerForm from "../../../molecules/CustomerForm";
 import Storage from "../../../service/Storage";
 import DashboardLayout from "../../../templates/DashboardLayout";
 import { http_client } from "../../../utils/axios-custum";
@@ -23,51 +24,27 @@ const OrderCreate = () => {
   const [tabProductSearch, setTabProductSearch] = useState<Product[]>([]);
   const [filter, setFilter] = useState("");
   const [showClientForm, setShowClientForm] = useState(false);
+  const [addNewClientState,setAddNewClientState] = useState(false);
 
   const commander = (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault()
   }
 
   const addToCart = (product: Product) => {
-    if(!product.is_stock) return
     
-    let exist = carts.find(p => p.id === product.id) ? true : false
-    // let olt_type_de_vente = carts.find(p => p.id === product.id)?.type_de_vente
-    let newProduct : any;
-    if(!exist){
-      let nbreUnites;
-
-      // if((product.unite_mesure === 'KG' || product.unite_mesure === 'G') && !product.nbre_par_carton){
-      //   if(product.vendu_par_piece){
-      //     nbreUnites = product.qte_en_stock;
-      //   }else{
-      //     nbreUnites =  (product.qte_en_stock * product.poids) + product.reste_unites;
-      //   }
-      // } else if((product.unite_mesure !== 'KG' || product.unite_mesure !== 'G') && !product.nbre_par_carton){
-      //   nbreUnites =  (product.qte_en_stock * product.qte_en_littre) + product.reste_unites;
-      // } else{
-      //   nbreUnites =  (product.qte_en_stock * product.nbre_par_carton) + product.reste_unites;
-      // }
-
-      // newProduct = {
-      //   ...product,
-      //   qte : 1,
-      //   max : nbreUnites,
-      //   prix_de_vente : product.vendu_par_piece ? product.prix_unitaire : null,
-      //   type_de_vente : !product.vendu_par_piece ? "DETAIL":"PIECE"
-      // }
-      // setCarts(state => [...state,newProduct])
-    
-    }else{
-      // let copieCarts = carts;
-      // let produitFind = copieCarts.find(p => p.id === product.id);
-      // produitFind.qte = (parseInt(produitFind.qte,10) || 0) + 1
-      // copieCarts = carts.filter(p => p.id !== product.id)
-      // copieCarts = [...copieCarts,produitFind]
-      // setCarts(copieCarts)
-    }
-    setFilter('')
   }
+
+  useEffect(() => {
+    if(addNewClientState){
+      http_client(Storage.getStorage("auth").token).get(GET_MY_CUSTOMERS)
+        .then(res => {
+          setCustomers(res.data.data) 
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
+  },[addNewClientState])
 
   useEffect(() => {
     const fetUsers = async () => {
@@ -146,7 +123,12 @@ const OrderCreate = () => {
               </div>
             } 
 
-            
+            {showClientForm && 
+              <CustomerForm onClickBack={(value) => setShowClientForm(value)} addNewClient={(value) => {
+                setShowClientForm(false)
+                setAddNewClientState(value)
+              }} />
+            }
 
             <form onSubmit={commander} className="w-1/2 ml-2">
               <div className="relative z-50">
