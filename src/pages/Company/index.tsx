@@ -166,7 +166,7 @@ const Company: FC<TypeCompany> = () => {
       setLoading(false)
     }
     
-  }, [action]);
+  }, [action,navigate]);
 
   return (
     <DashboardLayout

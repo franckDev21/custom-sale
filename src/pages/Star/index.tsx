@@ -13,7 +13,7 @@ import Storage from "../../service/Storage";
 import { toast } from "react-toastify";
 import { setAuth } from "../../store/features/auth/authSlice";
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import Loader from "../../atoms/Loader";
 
 type TypeStar = {};
@@ -39,7 +39,7 @@ const Star: FC<TypeStar> = () => {
 
   // redux
   const dispatch = useDispatch()
-  const auth = useSelector((state: any) => state.auth)
+  // const auth = useSelector((state: any) => state.auth)
 
       //
   const navigate = useNavigate()

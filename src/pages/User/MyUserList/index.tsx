@@ -113,7 +113,7 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
       setLoading(false);
     };
     fetUsers();
-  }, []);
+  }, [navigate]);
 
   const columns: TableColumn<User>[] = [
     {

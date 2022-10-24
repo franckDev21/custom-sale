@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { TbArrowsRightLeft } from 'react-icons/tb'
 import DashboardLayout from '../../../templates/DashboardLayout'
 import { ImSearch } from 'react-icons/im'
@@ -15,7 +15,7 @@ import { formatDate, formatCurrency } from '../../../utils/function'
 import { Modal } from 'flowbite-react'
 import Loader from '../../../atoms/Loader'
 import { BiPencil } from 'react-icons/bi'
-import ReactPDF from '@react-pdf/renderer';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
 import DefautProductImage from '../../../assets/img/default-product.png';
 import MyDocument from '../../../templates/MyDocument'
@@ -39,9 +39,7 @@ const ProducList:FC<TypeProducList> = () => {
   );
   const [deleting, setDeleting] = useState(false);
 
-  const pdf = () => {
-    ReactPDF.render(<MyDocument />, `${__dirname}/example.pdf`);
-  }
+  const navigate = useNavigate()
 
   const filteredItems = products.filter(
     (item) =>
@@ -213,6 +211,12 @@ const ProducList:FC<TypeProducList> = () => {
     setShowModal(false);
   };
 
+  const download = () => {
+    let id = window.setTimeout(() => {
+      navigate('/products/preview/list')
+      
+    },3000)
+  }
 
   useEffect(() => {
     const fetUsers = async () => {
@@ -246,7 +250,9 @@ const ProducList:FC<TypeProducList> = () => {
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center">
           <Link to='/products/history/all' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <TbArrowsRightLeft size={16} className='inline-block  mr-1' /> History of entries</Link>
-          <button onClick={pdf} className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> Print the list of products</button>
+          <PDFDownloadLink onClick={download} document={<MyDocument/>} fileName="somename.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
+            Print the list of products
+          </PDFDownloadLink >
           <Link to='/products/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaBoxOpen size={16} className='inline-block mr-1' /> Add new product</Link>
           <Link to='/approvisionnement' className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></Link>
         </div>

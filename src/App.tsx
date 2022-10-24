@@ -22,6 +22,9 @@ import ProductDetail from './pages/Product/Detail';
 import ProductEdit from './pages/Product/Edit';
 import ProductHistory from './pages/ProductHistory';
 import ProcurementHistory from './pages/ProcurementHistory';
+import ProductPreview from './pages/Product/Preview';
+import OrderList from './pages/Order/List';
+import OrderCreate from './pages/Order/Create';
 
 function App() {
   return (
@@ -37,18 +40,25 @@ function App() {
         <Route element={<RequireAuth />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profil" element={<Profil />} />
+
           <Route path="/users" element={<UserList />} />
           <Route path="/users/create" element={<CreateUser />} />
           <Route path="/users/company" element={<MyUserList />} />
           <Route path="/my/company/:action" element={<Company />} />
+
           <Route path="/customers" element={<CustomerList />} />
           <Route path="/customers/create/:action" element={<AddCustomer />} />
+
           <Route path="/products" element={<ProducList />} />
           <Route path="/products/create" element={<ProductCreate />} />
           <Route path="/products/show/:id/:slug" element={<ProductDetail />} />
           <Route path="/products/edit/:id/:slug" element={<ProductEdit />} />
           <Route path="/products/history/all" element={<ProductHistory />} />
           <Route path='/products/procurements' element={<ProcurementHistory />} />
+          <Route path='/products/preview/list' element={<ProductPreview />} />
+
+          <Route path='/orders' element={<OrderList />} />
+          <Route path='/orders/create' element={<OrderCreate />} />
           {/* custumers/create */}
         </Route>
 
