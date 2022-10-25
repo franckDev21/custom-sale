@@ -30,7 +30,7 @@ const OrderList = () => {
   const filteredItems = orders.filter(
     (item) =>
       (item.reference &&
-        item.reference.toLowerCase().includes(filterText.toLowerCase())) ||
+        item.reference.toString().toLowerCase().includes(filterText.toLowerCase())) ||
       (item?.created_at &&
         item.created_at.toLowerCase().includes(filterText.toLowerCase())) || 
       (item.quantite &&
@@ -94,21 +94,11 @@ const OrderList = () => {
     );
   }, [filterText, resetPaginationToggle]);
 
-  /**
-   * REFERENCE
-    QUANTITE PRODUITS
-    COÛT
-    ETAT
-    CLIENT
-    DATE CRÉATION
-    AUTHEUR
-    ACTIONS
-   */
   const columns: TableColumn<Order>[] = [
 
     {
       name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Référence</span>,
-      cell: (row) => <div className="font-bold flex space-y-1 flex-col justify-start items-start">{row.reference}</div>,
+      cell: (row) => <div className="font-bold flex space-y-1 flex-col justify-start items-start"># {row.reference}</div>,
       sortable: true,
     },
     {
@@ -160,7 +150,7 @@ const OrderList = () => {
       cell: (row) => (
         <h1 className=" flex items-center justify-center">
           <Link
-            to={`/products/show/${row.id}/${row.reference?.split(' ').join('-').toLowerCase()}`}
+            to={`/products/show/${row.id}/${row.reference?.toString().split(' ').join('-').toLowerCase()}`}
             className="font-medium ml-1 text-base text-blue-500 p-2 bg-blue-100 rounded-md inline-block dark:text-blue-500 hover:underline"
           >
             <FaEye />
