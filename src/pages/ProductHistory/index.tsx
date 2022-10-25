@@ -110,7 +110,7 @@ const ProductHistory:React.FC<TypeProductHistory> = () => {
     },
     {
       name: <span className="  font-bold text-xs text-[#ac3265] uppercase">AUTEUR DE LATRANSACTION</span>,
-      cell: (row) => <div>{row.user?.lastname || row.user?.firstname || ''}</div>,
+      cell: (row) => <div>{row.user?.firstname} {row.user?.lastname}</div>,
       sortable: true,
     },
     {

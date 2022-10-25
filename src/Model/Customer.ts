@@ -1,3 +1,6 @@
+import Company from "./Company";
+import Order from "./Order";
+
 export default interface Customer {
   id ?: string,
   firstname ?: string,
@@ -10,4 +13,6 @@ export default interface Customer {
   tel      ?: string|null,
   created_at ?: string,
   updated_at ?: string,
+  orders ?: Order[],
+  company ?: Company
 }

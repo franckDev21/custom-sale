@@ -160,7 +160,7 @@ const CustomerList: FC<TypeCustomerList> = () => {
           Total order
         </span>
       ),
-      selector: (row) => "0 Order",
+      cell: (row) => <span>{row.orders?.length || '0'} Order{(row.orders?.length || 0) > 1 && 's'}</span>,
       sortable: true,
     },
     {
