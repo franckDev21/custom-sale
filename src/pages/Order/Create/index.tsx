@@ -1,6 +1,7 @@
 import React, { useState, useEffect, FormEvent } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { HiOutlineSearch } from "react-icons/hi";
+import { TiTimes } from 'react-icons/ti';
 import Loader from "../../../atoms/Loader";
 import Customer from "../../../Model/Customer";
 import Product from "../../../Model/Product";
@@ -21,18 +22,163 @@ const OrderCreate = () => {
   const [client, setClient] = useState("");
   const [desc, setDesc] = useState("");
   const [carts, setCarts] = useState<ProductCart[]>([]);
-  const [tabProductSearch, setTabProductSearch] = useState<Product[]>([]);
+  const [productSearch, setProductSearch] = useState<Product[]>([]);
   const [filter, setFilter] = useState("");
   const [showClientForm, setShowClientForm] = useState(false);
   const [addNewClientState,setAddNewClientState] = useState(false);
 
+  const API_STORAGE_URL = "http://localhost:8000/storage";
+
   const commander = (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-  }
 
-  const addToCart = (product: Product) => {
     
   }
+
+  const addToCart = (product: ProductCart) => {
+    if(!product.is_stock) return
+
+    let exist = carts.find(p => p.id === product.id) ? true : false
+
+    let newProduct : ProductCart;
+
+    if(!exist){
+      let nbreUnites;
+      
+      if(product.product_type?.name === 'VENDU_PAR_KG'){
+        nbreUnites =  ((parseInt(product.qte_en_stock?.toString() || '0',10) || 0) * (parseInt(product.poids?.toString() || '0',10) || 0)) + (parseInt(product.unite_restante?.toString() || '0',10) || 0);
+      }else if(product.product_type?.name === 'VENDU_PAR_PIECE'){
+        nbreUnites = product.qte_en_stock || 0;
+      } else if(product.product_type?.name === 'VENDU_PAR_LITRE'){
+        nbreUnites =  ((parseInt(product.qte_en_stock?.toString() || '0',10) || 0) * parseInt(product.qte_en_litre?.toString() || '0',10)) + (parseInt(product.unite_restante?.toString() || '0',10) || 0);
+      } else if (product.product_type?.name === 'VENDU_PAR_NOMBRE_PAR_CONTENEUR'){
+        nbreUnites =  ((parseInt(product.qte_en_stock?.toString() || '0',10) || 0) * parseInt(product.nbre_par_carton?.toString() || '0',10)) + (parseInt(product.unite_restante?.toString() || '0',10) || 0);
+      }
+
+      newProduct = {
+        ...product,
+        qte : 1,
+        max : nbreUnites,
+        prix_de_vente : product.product_type?.name === 'VENDU_PAR_PIECE' ? product.prix_unitaire : null,
+        type_de_vente : product.product_type?.name !== 'VENDU_PAR_PIECE' ? "DETAIL":"PIECE"
+      }
+
+      setCarts(state => [...state,newProduct])
+    }else{
+      let copieCarts = carts;
+      let produitFind = copieCarts.find(p => p.id === product.id);
+
+      if(produitFind){
+        produitFind.qte = (parseInt(produitFind.qte?.toString() || '0',10) || 0) + 1
+        copieCarts = carts.filter(p => p.id !== product.id)
+        copieCarts = [...copieCarts,produitFind]
+        setCarts(copieCarts)
+      }
+      
+    }
+    setFilter('')
+  }
+
+  const findProduct = (id: string) => {
+    return carts.find(product => product.id === id)
+  }
+
+  const setPriceShop = (id: string,value:string) => {
+    let copieCarts  = carts;
+    let produitFind = copieCarts.find(product => product.id === id);
+    if(produitFind){
+      produitFind.prix_de_vente = parseInt(value,10) || 0
+      copieCarts = carts.filter(product => product.id !== id)
+      copieCarts = [...copieCarts,produitFind]
+      setCarts(copieCarts)
+    }
+  }
+
+  const setQte = (id: string,value: string) => {
+    let copieCarts = carts;
+    let produitFind = copieCarts.find(product => product.id === id);
+    if(produitFind){
+      produitFind.qte = parseInt(value,10) || null
+      copieCarts = carts.filter(product => product.id !== id)
+      copieCarts = [...copieCarts,produitFind]
+      setCarts(copieCarts)
+    }
+  }
+
+  const setTypeDeVente = (id:string,value:string) =>{
+    let copieCarts  = carts;
+    let produitFind = copieCarts.find(product => product.id === id);
+    let nbreUnites
+
+    if(produitFind){
+      if(value === 'DETAIL'){
+      
+        produitFind.prix_de_vente = null
+
+        if(produitFind.product_type?.name === 'VENDU_PAR_KG'){
+          nbreUnites =  ((parseInt(produitFind.qte_en_stock?.toString() || '0',10) || 0) * (parseInt(produitFind.poids?.toString() || '0',10) || 0)) + (parseInt(produitFind.unite_restante?.toString() || '0',10) || 0);
+        }else if(produitFind.product_type?.name === 'VENDU_PAR_PIECE'){
+          nbreUnites = produitFind.qte_en_stock || 0;
+        } else if(produitFind.product_type?.name === 'VENDU_PAR_LITRE'){
+          nbreUnites =  ((parseInt(produitFind.qte_en_stock?.toString() || '0',10) || 0) * parseInt(produitFind.qte_en_litre?.toString() || '0',10)) + (parseInt(produitFind.unite_restante?.toString() || '0',10) || 0);
+        } else if (produitFind.product_type?.name === 'VENDU_PAR_NOMBRE_PAR_CONTENEUR'){
+          nbreUnites =  ((parseInt(produitFind.qte_en_stock?.toString() || '0',10) || 0) * parseInt(produitFind.nbre_par_carton?.toString() || '0',10)) + (parseInt(produitFind.unite_restante?.toString() || '0',10) || 0);
+        }
+    
+      }else{
+        produitFind.prix_de_vente = produitFind.prix_unitaire
+        nbreUnites = produitFind.qte_en_stock
+      }
+
+      produitFind.max = nbreUnites
+      produitFind.type_de_vente = value
+      copieCarts = carts.filter(product => product.id !== id)
+      copieCarts = [...copieCarts,produitFind]
+      setCarts(copieCarts)
+
+    }
+
+  }
+
+  const isValid = () => {
+    let som = 0
+    let prix = 0
+    carts.forEach(product => {
+      som += (parseInt(product.qte?.toString() || '0',10) || 0)
+      prix += ((parseInt(product.qte?.toString() || '0',10) || 0) * (parseInt((product.prix_de_vente?.toString() || '0'),10) || 0))
+    })
+    return {
+      ok : ((som > 0) && client !== ''),
+      prix : prix,
+      qte : som
+    }
+  }
+
+  const deleteProduct = (id: string) => {
+    let cartFiltereds = carts.filter(product => product.id !== id)
+    setCarts(cartFiltereds)
+  }
+
+  const search = () => {
+    if(filter !== ''){
+      let newTab = products.filter(product => ((product.name || '').toLowerCase().includes(filter.toLowerCase()) || (product.type_approvisionnement || '').toLowerCase().includes(filter.toLowerCase()) || (product.prix_unitaire || 0).toString().toLowerCase().includes(filter.toLowerCase())))
+      let tab: ProductCart[] = []
+      if(newTab.length > 0){
+        newTab.forEach((product,i) => {
+          if(i <= 5){
+            tab.push(product)
+          }
+        })
+      }
+      setProductSearch(tab)
+    }else{
+      setProductSearch([])
+    }
+  }
+
+  useEffect(() => {
+    search()
+  },[filter])
 
   useEffect(() => {
     if(addNewClientState){
@@ -138,16 +284,17 @@ const OrderCreate = () => {
                 </span>
                 
                 <div className="bg-gray-300 absolute w-full flex-col flex justify-start items-start top-full left-0 ring-0 rounded-b-md">
-                  {tabProductSearch.map((product: Product) => (
+                  {productSearch.map((product: Product) => (
                     <div style={{ zIndex: 1000 }} onClick={() => addToCart(product)} key={product.id} className="w-full z-50 flex justify-start items-start mb-2 p-1 hover:bg-gray-200 transition cursor-pointer">
                       <div className="w-10 relative h-10 overflow-hidden">
-                        <img src={`${product.image ? `/storage/${product.image}` :'/static/img/product.png'}`} className=" absolute z-0 h-auto w-full object-cover" alt="kl" />
+                        <img src={`${product.image ? `${API_STORAGE_URL}/${product.image}` :'/static/img/product.png'}`} className=" absolute z-0 h-auto w-full object-cover" alt="imageproduit" />
                       </div>
                       <div className="ml-2 -translate-y-1">
                         <h2 className="font-semibold text-gray-600">{product.name}</h2>
                         <h2 className="font-semibold text-sm text-primary">prix unitaire : {formatCurrency(parseInt(product.prix_unitaire?.toString()||'0',10) || 0)} 
                           {product.is_stock ?  <>
                             <span className="px-2 font-normal rounded-lg mx-2 py-1 text-xs bg-green-100 text-green-500">En stock</span> | {product.qte_en_stock} {product.type_approvisionnement}(s) 
+                            
                           </>: <span className="px-2 font-normal rounded-lg mx-2 py-1 text-xs bg-red-100 text-red-500">stock vide</span>}
                         
                         </h2> 
@@ -161,8 +308,33 @@ const OrderCreate = () => {
               <div className="mt-3 z-0">
                 {carts.length > 0 ? (
                   <>
-                    
-                  </>
+                  {carts.map((product,i) => (
+                    <div key={`${product.id}-${i}`} className="w-full flex justify-start items-start mb-2 p-1 relative z-10 ">
+                      <span onClick={() => deleteProduct(product.id || '0')} className="fa-solid fa-times absolute right-2 cursor-pointer inline-block ml-2 bg-red-100 p-2 top-2 text-red-500 z-50">
+                        <TiTimes />
+                        </span>
+                      
+                      { product.product_type?.name !== 'VENDU_PAR_PIECE' && 
+                      <select onChange={e => setTypeDeVente(product.id || '0',e.target.value)} className="absolute right-14 top-2 appearance-none px-8 text-sm text-center font-bold ml-2 py-0.5 bg-gray-100 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-gray-600 outline-none border-none">
+                        <option value="DETAIL">Detail</option>
+                        <option value="PIECE">{product.type_approvisionnement}</option>
+                      </select>}
+
+                      <div className="w-24 h-24 relative overflow-hidden z-10">
+                        <img src={`${product.image ? `${API_STORAGE_URL}/${product.image}` :'/static/img/product.png'}`} className=" z-0 h-auto w-full object-cover" alt="imageproduit" />
+                      </div>
+
+                      <div className="ml-2 -translate-y-1">
+                        <h2 className="font-semibold text-gray-600">{product.name}</h2>
+                        <h2 className="font-semibold text-sm text-primary">Prix unitaire {product.type_approvisionnement} : {formatCurrency(parseInt(product.prix_unitaire?.toString() || '0',10),'XAF')}</h2> 
+                        <div>
+                          <input min={0} max={product.max} value={findProduct(product.id || '0')?.qte || 0} onChange={(e) => setQte(product.id || '0',e.target.value)}    type="number" className="mt-1 appearance-none px-1 text-center font-bold w-20 py-1 bg-gray-100 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-gray-600 outline-none border-none" required />
+                          <input min={0} value={findProduct(product.id || '0')?.prix_de_vente || ''} onChange={e => setPriceShop(product.id || '0',e.target.value)} placeholder='prix de vente' type="number" className="mt-1 appearance-none pl-2 pr-1 font-bold ml-2 py-1 bg-gray-100 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-gray-600 outline-none border-none" required />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
                 ):(
                   <div className="min-h-[200px] text-center text-gray-500 text-2xl bg-slate-100 rounded-md flex flex-col justify-center items-center">
                     <span className="fa-solid fa-cart-shopping text-3xl text-primary">
@@ -175,11 +347,11 @@ const OrderCreate = () => {
                 <div className="my-4 border-y flex justify-end items-center">
                   <span className="text-3xl text-gray-500 font-bold py-3 inline-block">
                     <span className="text-secondary pr-2">Total : </span>
-                    <span>0 F</span>
+                    <span>{isValid().prix} F</span>
                   </span>
                 </div>
                 <div className="py-3">
-                  <button className={`bg-primary ${false && 'disabled'} border-2 border-primary transition text-white px-6 py-2 w-full rounded-md`}>{false ? "Enregistrement en cours ...":"Commander"}</button>
+                  <button className={`bg-primary  ${!isValid().ok && 'disabled'} border-2 border-primary transition text-white px-6 py-2 w-full rounded-md`}>{false ? "Enregistrement en cours ...":"Commander"}</button>
                 </div>
               </div>
             </form>
