@@ -214,7 +214,7 @@ const ProducList:FC<TypeProducList> = () => {
   const download = () => {
     let id = window.setTimeout(() => {
       navigate('/products/preview/list')
-      
+      clearTimeout(id)
     },3000)
   }
 
