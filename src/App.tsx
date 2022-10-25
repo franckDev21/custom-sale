@@ -25,6 +25,7 @@ import ProcurementHistory from './pages/ProcurementHistory';
 import ProductPreview from './pages/Product/Preview';
 import OrderList from './pages/Order/List';
 import OrderCreate from './pages/Order/Create';
+import OrderShow from './pages/Order/Show';
 
 function App() {
   return (
@@ -59,6 +60,8 @@ function App() {
 
           <Route path='/orders' element={<OrderList />} />
           <Route path='/orders/create' element={<OrderCreate />} />
+          <Route path='/orders/show/:id/:reference' element={<OrderShow />} />
+          {/* orders/show */}
           {/* custumers/create */}
         </Route>
 

@@ -265,8 +265,8 @@ const OrderCreate = () => {
                 <h3 className="text-3xl text-gray-600 w-[40%] text-center mx-auto font-bold">The order has been registered successfully</h3>
                 <p>an email was sent to <span className="text-primary">{getCustomer(client || '1')?.firstname} {getCustomer(client || '1')?.lastname}</span> to invoice her order</p>
                 <div className="flex items-center justify-center space-x-4">
-                  <Link to='orders' className="px-4 py-2 bg-slate-600 text-white rounded-md">Liste des commandes </Link>
-                  <Link to={`orders/${orderId || 0}`} className="px-4 py-2 bg-primary text-white rounded-md">See the order </Link>
+                  <Link to='/orders' className="px-4 py-2 bg-slate-600 text-white rounded-md">Liste des commandes </Link>
+                  <Link to={`/orders/${orderId || 0}`} className="px-4 py-2 bg-primary text-white rounded-md">See the order </Link>
                 </div>
               </div>
             </>:<>
@@ -395,8 +395,8 @@ const OrderCreate = () => {
                   )}
                   <div className="my-4 border-y flex justify-end items-center">
                     <span className="text-3xl text-gray-500 font-bold py-3 inline-block">
-                      <span className="text-secondary pr-2">Total : </span>
-                      <span>{isValid().prix} F</span>
+                      <span className="text-secondary pr-2">Total :  </span>
+                      <span>{formatCurrency(isValid().prix,'XAF')}</span>
                     </span>
                   </div>
                   <div className="py-3">

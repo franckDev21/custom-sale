@@ -7,6 +7,7 @@ export default interface OrderProduct {
   product_id ?: string,
   qte ?: string,
   type_de_vente ?: string,
+  prix_de_vente ?: string,
   created_at ?: string,
   updated_at ?: string,
   order ?: Order,

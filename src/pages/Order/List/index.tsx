@@ -1,11 +1,12 @@
+import { Modal } from 'flowbite-react'
 import React, { useState, useEffect } from 'react'
 import DataTable, { TableColumn } from 'react-data-table-component'
-import { BiPencil } from 'react-icons/bi'
 import { BsPrinterFill } from 'react-icons/bs'
-import { FaEye, FaShoppingCart, FaTrash } from 'react-icons/fa'
-import { HiRefresh } from 'react-icons/hi'
+import { FaEye, FaMoneyBillWave, FaShoppingCart, FaTrash } from 'react-icons/fa'
+import { HiOutlineExclamationCircle, HiRefresh } from 'react-icons/hi'
 import { ImSearch } from 'react-icons/im'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import Loader from '../../../atoms/Loader'
 import Order from '../../../Model/Order'
 import Storage from '../../../service/Storage'
@@ -14,6 +15,7 @@ import { http_client } from '../../../utils/axios-custum'
 import { formatCurrency, formatDate } from '../../../utils/function'
 
 const GET_ORDER_URL = '/orders'
+const DELETE_ORDER_URL = '/orders'
 
 const OrderList = () => {
 
@@ -22,7 +24,7 @@ const OrderList = () => {
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [currentIdComapany, setCurrentIdCompany] = useState<string | null>(
+  const [currentIdOrder, setCurrentIdOrder] = useState<string | null>(
     null
   );
   const [deleting, setDeleting] = useState(false);
@@ -47,9 +49,40 @@ const OrderList = () => {
         item.cout.toString().toLowerCase().includes(filterText.toLowerCase()))
   );
 
+  const confirmDelete = () => {
+    setShowModal(false);
+
+    setDeleting(true);
+    // delete order
+    http_client(Storage.getStorage("auth").token)
+      .delete(`${DELETE_ORDER_URL}/${currentIdOrder}`)
+      .then((res) => {
+        setDeleting(false);
+        deleteOrder(currentIdOrder || "1");
+        if(res.data.message){
+          toast.success(res.data.message);
+        }else{
+          toast.error(res.data.error);
+        }
+      })
+      .catch((err: any) => {
+        setDeleting(false);
+        console.log(err);
+      });
+  };
+
+  const deleteOrder = (id: string) => {
+    let ordersFilter = orders.filter((order) => order.id !== id);
+    setOrders(ordersFilter);
+  };
+
   const onClick = (id: string) => {
-    setCurrentIdCompany(id);
+    setCurrentIdOrder(id);
     setShowModal(!showModal);
+  };
+
+  const onClose = () => {
+    setShowModal(false);
   };
 
 
@@ -149,18 +182,20 @@ const OrderList = () => {
       name: "",
       cell: (row) => (
         <h1 className=" flex items-center justify-center">
+          <button
+            title='Pay the order'
+            className="font-medium ml-1 text-base text-yellow-500 p-2 bg-yellow-100 rounded-md inline-block dark:text-yellow-500 hover:underline"
+          >
+            <FaMoneyBillWave />
+          </button>
+
           <Link
-            to={`/products/show/${row.id}/${row.reference?.toString().split(' ').join('-').toLowerCase()}`}
+            to={`/orders/show/${row.id}/${row.reference?.toString().split(' ').join('-').toLowerCase()}`}
             className="font-medium ml-1 text-base text-blue-500 p-2 bg-blue-100 rounded-md inline-block dark:text-blue-500 hover:underline"
           >
             <FaEye />
           </Link>
-          <Link
-            to={`/products/edit`}
-            className="font-medium ml-1 text-base text-gray-700 p-2 bg-gray-200 rounded-md inline-block dark:text-gray-500 hover:underline"
-          >
-            <BiPencil />
-          </Link>
+          
           <button
             onClick={(_) => onClick(row.id || "1")}
             className="font-medium ml-1 text-red-500 w-8 h-8 justify-center items-center  bg-red-100 rounded-md inline-flex dark:text-red-500 hover:underline"
@@ -201,6 +236,44 @@ const OrderList = () => {
         </>
       }
     >
+      <React.Fragment>
+        <Modal
+          show={showModal || deleting}
+          size="md"
+          popup={true}
+          onClose={onClose}
+        >
+        <Modal.Header />
+          <Modal.Body>
+            <div className="text-center">
+              <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
+              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                Do you really want to delete this product order ?
+              </h3>
+              <div className="flex justify-center gap-4">
+                <button
+                  color="failure"
+                  className="bg-red-500 text-white rounded-md px-4 py-2"
+                  onClick={confirmDelete}
+                >
+                  {deleting ? (
+                    <Loader className="flex justify-center items-center" />
+                  ) : (
+                    "Yes, I'm sure"
+                  )}
+                </button>
+                <button
+                  color="gray"
+                  onClick={onClose}
+                  className="bg-gray-500 text-white rounded-md px-4 py-2"
+                >
+                  No, cancel
+                </button>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+      </React.Fragment>
 
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center">
@@ -217,7 +290,7 @@ const OrderList = () => {
           <>
             <DataTable
               className=" rounded-md overflow-hidden"
-              title="Products"
+              title="Orders"
               pagination
               columns={columns}
               data={filteredItems}
