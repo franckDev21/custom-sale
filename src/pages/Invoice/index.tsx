@@ -5,6 +5,7 @@ import { BsPrinterFill } from 'react-icons/bs'
 import { FaEye, FaShoppingCart, FaTrash } from 'react-icons/fa'
 import { HiOutlineExclamationCircle, HiRefresh } from 'react-icons/hi'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import Loader from '../../atoms/Loader'
 import Invoice from '../../Model/Invoice'
 import Storage from '../../service/Storage'
@@ -37,10 +38,28 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
   );
 
   const confirmDelete = () => {
+    setShowModal(false);
 
+    setDeleting(true);
+    // delete order
+    http_client(Storage.getStorage("auth").token)
+      .delete(`${GET_INVOICES}/${currentIdInvoice}`)
+      .then((res) => {
+        setDeleting(false);
+        deleteInvoice(currentIdInvoice || "1");
+        if(res.data.message){
+          toast.success(res.data.message);
+        }else{
+          toast.error(res.data.error);
+        }
+      })
+      .catch((err: any) => {
+        setDeleting(false);
+        console.log(err);
+      });
   }
 
-  const deleteOrder = (id: string) => {
+  const deleteInvoice = (id: string) => {
     let invoicesFilter = invoices.filter((invcoice) => invcoice.id !== id);
     setInvoices(invoicesFilter);
   };
@@ -186,7 +205,7 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
             <div className="text-center">
               <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Do you really want to delete this product order ?
+                Do you really want to delete this invoice ?
               </h3>
               <div className="flex justify-center gap-4">
                 <button
