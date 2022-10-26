@@ -24,7 +24,7 @@ const Header:FC<TypeHeader> = ({ classname='' }) => {
 
   return (
     <header className={`${classname} header py-4 bg-cyan-900`}>
-      <div className="container flex items-center justify-between text-white">
+      <div className="container-custom flex items-center justify-between text-white">
         <Link to='/' className="logo block header__logo uppercase font-bold text-xl text-gray-400">
           <img src={LOGO} width={80} alt="" />
         </Link>
@@ -42,9 +42,9 @@ const Header:FC<TypeHeader> = ({ classname='' }) => {
           {((auth.token && auth.user) || Auth.isLogin() ) ?
             <>
               {init && <Link to='/dashboard' className='px-4 py-2 bg-[#ac3265] active:scale-[96%] inline-block hover:bg-[#5c3852] hover:border-transparent transition border-2 border-[#7e3151] rounded-md font-bold' >Dashboard </Link>}
-              {!init && <Link to='/start' className='px-4 py-2 bg-[#ac3265] active:scale-[96%] inline-block hover:bg-[#5c3852] hover:border-transparent transition border-2 border-[#7e3151] rounded-md font-bold' >Essai Gratuit </Link>}
+              {!init && <Link to='/star' className='px-4 py-2 bg-[#ac3265] active:scale-[96%] inline-block hover:bg-[#5c3852] hover:border-transparent transition border-2 border-[#7e3151] rounded-md font-bold' >Essai Gratuit </Link>}
             </> : 
-           <Link to='/start' className='px-4 py-2 bg-[#ac3265] active:scale-[96%] inline-block hover:bg-[#5c3852] hover:border-transparent transition border-2 border-[#442a3d] rounded-md font-bold' >Essai Gratuit </Link>
+           <Link to='/star' className='px-4 py-2 bg-[#ac3265] active:scale-[96%] inline-block hover:bg-[#5c3852] hover:border-transparent transition border-2 border-[#442a3d] rounded-md font-bold' >Essai Gratuit </Link>
           } 
 
           

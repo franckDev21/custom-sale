@@ -9,7 +9,7 @@ type TypeBanner = {
 const Banner:FC<TypeBanner> = ({ classname='', children }) => {
   return (
     <section className={`${classname} Banner pt-14 pb-24 bg-cyan-900`}>
-      <div className="container">
+      <div className="container-custom">
         {children ?? children}
       </div>
     </section>
