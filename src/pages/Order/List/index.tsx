@@ -16,6 +16,7 @@ import { formatCurrency, formatDate } from '../../../utils/function'
 
 const GET_ORDER_URL = '/orders'
 const DELETE_ORDER_URL = '/orders'
+const BAY_ORDER_URL = '/orders/pay'
 
 const OrderList = () => {
 
@@ -24,9 +25,14 @@ const OrderList = () => {
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showModalPay, setShowModalPay] = useState(false);
   const [currentIdOrder, setCurrentIdOrder] = useState<string | null>(
     null
   );
+  const [currentIdPay, setCurrentIdPay] = useState<string | null>(
+    null
+  );
+  const [sending, setSending] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   const filteredItems = orders.filter(
@@ -35,6 +41,8 @@ const OrderList = () => {
         item.reference.toString().toLowerCase().includes(filterText.toLowerCase())) ||
       (item?.created_at &&
         item.created_at.toLowerCase().includes(filterText.toLowerCase())) || 
+      (item?.etat &&
+        item.etat.toLowerCase().includes(filterText.toLowerCase())) || 
       (item.quantite &&
         item.quantite.toString().toLowerCase().includes(filterText.toLowerCase())) ||
       (item.customer?.lastname &&
@@ -71,6 +79,37 @@ const OrderList = () => {
       });
   };
 
+  const confirmPay = () => {
+    setShowModalPay(false);
+
+    setSending(true);
+    // delete order
+    http_client(Storage.getStorage("auth").token)
+      .post(`${BAY_ORDER_URL}/${currentIdPay}`)
+      .then((res) => {
+        setSending(false);
+        if(res.data.message){
+          setLoading(true);
+          http_client(Storage.getStorage("auth").token).get( GET_ORDER_URL)
+            .then(res => {
+              setLoading(false)
+              setOrders(res.data)
+            })
+            .catch(err => {
+              setLoading(false)
+              console.log(err);
+            })
+          toast.success(res.data.message);
+        }else{
+          toast.error(res.data.error);
+        }
+      })
+      .catch((err: any) => {
+        setSending(false);
+        console.log(err);
+      });
+  };
+
   const deleteOrder = (id: string) => {
     let ordersFilter = orders.filter((order) => order.id !== id);
     setOrders(ordersFilter);
@@ -83,6 +122,15 @@ const OrderList = () => {
 
   const onClose = () => {
     setShowModal(false);
+  };
+
+  const onClickPay = (id: string) => {
+    setCurrentIdPay(id);
+    setShowModalPay(!showModal);
+  };
+
+  const onClosePay = () => {
+    setShowModalPay(false);
   };
 
 
@@ -160,7 +208,7 @@ const OrderList = () => {
           état
         </span>
       ),
-      selector: (row) => row.etat || '',
+      cell: (row) => <span className={`${row.etat?.toString() === 'PAYER' ? 'text-green-500':'text-red-500'}`}>{row.etat || ''}</span>,
     },
     {
       name: (
@@ -183,8 +231,9 @@ const OrderList = () => {
       cell: (row) => (
         <h1 className=" flex items-center justify-center">
           <button
+            onClick={(_) => onClickPay(row.id || "1")}
             title='Pay the order'
-            className="font-medium ml-1 text-base text-yellow-500 p-2 bg-yellow-100 rounded-md inline-block dark:text-yellow-500 hover:underline"
+            className={`font-medium ${row.etat?.toString() === 'PAYER' ? 'disabled text-gray-500 bg-gray-200':'bg-yellow-100 text-yellow-500'} ml-1 text-base p-2  rounded-md inline-block  hover:underline`}
           >
             <FaMoneyBillWave />
           </button>
@@ -265,6 +314,45 @@ const OrderList = () => {
                 <button
                   color="gray"
                   onClick={onClose}
+                  className="bg-gray-500 text-white rounded-md px-4 py-2"
+                >
+                  No, cancel
+                </button>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+      </React.Fragment>
+
+      <React.Fragment>
+        <Modal
+          show={showModalPay || sending}
+          size="md"
+          popup={true}
+          onClose={onClosePay}
+        >
+        <Modal.Header />
+          <Modal.Body>
+            <div className="text-center">
+              <FaMoneyBillWave className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
+              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                Do you really want to pay the order ?
+              </h3>
+              <div className="flex justify-center gap-4">
+                <button
+                  color="failure"
+                  className="bg-green-500 text-white rounded-md px-4 py-2"
+                  onClick={confirmPay}
+                >
+                  {sending ? (
+                    <Loader className="flex justify-center items-center" />
+                  ) : (
+                    "Pay the order"
+                  )}
+                </button>
+                <button
+                  color="gray"
+                  onClick={onClosePay}
                   className="bg-gray-500 text-white rounded-md px-4 py-2"
                 >
                   No, cancel
