@@ -12,23 +12,31 @@ import { formatCurrency } from '../../../utils/function'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import FactureDocument from '../../../templates/FactureDocument'
 import { BsPrinterFill } from 'react-icons/bs'
+import Invoice from '../../../Model/Invoice'
 
 const GET_ORDER_URL = 'orders';
 const API_STORAGE_URL = "http://localhost:8000/storage";
+// orders/{order}/facture
 
 const OrderShow = () => {
 
   const [loading, setLoading] = useState(true);
   const [order,setOrder] = useState<Order>({})
   const [orderProducts,setOrderProducts] = useState<OrderProduct[]>([])
+  const [invoice,setInvoice] = useState<Invoice>({})
 
   const { reference,id } = useParams()
 
   useEffect(() => {
     const fetOrders = async () => {
-      const res = await http_client(Storage.getStorage("auth").token).get(`${GET_ORDER_URL}/${id}`);
-      setOrder(res.data.order);
-      setOrderProducts(res.data.products);
+      const res = await Promise.all([
+        http_client(Storage.getStorage("auth").token).get(`${GET_ORDER_URL}/${id}`),
+        http_client(Storage.getStorage("auth").token).get(`${GET_ORDER_URL}/${id}/invoice`)
+      ]);
+      setOrder(res[0].data.order);
+      setOrderProducts(res[0].data.products);
+
+      setInvoice(res[1].data)
       setLoading(false);
     };
     fetOrders();

@@ -5,6 +5,7 @@ import OrderProduct from "../../Model/OrderProduct";
 import { formatCurrency, formatDate } from "../../utils/function";
 
 import DefaultImage from '../../assets/img/default-product.png'
+import Invoice from "../../Model/Invoice";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -121,7 +122,8 @@ const styles = StyleSheet.create({
 type TypeDocument = {
   className ?:  string,
   order ?: Order,
-  orderProducts ?: OrderProduct[]
+  orderProducts ?: OrderProduct[],
+  invoice ?: Invoice
 };
 
 const API_STORAGE_URL = "http://localhost:8000/storage";
@@ -129,7 +131,8 @@ const API_STORAGE_URL = "http://localhost:8000/storage";
 const FactureDocument: FC<TypeDocument> = ({
   className='',
   order = {},
-  orderProducts = []
+  orderProducts = [],
+  invoice = {}
 }) => {
   return (
     <Document>
@@ -158,7 +161,7 @@ const FactureDocument: FC<TypeDocument> = ({
           </View>
         </View>
 
-        <View style={styles.tableTile}><Text style={{ padding: 5 }}>FACTURE N°2/10/2022/company_name</Text></View>
+        <View style={styles.tableTile}><Text style={{ padding: 5 }}>FACTURE N°2/10/{invoice.created_at}/company_name</Text></View>
         <View style={styles.table}>
           <View style={styles.tableTh}><Text>Nom du produit</Text></View>
           <View style={styles.tableTh}><Text>Quantité</Text></View>
