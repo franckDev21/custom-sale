@@ -6,7 +6,7 @@ import Loader from "../../atoms/Loader";
 import CompanyModel from "../../Model/Company";
 import Storage from "../../service/Storage";
 import DashboardLayout from "../../templates/DashboardLayout";
-import { http_client } from "../../utils/axios-custum";
+import { baseURL, http_client } from "../../utils/axios-custum";
 import { toast } from "react-toastify";
 import { BsPencilSquare } from "react-icons/bs";
 import { FaEye } from "react-icons/fa";
