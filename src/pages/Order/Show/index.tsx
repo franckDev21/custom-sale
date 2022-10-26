@@ -50,7 +50,7 @@ const OrderShow = () => {
           <div className="ml-4 w-[74%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
           <span>| order #{reference} | {order.customer?.firstname} {order.customer?.lastname}</span>{" "}
             <div className='flex justify-between space-x-2 '>
-              <button className='px-4 py-2 rounded-md bg-slate-500 hover:bg-slate-700 transition text-white text-sm flex items-center'><FaFileInvoiceDollar className='mr-2' /> List of all customer invoices</button>
+              <Link to='/invoices' className='px-4 py-2 rounded-md bg-slate-500 hover:bg-slate-700 transition text-white text-sm flex items-center'><FaFileInvoiceDollar className='mr-2' /> List of all customer invoices</Link>
             </div> 
           </div>
         </>

@@ -48,6 +48,8 @@ const HeaderDashboard = () => {
                   <NavLink to="/customers" className="nav-link">Customers</NavLink>
                   
                   <NavLink to="/orders" className="nav-link">Orders</NavLink>
+
+                  <NavLink to="/invoices" className="nav-link">Invoices</NavLink>
                   
                   <NavLink to="/cashier" className="nav-link">Cashier</NavLink>
 

@@ -10,6 +10,10 @@ export default interface Invoice {
   customer_id ?: string,
   order_id ?: string,
 
+  day ?: string,
+
+  year ?: string,
+
   created_at ?: string,
   updated_at ?: string,
 }
