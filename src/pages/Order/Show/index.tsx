@@ -9,6 +9,9 @@ import { http_client } from '../../../utils/axios-custum'
 import DefautProductImage from '../../../assets/img/default-product.png';
 import OrderProduct from '../../../Model/OrderProduct'
 import { formatCurrency } from '../../../utils/function'
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import FactureDocument from '../../../templates/FactureDocument'
+import { BsPrinterFill } from 'react-icons/bs'
 
 const GET_ORDER_URL = 'orders';
 const API_STORAGE_URL = "http://localhost:8000/storage";
@@ -51,7 +54,9 @@ const OrderShow = () => {
             <header className='flex justify-between items-center py-4 border-b w-full mb-2'>
               <div className='text-2xl font-bold text-gray-600'>Total prix :  <span className='text-primary'> {formatCurrency(parseInt(order.cout?.toString() || '0') || 0,'XAF')}</span></div>
               <div className="flex text-xs space-x-4">
-                <button className='px-4 py-2 bg-green-500 hover:bg-green-600 font-bold transition text-white rounded-md'>INVOICE AND PAY THE ORDER</button>
+                <PDFDownloadLink document={<FactureDocument order={order} orderProducts={orderProducts} />} fileName="facture.pdf" className='px-4 py-2 bg-green-500 hover:bg-green-600 font-bold transition text-white rounded-md'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
+                  INVOICE AND PAY THE ORDER
+                </PDFDownloadLink >
                 <button className='px-4 py-2 bg-primary opacity-80 hover:opacity-100 transition font-bold text-white rounded-md' >INVOICE THE CUSTOMER</button>
               </div>
             </header>
