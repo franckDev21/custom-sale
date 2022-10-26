@@ -13,7 +13,7 @@ import Loader from "../../../atoms/Loader";
 import User from "../../../Model/User";
 import Storage from "../../../service/Storage";
 import DashboardLayout from "../../../templates/DashboardLayout";
-import { http_client } from "../../../utils/axios-custum";
+import { baseURL, http_client } from "../../../utils/axios-custum";
 import { useDispatch } from "react-redux";
 import { setAuth } from "../../../store/features/auth/authSlice";
 import { BsBuilding } from "react-icons/bs";
@@ -32,7 +32,7 @@ const UPDATE_INFO_USER_URL = "auth/user";
 const UPDATE_USER_PASSWORD_URL = "auth/user/password";
 const UPDATE_PICTURE_USER_URL = "auth/user/picture";
 
-const API_STORAGE_URL = "http://localhost:8000/storage";
+const API_STORAGE_URL = `${baseURL}/storage`;
 
 const Profil: FC<TypeProfil> = () => {
   const [user, setUser] = useState<User>({});

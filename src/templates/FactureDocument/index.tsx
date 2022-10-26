@@ -6,6 +6,7 @@ import { formatCurrency, formatDate } from "../../utils/function";
 
 import DefaultImage from '../../assets/img/default-product.png'
 import Invoice from "../../Model/Invoice";
+import { baseURL } from "../../utils/axios-custum";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -126,7 +127,7 @@ type TypeDocument = {
   invoice ?: Invoice
 };
 
-const API_STORAGE_URL = "http://localhost:8000/storage";
+const API_STORAGE_URL = `${baseURL}/storage`;
 
 const FactureDocument: FC<TypeDocument> = ({
   className='',

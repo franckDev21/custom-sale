@@ -7,7 +7,7 @@ import { BsPrinterFill } from 'react-icons/bs'
 import { FaBoxOpen, FaEye, FaTrash } from 'react-icons/fa'
 import { HiOutlineExclamationCircle, HiRefresh } from 'react-icons/hi'
 import Product from '../../../Model/Product'
-import { http_client } from '../../../utils/axios-custum'
+import { baseURL, http_client } from '../../../utils/axios-custum'
 import Storage from '../../../service/Storage'
 import { toast } from 'react-toastify'
 import DataTable, { TableColumn } from 'react-data-table-component'
@@ -23,7 +23,7 @@ import MyDocument from '../../../templates/MyDocument'
 type TypeProducList = {}
 
 const GET_PRODUCT_URL = '/products'
-const API_STORAGE_URL = "http://localhost:8000/storage";
+const API_STORAGE_URL = `${baseURL}/storage`;
 const DELETE_PRODUCT_URL = 'product'
 
 

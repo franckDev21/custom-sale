@@ -8,8 +8,9 @@ import { logout, setAuth } from '../../store/features/auth/authSlice'
 import Storage from '../../service/Storage'
 import { useSelector } from 'react-redux'
 import UserService from '../../service/UserService'
+import { baseURL } from '../../utils/axios-custum'
 
-const API_STORAGE_URL = "http://localhost:8000/storage";
+const API_STORAGE_URL = `${baseURL}/storage`;
 
 const HeaderDashboard = () => {
 

@@ -12,7 +12,7 @@ import ProductCart from "../../../Model/ProductCart";
 import CustomerForm from "../../../molecules/CustomerForm";
 import Storage from "../../../service/Storage";
 import DashboardLayout from "../../../templates/DashboardLayout";
-import { http_client } from "../../../utils/axios-custum";
+import { baseURL, http_client } from "../../../utils/axios-custum";
 import { formatCurrency } from "../../../utils/function";
 
 const GET_MY_CUSTOMERS = "/customers"; // changer et recuperer seulement les clients du user connecter
@@ -33,7 +33,7 @@ const OrderCreate = () => {
   const [success,setSuccess] = useState(false)
   const [orderId,setOrderId] = useState(0)
 
-  const API_STORAGE_URL = "http://localhost:8000/storage";
+  const API_STORAGE_URL = `${baseURL}/storage`;
   const CREATE_ORDER_URL = "orders";
 
   const commander = (e:FormEvent<HTMLFormElement>) => {

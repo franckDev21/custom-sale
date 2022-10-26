@@ -9,7 +9,7 @@ import Loader from "../../../atoms/Loader";
 import Product from "../../../Model/Product";
 import Storage from "../../../service/Storage";
 import DashboardLayout from "../../../templates/DashboardLayout";
-import { http_client } from "../../../utils/axios-custum";
+import { baseURL, http_client } from "../../../utils/axios-custum";
 import { formatCurrency, formatDate } from "../../../utils/function";
 
 type TypeProductDetail = {};
@@ -26,7 +26,7 @@ type TypeOutputForm = {
 }
 
 const GET_PRODUIT_URL = "product";
-const API_STORAGE_URL = "http://localhost:8000/storage";
+const API_STORAGE_URL = `${baseURL}/storage`;
 const POST_SUPPLY_URL = "products/add";
 // products/add/{product}/input/supply
 

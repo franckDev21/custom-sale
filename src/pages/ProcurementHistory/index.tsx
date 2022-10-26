@@ -5,7 +5,7 @@ import { HiRefresh } from 'react-icons/hi'
 import { Link } from 'react-router-dom'
 import Storage from '../../service/Storage'
 import DashboardLayout from '../../templates/DashboardLayout'
-import { http_client } from '../../utils/axios-custum'
+import { baseURL, http_client } from '../../utils/axios-custum'
 import DefautProductImage from '../../assets/img/default-product.png';
 import { formatCurrency, formatDate } from '../../utils/function'
 import Loader from '../../atoms/Loader'
@@ -14,7 +14,7 @@ import Procurement from '../../Model/Procurement'
 type TypeProcurementHistory = {}
 
 const GET_PROCUREMENT = 'history/procurement'
-const API_STORAGE_URL = "http://localhost:8000/storage";
+const API_STORAGE_URL = `${baseURL}/storage`;
 
 const ProcurementHistory:React.FC<TypeProcurementHistory> = () => {
 

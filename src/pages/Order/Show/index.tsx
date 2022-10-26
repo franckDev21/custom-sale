@@ -5,7 +5,7 @@ import Loader from '../../../atoms/Loader'
 import Order from '../../../Model/Order'
 import Storage from '../../../service/Storage'
 import DashboardLayout from '../../../templates/DashboardLayout'
-import { http_client } from '../../../utils/axios-custum'
+import { baseURL, http_client } from '../../../utils/axios-custum'
 import DefautProductImage from '../../../assets/img/default-product.png';
 import OrderProduct from '../../../Model/OrderProduct'
 import { formatCurrency } from '../../../utils/function'
@@ -15,7 +15,7 @@ import { BsPrinterFill } from 'react-icons/bs'
 import Invoice from '../../../Model/Invoice'
 
 const GET_ORDER_URL = 'orders';
-const API_STORAGE_URL = "http://localhost:8000/storage";
+const API_STORAGE_URL = `${baseURL}/storage`;
 // orders/{order}/facture
 
 const OrderShow = () => {

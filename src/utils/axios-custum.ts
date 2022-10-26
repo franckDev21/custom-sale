@@ -12,3 +12,5 @@ export const http_client = (token: string) =>  axios.create({
     'Authorization': `Bearer ${token}`
   }
 })
+
+export const baseURL = `https://gm-smart-api.herokuapp.com/`

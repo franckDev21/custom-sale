@@ -11,7 +11,7 @@ import ProductSupplier from "../../../Model/ProductSupplier";
 import ProductType from "../../../Model/ProductType";
 import Storage from "../../../service/Storage";
 import DashboardLayout from "../../../templates/DashboardLayout";
-import { http_client } from "../../../utils/axios-custum";
+import { baseURL, http_client } from "../../../utils/axios-custum";
 import DefaultProductImage from "../../../assets/img/default-product.png";
 import { toast } from "react-toastify";
 import Loader from "../../../atoms/Loader";
@@ -26,7 +26,7 @@ const GET_PRODUCT_TYPE_URL = "products/types";
 const GET_PRODUCT_SUPPLIER_URL = "products/suppliers";
 const EDIT_PRODUCT_URL = "product";
 const GET_PRODUIT_URL = "product";
-const API_STORAGE_URL = "http://localhost:8000/storage";
+const API_STORAGE_URL = `${baseURL}/storage`;
 
 const ProductEdit: FC<TypeProductEdit> = () => {
   const [product, setProduct] = useState<Product>({});

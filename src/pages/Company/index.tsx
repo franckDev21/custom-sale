@@ -21,7 +21,7 @@ const GET_MY_COMPANY_URL = "my/company";
 const UPDATE_PICTURE_COMPANY_URL = "my/company/picture";
 const UPDATE_COMPANY_URL = "my/company";
 const CREATE_COMPANY_URL = "my/company";
-const API_STORAGE_URL = "http://localhost:8000/storage";
+const API_STORAGE_URL = `${baseURL}/storage`;
 
 const Company: FC<TypeCompany> = () => {
   const [company, setCompany] = useState<CompanyModel>({});
