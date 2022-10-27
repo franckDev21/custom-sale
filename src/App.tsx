@@ -27,6 +27,7 @@ import OrderList from './pages/Order/List';
 import OrderCreate from './pages/Order/Create';
 import OrderShow from './pages/Order/Show';
 import InvoiceList from './pages/Invoice';
+import Cashier from './pages/Cashier';
 
 function App() {
   return (
@@ -64,6 +65,8 @@ function App() {
           <Route path='/orders/show/:id/:reference' element={<OrderShow />} />
 
           <Route path='/invoices' element={<InvoiceList />} />
+
+          <Route path='/cashiers' element={<Cashier />} />
           
           {/* orders/show */}
           {/* custumers/create */}

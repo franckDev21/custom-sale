@@ -51,7 +51,7 @@ const HeaderDashboard = () => {
 
                   <NavLink to="/invoices" className="nav-link">Invoices</NavLink>
                   
-                  <NavLink to="/cashier" className="nav-link">Cashier</NavLink>
+                  <NavLink to="/cashiers" className="nav-link">Cashier</NavLink>
 
                 </div>
               </div>
