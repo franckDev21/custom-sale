@@ -28,6 +28,7 @@ import OrderCreate from './pages/Order/Create';
 import OrderShow from './pages/Order/Show';
 import InvoiceList from './pages/Invoice';
 import Cashier from './pages/Cashier';
+import Setting from './pages/Setting';
 
 function App() {
   return (
@@ -67,6 +68,8 @@ function App() {
           <Route path='/invoices' element={<InvoiceList />} />
 
           <Route path='/cashiers' element={<Cashier />} />
+
+          <Route path='/settings' element={<Setting />} />
           
           {/* orders/show */}
           {/* custumers/create */}
