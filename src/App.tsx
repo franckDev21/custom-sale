@@ -29,6 +29,7 @@ import OrderShow from './pages/Order/Show';
 import InvoiceList from './pages/Invoice';
 import Cashier from './pages/Cashier';
 import Setting from './pages/Setting';
+import Contact from './pages/Contact';
 
 function App() {
   return (
@@ -70,6 +71,8 @@ function App() {
           <Route path='/cashiers' element={<Cashier />} />
 
           <Route path='/settings' element={<Setting />} />
+
+          <Route path='/contact' element={<Contact />} />
           
           {/* orders/show */}
           {/* custumers/create */}
