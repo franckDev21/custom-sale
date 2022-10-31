@@ -15,6 +15,8 @@ import DataTable, { TableColumn } from 'react-data-table-component'
 import { AiOutlineToTop, AiOutlineVerticalAlignBottom } from 'react-icons/ai'
 import { toast } from 'react-toastify'
 import { resolve } from 'path'
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import CashierPrint from '../../templates/CashierPrint'
 
 type TypeCashier = {}
 
@@ -281,7 +283,9 @@ const Cashier: React.FC<TypeCashier> = () => {
         <>
           <div className="ml-4 w-[90%] font-bold text-2xl text-[#ac3265] flex items-center justify-end">
             <div className='flex justify-between space-x-2 '>
-              <Link to='/orders/print' className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block  mr-1' />Print the list of cashiers</Link>
+              <PDFDownloadLink document={<CashierPrint cashiers={cashiers} total={totalCash.montant} />} fileName="caisse.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
+                Print the list of cashiers
+              </PDFDownloadLink >
               <button onClick={_ => {
                     onClick('OUTPUT')
                     setModalType('OUTPUT')
@@ -407,7 +411,7 @@ const Cashier: React.FC<TypeCashier> = () => {
 
             <DataTable
               className=" rounded-md overflow-hidden"
-              title="Invoice"
+              title="Cashiers"
               pagination
               columns={columns}
               data={filteredItems}

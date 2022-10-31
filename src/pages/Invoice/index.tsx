@@ -1,3 +1,4 @@
+import { PDFDownloadLink } from '@react-pdf/renderer'
 import { Modal } from 'flowbite-react'
 import React, { useState, useEffect } from 'react'
 import DataTable, { TableColumn } from 'react-data-table-component'
@@ -10,6 +11,7 @@ import Loader from '../../atoms/Loader'
 import Invoice from '../../Model/Invoice'
 import Storage from '../../service/Storage'
 import DashboardLayout from '../../templates/DashboardLayout'
+import InvoicePrint from '../../templates/InvoicePrint'
 import { http_client } from '../../utils/axios-custum'
 import { formatDate } from '../../utils/function'
 
@@ -234,7 +236,9 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
 
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center">
-          <Link to='/orders/print' className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block  mr-1' />Print the list of invoices</Link>
+          <PDFDownloadLink document={<InvoicePrint invoices={invoices} />} fileName="liste-des-factures.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
+            Print the list of invoices
+          </PDFDownloadLink >
           <Link to='/approvisionnement' className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></Link>
         </div>
       </div>

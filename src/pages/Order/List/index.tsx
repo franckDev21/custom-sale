@@ -1,3 +1,4 @@
+import { PDFDownloadLink } from '@react-pdf/renderer'
 import { Modal } from 'flowbite-react'
 import React, { useState, useEffect } from 'react'
 import DataTable, { TableColumn } from 'react-data-table-component'
@@ -9,12 +10,15 @@ import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Loader from '../../../atoms/Loader'
 import Order from '../../../Model/Order'
+import Product from '../../../Model/Product'
 import Storage from '../../../service/Storage'
 import DashboardLayout from '../../../templates/DashboardLayout'
+import OrderPrint from '../../../templates/OrderPrint'
 import { http_client } from '../../../utils/axios-custum'
 import { formatCurrency, formatDate } from '../../../utils/function'
 
 const GET_ORDER_URL = '/orders'
+const GET_PRODUCT_URL = '/products'
 const DELETE_ORDER_URL = '/orders'
 const BAY_ORDER_URL = '/orders/pay'
 
@@ -22,6 +26,7 @@ const OrderList = () => {
 
   const [loading, setLoading] = useState(true);
   const [orders,setOrders] = useState<Order[]>([]);
+  const [products,setProducts] = useState<Product[]>([]);
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -261,7 +266,13 @@ const OrderList = () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
         GET_ORDER_URL
       );
+      const res2 = await http_client(Storage.getStorage("auth").token).get(
+        GET_PRODUCT_URL
+      );
+
       setOrders(res.data);
+      setProducts(res2.data)
+
       setLoading(false);
     };
     fetOrders();
@@ -365,7 +376,9 @@ const OrderList = () => {
 
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center">
-          <Link to='/orders/print' className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block  mr-1' />Print the list of orders</Link>
+          <PDFDownloadLink  document={<OrderPrint products={products} orders={orders} />} fileName="liste-des-commandes.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
+            Print the list of orders
+          </PDFDownloadLink >
           <Link to='/orders/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaShoppingCart size={16} className='inline-block mr-1' />  Add a new order</Link>
           <Link to='/approvisionnement' className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></Link>
         </div>
