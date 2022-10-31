@@ -41,6 +41,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/star" element={<Star />} />
 
+        <Route path='/contact' element={<Contact />} />
+
         {/* we want to protect these routes */}
         <Route element={<RequireAuth />}>
           <Route path="/dashboard" element={<Dashboard />} />
@@ -71,8 +73,6 @@ function App() {
           <Route path='/cashiers' element={<Cashier />} />
 
           <Route path='/settings' element={<Setting />} />
-
-          <Route path='/contact' element={<Contact />} />
           
           {/* orders/show */}
           {/* custumers/create */}

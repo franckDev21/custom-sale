@@ -1,11 +1,64 @@
-import React from "react";
+import React,{ ChangeEvent, FormEvent, useState } from "react";
+import axiosCustum from "../../utils/axios-custum";
+import LOGO from '../../assets/img/logo/logo3.png'
+import { Link } from "react-router-dom";
+import Loader from "../../atoms/Loader";
+import { toast, ToastContainer } from "react-toastify";
 
 type TypeContact = {};
 
+const CONTACT_URL = 'contact'
+
+type ContactFormProps = {
+  name ?: string,
+  email ?: string,
+  tel ?: string,
+  content ?: string
+}
+
 const Contact: React.FC<TypeContact> = () => {
+
+  const [contactForm,setContactForm] = useState<ContactFormProps>()
+  const [loading,setLoading] = useState(false)
+
+  const handleOnchange = (e: ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
+    switch (e.target.name) {
+      case 'name':
+        setContactForm({...contactForm,name : e.target.value})
+        break;
+      case 'email':
+        setContactForm({...contactForm,email : e.target.value})
+        break;
+      case 'tel':
+        setContactForm({...contactForm,tel : e.target.value})
+        break;
+      case 'content':
+        setContactForm({...contactForm,content : e.target.value})
+        break;
+    }
+  }
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    
+    setLoading(true)
+    axiosCustum.post(CONTACT_URL,contactForm)
+      .then(res => {
+        setLoading(false)
+        setContactForm({})
+        console.log(res.data)
+        toast.success(res.data.message)
+      })
+      .catch((err: any) => {
+        setLoading(false)
+        console.log(err)
+      })
+  }
+
   return (
-    <section className="relative z-10 overflow-hidden bg-white py-20 lg:py-[120px]">
+    <section className="relative z-10 overflow-hidden bg-white pb-20 pt-14 lg:pb-10 lg:pt-10">
       <div className="container mx-auto">
+      <ToastContainer />
         <div className="-mx-4 flex flex-wrap lg:justify-between">
           <div className="w-full px-4 lg:w-1/2 xl:w-6/12">
             <div className="mb-12 max-w-[570px] lg:mb-0">
@@ -86,16 +139,30 @@ const Contact: React.FC<TypeContact> = () => {
           </div>
           <div className="w-full px-4 lg:w-1/2 xl:w-5/12">
             <div className="relative rounded-lg bg-white p-8 shadow-lg sm:p-12">
-              <form>
+              <form onSubmit={handleSubmit}>
+                <Link to='/' className="text-xl top-0 absolute flex justify-center items-center font-bold text-center cursor-pointer">
+                  {/* Create An Account */}
+                  <img src={LOGO} width={80} alt="" />
+                </Link>
                 <div className="mb-6">
+
                   <input
+                    name="name"
+                    value={contactForm?.name || ''}
+                    required
+                    onChange={handleOnchange}
                     type="text"
                     placeholder="Your Name"
                     className="text-body-color border-[f0f0f0] focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none focus-visible:shadow-none"
                   />
+
                 </div>
                 <div className="mb-6">
                   <input
+                    name="email"
+                    value={contactForm?.email || ''}
+                    required
+                    onChange={handleOnchange}
                     type="email"
                     placeholder="Your Email"
                     className="text-body-color border-[f0f0f0] focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none focus-visible:shadow-none"
@@ -103,13 +170,21 @@ const Contact: React.FC<TypeContact> = () => {
                 </div>
                 <div className="mb-6">
                   <input
-                    type="text"
+                    name="tel"
+                    value={contactForm?.tel || ''}
+                    required
+                    onChange={handleOnchange}
+                    type="tel"
                     placeholder="Your Phone"
                     className="text-body-color border-[f0f0f0] focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none focus-visible:shadow-none"
                   />
                 </div>
                 <div className="mb-6">
                   <textarea
+                    name="content"
+                    value={contactForm?.content || ''}
+                    required
+                    onChange={handleOnchange}
                     rows={6}
                     placeholder="Your Message"
                     className="text-body-color border-[f0f0f0] focus:border-primary w-full resize-none rounded border py-3 px-[14px] text-base outline-none focus-visible:shadow-none"
@@ -118,9 +193,9 @@ const Contact: React.FC<TypeContact> = () => {
                 <div>
                   <button
                     type="submit"
-                    className="bg-primary border-primary w-full rounded border p-3 text-white transition hover:bg-opacity-90"
+                    className={`bg-primary ${loading && 'disabled'} border-primary w-full flex justify-center items-center rounded border p-3 text-white transition hover:bg-opacity-90`}
                   >
-                    Send Message
+                    {loading ? <Loader className="text-3xl" />:'Send Message'}
                   </button>
                 </div>
               </form>
@@ -134,8 +209,8 @@ const Contact: React.FC<TypeContact> = () => {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
+                      fillRule="evenodd"
+                      clipRule="evenodd"
                       d="M0 100C0 44.7715 0 0 0 0C55.2285 0 100 44.7715 100 100C100 100 100 100 0 100Z"
                       fill="currentColor"
                     />
