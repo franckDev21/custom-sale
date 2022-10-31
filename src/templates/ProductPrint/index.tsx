@@ -188,7 +188,7 @@ const ProductPrint: FC<ProductPrintProps> = ({
           {products.map(item => (
             <React.Fragment key={item.id}>
               <View style={styles.tableChild}>
-                {item.image && <Image src={{ uri: `${API_STORAGE_URL}/${item.image}`, method: 'GET', headers: {}, body: '' }} />}
+                {item.image && <Image src={{ uri: `${API_STORAGE_URL}/${item.image}`, method: 'GET', headers:{"Cache-Control": "no-cache"}, body: '' }} cache={false} />}
                 <Text>{item.name}</Text>
               </View>
               <View style={styles.tableChild}><Text>{formatDate(item.created_at || '')}</Text></View>

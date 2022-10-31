@@ -6,6 +6,7 @@ import DefaultImage from '../../assets/img/default-product.png'
 import { baseURL } from "../../utils/axios-custum";
 import moment from "moment";
 import Customer from "../../Model/Customer";
+import ProductHistory from "../../Model/ProductHistory";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   },
   tableTh:{
     fontWeight: 'semibold',
-    width: '25%',
+    width: '20%',
     padding: 4,
     borderLeft:1,
     borderBottom: 1,
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
   },
   tableThLast:{
     fontWeight: 'semibold',
-    width: '25%',
+    width: '20%',
     padding: 4,
     borderLeft:1,
     borderBottom: 1,
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
   },
   tableThFirst:{
     fontWeight: 'semibold',
-    width: '25%',
+    width: '20%',
     padding: 4,
     borderLeft:1,
     borderBottom: 1,
@@ -104,14 +105,14 @@ const styles = StyleSheet.create({
     borderLeftColor: '#000',
   },
   tableChild:{
-    width: '25%',
+    width: '20%',
     padding: 4,
     borderLeft:1,
     borderBottom: 1,
     minHeight: 30,
   },
   tableChildRigth:{
-    width: '25%',
+    width: '20%',
     padding: 4,
     borderLeft:1,
     borderBottom: 1,
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
     borderRight: 1
   },
   tableTotal: {
-    width: '25%',
+    width: '20%',
     padding: 4,
     minHeight: 30,
     borderBottom: 1
@@ -144,15 +145,15 @@ const styles = StyleSheet.create({
   }
 });
 
-type CustomerPrintProps = {
+type HistoriesPrintProps = {
   className ?:  string,
-  customers ?: Customer[],
+  histories ?: ProductHistory[],
 };
 
 
-const CustomerPrint: FC<CustomerPrintProps> = ({
+const HistoriesPrint: FC<HistoriesPrintProps> = ({
   className='',
-  customers = [],
+  histories = [],
 }) => {
   return (
     <Document>
@@ -170,23 +171,22 @@ const CustomerPrint: FC<CustomerPrintProps> = ({
           </View>
         </View>
 
-        <View style={styles.tableTile}><Text style={{ padding: 5 }}>Liste des clients | {moment().format('MMMM Do YYYY')}</Text></View>
+        <View style={styles.tableTile}><Text style={{ padding: 5 }}>Liste des E/S Produits | {moment().format('MMMM Do YYYY')}</Text></View>
         <View style={styles.table}>
-          <View style={styles.tableThFirst}><Text>Nom</Text></View>
-          <View style={styles.tableTh}><Text>Email/Tel</Text></View>
-          <View style={styles.tableTh}><Text>Addresse</Text></View>
-          <View style={styles.tableTh}><Text>Date d'ajout </Text></View>
+          <View style={styles.tableThFirst}><Text>Nom du produit</Text></View>
+          <View style={styles.tableTh}><Text>Date</Text></View>
+          <View style={styles.tableTh}><Text>Quantité</Text></View>
+          <View style={styles.tableTh}><Text>Type </Text></View>
+          <View style={styles.tableTh}><Text>Motif </Text></View>
           
 
-          {customers.map(item => (
+          {histories.map(item => (
             <React.Fragment key={item.id}>
-              <View style={styles.tableChild}><Text>{item.firstname} {item.lastname}</Text></View>
-              <View style={styles.tableChild}>
-                <Text>{item.email}</Text>
-                <Text style={{ padding: 4 }}>{item.tel}</Text>
-              </View>
-              <View style={styles.tableChild}><Text>{item.address}</Text></View>
-              <View style={styles.tableChildRigth}><Text>{formatDate(item.created_at || '')}</Text></View>
+              <View style={styles.tableChild}><Text>{item.product?.name}</Text></View>
+              <View style={styles.tableChild}><Text>{formatDate(item.created_at || '')}</Text></View>
+              <View style={styles.tableChild}><Text>{item.quantite}</Text></View>
+              <View style={styles.tableChild}><Text>{item.type}</Text></View>
+              <View style={styles.tableChildRigth}><Text>{item.motif}</Text></View>
             </React.Fragment>
           ))}
           
@@ -199,4 +199,4 @@ const CustomerPrint: FC<CustomerPrintProps> = ({
   );
 };
 
-export default CustomerPrint;
+export default HistoriesPrint;

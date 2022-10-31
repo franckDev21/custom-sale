@@ -11,6 +11,8 @@ import DefautProductImage from '../../assets/img/default-product.png';
 import { formatDate } from '../../utils/function'
 import { FaEye } from 'react-icons/fa'
 import Loader from '../../atoms/Loader'
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import HistoriesPrint from '../../templates/HistoryPrint'
 
 type TypeProductHistory = {}
 
@@ -156,7 +158,9 @@ const ProductHistory:React.FC<TypeProductHistory> = () => {
     >
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center">
-          <Link to='/approvisionnement' className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' />Print the list of the input/output history</Link>
+          <PDFDownloadLink  document={<HistoriesPrint histories={histories} />} fileName="liste-entree_sortie.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
+            Print the list of the input/output history
+          </PDFDownloadLink >
           <Link to='/approvisionnement' className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></Link>
         </div>
       </div>
