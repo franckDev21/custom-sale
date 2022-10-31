@@ -9,7 +9,7 @@ import Loader from "../../../atoms/Loader";
 import { extraiText, formatDate } from "../../../utils/function";
 import { FaTrash } from "react-icons/fa";
 import { MdOutgoingMail } from "react-icons/md";
-import { BsBuilding } from "react-icons/bs";
+import { BsBuilding, BsPrinterFill } from "react-icons/bs";
 
 import "./List.scss";
 import { Modal } from "flowbite-react";
@@ -17,6 +17,9 @@ import { HiEye, HiOutlineExclamationCircle } from "react-icons/hi";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import UserService from "../../../service/UserService";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import UserPrint from "../../../templates/Userprint";
+import { TbArrowsRightLeft } from "react-icons/tb";
 
 type TypeUserList = {};
 
@@ -340,6 +343,16 @@ const UserList: React.FC<TypeUserList> = () => {
           </Modal.Body>
         </Modal>
       </React.Fragment>
+
+      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <div className="flex space-x-4 font-bold items-center">
+          <Link to='/products/history/all' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <TbArrowsRightLeft size={16} className='inline-block  mr-1' /> History of entries</Link>
+          <PDFDownloadLink document={<UserPrint users={users} />} fileName="liste-des-produits.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
+            Print the list of users
+          </PDFDownloadLink >
+        </div>
+      </div>
+
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         {!loading ? (
           <>

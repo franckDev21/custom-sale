@@ -18,7 +18,7 @@ import { BiPencil } from 'react-icons/bi'
 import { PDFDownloadLink } from '@react-pdf/renderer';
 
 import DefautProductImage from '../../../assets/img/default-product.png';
-import MyDocument from '../../../templates/MyDocument'
+import ProductPrint from '../../../templates/ProductPrint'
 
 type TypeProducList = {}
 
@@ -118,6 +118,8 @@ const ProducList:FC<TypeProducList> = () => {
       name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Quantité</span>,
       cell: (row) => <span>{row.qte_en_stock} {row.type_approvisionnement}{(row.qte_en_stock || 0) > 1 && 's'} 
       {row.product_type?.name === 'VENDU_PAR_NOMBRE_PAR_CONTENEUR' && ` de ${row.nbre_par_carton} et ${row.unite_restante || 0} Unité${(row.unite_restante || 0) > 1 ? 's':''} restante`} 
+      {row.product_type?.name === 'VENDU_PAR_LITRE' && ` de ${row.qte_en_litre} ${row.product_type.unite_de_mesure} et ${row.unite_restante || 0} Unité${(row.unite_restante || 0) > 1 ? 's':''} restante`} 
+      {row.product_type?.name === 'VENDU_PAR_KG' && ` de ${row.poids} ${row.product_type.unite_de_mesure} et ${row.unite_restante || 0} Unité${(row.unite_restante || 0) > 1 ? 's':''} restante`} 
       </span>,
       sortable: true,
     },
@@ -212,10 +214,10 @@ const ProducList:FC<TypeProducList> = () => {
   };
 
   const download = () => {
-    let id = window.setTimeout(() => {
-      navigate('/products/preview/list')
-      clearTimeout(id)
-    },3000)
+    // let id = window.setTimeout(() => {
+    //   navigate('/products/preview/list')
+    //   clearTimeout(id)
+    // },3000)
   }
 
   useEffect(() => {
@@ -250,7 +252,7 @@ const ProducList:FC<TypeProducList> = () => {
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center">
           <Link to='/products/history/all' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <TbArrowsRightLeft size={16} className='inline-block  mr-1' /> History of entries</Link>
-          <PDFDownloadLink onClick={download} document={<MyDocument/>} fileName="somename.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
+          <PDFDownloadLink onClick={download} document={<ProductPrint products={products} />} fileName="liste-des-produits.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
             Print the list of products
           </PDFDownloadLink >
           <Link to='/products/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaBoxOpen size={16} className='inline-block mr-1' /> Add new product</Link>

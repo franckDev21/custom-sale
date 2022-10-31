@@ -9,7 +9,7 @@ import Loader from "../../../atoms/Loader";
 import { formatDate } from "../../../utils/function";
 import { FaTrash } from "react-icons/fa";
 import { MdOutgoingMail } from "react-icons/md";
-import { BsBuilding } from 'react-icons/bs';
+import { BsBuilding, BsPrinterFill } from 'react-icons/bs';
 
 import "./List.scss";
 import { Modal } from "flowbite-react";
@@ -18,6 +18,9 @@ import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import UserService from "../../../service/UserService";
 import { BiUserPlus } from "react-icons/bi";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import UserPrint from "../../../templates/Userprint";
+import { TbArrowsRightLeft } from "react-icons/tb";
 
 type TypeMyUserList = {};
 
@@ -303,7 +306,16 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
           </Modal.Body>
         </Modal>
       </React.Fragment>
-      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+
+      <div className="mx-auto max-w-7xl py-4 sm:px-6 lg:px-8">
+        <div className="flex font-bold items-center">
+          <PDFDownloadLink document={<UserPrint users={users} />} fileName="liste-des-utilisateurs.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
+            Print the list of users
+          </PDFDownloadLink >
+        </div>
+      </div>
+
+      <div className="mx-auto max-w-7xl pb-6 pt-4 sm:px-6 lg:px-8">
         {!loading ? (
           <>
             <DataTable
