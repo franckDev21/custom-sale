@@ -5,6 +5,8 @@ import User from '../../Model/User'
 import UserService from '../../service/UserService'
 import { FaBoxOpen, FaUserAlt, FaUsers } from 'react-icons/fa'
 import { BsShop } from 'react-icons/bs'
+import { Link } from 'react-router-dom'
+import { TbArrowsRightLeft } from 'react-icons/tb'
 
 type TypeDashboard = {}
 
@@ -24,8 +26,14 @@ const Dashboard: React.FC<TypeDashboard> = () => {
       <div className="ml-4 font-bold text-2xl text-[#5c3652]"> | Welcome <span className='uppercase'>{user.firstname} {user.lastname}</span></div>
     </>
   }>
+    <div className="mx-auto max-w-7xl pt-4 sm:px-6 lg:px-8">
+      <div className="flex space-x-4 font-bold items-center">
+        <Link to='/products/history/all' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <TbArrowsRightLeft size={16} className='inline-block  mr-1' /> History of entries</Link>
+        <Link to='/products/procurements' className='text-sm text-white px-4 rounded-md bg-cyan-700 py-2'> <TbArrowsRightLeft size={16} className='inline-block rotate-90 mr-1' /> Procurement history</Link>
+      </div>
+    </div>
 
-    <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl pb-6 sm:px-6 lg:px-8">
       <div className="px-4 py-6 sm:px-0">
         <div className="min-h-[24rem]  rounded-lg border-4 border-dashed border-gray-300">
           <div className="grid grid-cols-3 gap-3 p-4">
