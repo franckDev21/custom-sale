@@ -1,4 +1,5 @@
 import Customer from "./Customer";
+import Invoice from "./Invoice";
 import OrderProduct from "./OrderProduct";
 import User from "./User";
 
@@ -15,5 +16,6 @@ export default interface Order {
   updated_at ?: string,
   customer ?: Customer,
   user ?: User,
+  invoice ?: Invoice,
   order_products ?: OrderProduct[]
 }

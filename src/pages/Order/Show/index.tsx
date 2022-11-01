@@ -16,6 +16,7 @@ import Invoice from '../../../Model/Invoice'
 
 const GET_ORDER_URL = 'orders';
 const API_STORAGE_URL = `${baseURL}/storage`;
+const CREATE_INVOICE_URL = 'invoices'
 // orders/{order}/facture
 
 const OrderShow = () => {
@@ -27,6 +28,12 @@ const OrderShow = () => {
 
   const { reference,id } = useParams()
 
+  const invoices = async () => {
+    const res = await http_client(Storage.getStorage("auth").token).post(`${CREATE_INVOICE_URL}/${id}`)
+    console.log(res.data);
+    
+  }
+
   useEffect(() => {
     const fetOrders = async () => {
       const res = await Promise.all([
@@ -36,7 +43,7 @@ const OrderShow = () => {
       setOrder(res[0].data.order);
       setOrderProducts(res[0].data.products);
 
-      setInvoice(res[1].data)
+      setInvoice(res[1].data.data)
       setLoading(false);
     };
     fetOrders();
@@ -62,10 +69,10 @@ const OrderShow = () => {
             <header className='flex justify-between items-center py-4 border-b w-full mb-2'>
               <div className='text-2xl font-bold text-gray-600'>Total prix :  <span className='text-primary'> {formatCurrency(parseInt(order.cout?.toString() || '0') || 0,'XAF')}</span></div>
               <div className="flex text-xs space-x-4">
-                <PDFDownloadLink document={<FactureDocument order={order} orderProducts={orderProducts} />} fileName="facture.pdf" className='px-4 py-2 bg-green-500 hover:bg-green-600 font-bold transition text-white rounded-md'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
-                  INVOICE AND PAY THE ORDER
+                <PDFDownloadLink onClick={invoices} document={<FactureDocument invoice={invoice} order={order} orderProducts={orderProducts} />} fileName="facture.pdf" className='px-4 py-2 bg-green-500 hover:bg-green-600 font-bold transition text-white rounded-md'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
+                  INVOICE THE CUSTOMER
                 </PDFDownloadLink >
-                <button className='px-4 py-2 bg-primary opacity-80 hover:opacity-100 transition font-bold text-white rounded-md' >INVOICE THE CUSTOMER</button>
+                {/* <button className='px-4 py-2 bg-primary opacity-80 hover:opacity-100 transition font-bold text-white rounded-md' >INVOICE THE CUSTOMER</button> */}
               </div>
             </header>
 

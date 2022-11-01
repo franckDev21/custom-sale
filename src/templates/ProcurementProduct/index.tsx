@@ -1,13 +1,13 @@
 import React, { FC } from "react";
 import { Page, Text, View, Document, StyleSheet, Image } from "@react-pdf/renderer";
-import Order from "../../Model/Order";
-import OrderProduct from "../../Model/OrderProduct";
 import { formatCurrency, formatDate } from "../../utils/function";
 
 import DefaultImage from '../../assets/img/default-product.png'
-import Invoice from "../../Model/Invoice";
 import { baseURL } from "../../utils/axios-custum";
 import moment from "moment";
+import Customer from "../../Model/Customer";
+import ProductHistory from "../../Model/ProductHistory";
+import Procurement from "../../Model/Procurement";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -68,10 +68,12 @@ const styles = StyleSheet.create({
   },
   tableTile : {
     width: '100%',
-    maxWidth: 200,
+    maxWidth: 500,
     // backgroundColor: 'violet',
     minHeight: 15,
-    marginTop: 4
+    marginTop: 4,
+    textDecoration: 'underline',
+    fontSize: 14,
   },
   tableTh:{
     fontWeight: 'semibold',
@@ -82,21 +84,41 @@ const styles = StyleSheet.create({
     borderTop: 1,
     minHeight: 30
   },
+  tableThLast:{
+    fontWeight: 'semibold',
+    width: '25%',
+    padding: 4,
+    borderLeft:1,
+    borderBottom: 1,
+    borderTop: 1,
+    minHeight: 30,
+    borderRight: 1
+  },
+  tableThFirst:{
+    fontWeight: 'semibold',
+    width: '25%',
+    padding: 4,
+    borderLeft:1,
+    borderBottom: 1,
+    borderTop: 1,
+    minHeight: 30,
+    borderLeftWidth: 1,
+    borderLeftColor: '#000',
+  },
   tableChild:{
     width: '25%',
     padding: 4,
     borderLeft:1,
     borderBottom: 1,
-    minHeight: 30
-  },
-  tableTotalLabel: {
-    width: '75%',
-    padding: 4,
-    paddingRight: 8,
     minHeight: 30,
+  },
+  tableChildRigth:{
+    width: '25%',
+    padding: 4,
+    borderLeft:1,
     borderBottom: 1,
-    borderRight: 1,
-    transform: 'translateX(1px)'
+    minHeight: 30,
+    borderRight: 1
   },
   tableTotal: {
     width: '25%',
@@ -108,7 +130,8 @@ const styles = StyleSheet.create({
     display:'flex',
     flexWrap: 'wrap',
     width: '100%',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    fontSize: '11px',
   },
   signature : {
     paddingTop: 8,
@@ -117,24 +140,21 @@ const styles = StyleSheet.create({
     minHeight: 20,
     marginTop: 70,
     display: 'flex',
-    textDecoration: 'underline'
+    textDecoration: 'underline',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   }
 });
 
-type TypeDocument = {
+type ProcurementPrintProps = {
   className ?:  string,
-  order ?: Order,
-  orderProducts ?: OrderProduct[],
-  invoice ?: Invoice
+  histories ?: Procurement[],
 };
 
-const API_STORAGE_URL = `${baseURL}/storage`;
 
-const FactureDocument: FC<TypeDocument> = ({
+const ProcurementPrint: FC<ProcurementPrintProps> = ({
   className='',
-  order = {},
-  orderProducts = [],
-  invoice = {}
+  histories = [],
 }) => {
   return (
     <Document>
@@ -152,52 +172,23 @@ const FactureDocument: FC<TypeDocument> = ({
           </View>
         </View>
 
-        <View style={styles.head}>
-          <View style={styles.content}>
-            <Text style={styles.date}>Douala {moment().format('MMMM Do YYYY')}</Text>
-            <View style={styles.customer}>
-              <Text>{order.customer?.firstname} {order.customer?.lastname}</Text>
-              <Text>Email : {order.customer?.email}</Text>
-              <Text>Tél : {order.customer?.tel}</Text>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.tableTile}><Text style={{ padding: 5 }}>FACTURE N° {order.invoice?.id}/{invoice?.day}/{invoice?.year}</Text></View>
+        <View style={styles.tableTile}><Text style={{ padding: 5 }}>Liste d'approvisionnement | {moment().format('MMMM Do YYYY')}</Text></View>
+        
         <View style={styles.table}>
-          <View style={styles.tableTh}><Text>Nom du produit</Text></View>
+          <View style={styles.tableThFirst}><Text>Nom du produit</Text></View>
+          <View style={styles.tableTh}><Text>Date</Text></View>
           <View style={styles.tableTh}><Text>Quantité</Text></View>
-          <View style={styles.tableTh}><Text>Prix unitaire</Text></View>
-          <View style={styles.tableTh}><Text>total</Text></View>
+          <View style={styles.tableTh}><Text>Prix d'âchat </Text></View>
 
-          {orderProducts.map(item => (
+          {histories.map(item => (
             <React.Fragment key={item.id}>
               <View style={styles.tableChild}><Text>{item.product?.name}</Text></View>
-              <View style={styles.tableChild}><Text>{item.qte}</Text></View>
-              <View style={styles.tableChild}>
-                <Text>
-                  {(item.prix_de_vente || '0').toString() !== (item.product?.prix_unitaire || '0').toString() ? <>
-                    {item.prix_de_vente}
-                  </>:<>
-                    {item.product?.prix_unitaire}
-                  </>}
-                </Text>
-              </View>
-              <View style={styles.tableChild}>
-                <Text>
-                  {(item.prix_de_vente || '0').toString() !== (item.product?.prix_unitaire || '0').toString() ? <>
-                    {(parseInt(item.prix_de_vente?.toString() || '0',10) || 0) * (parseInt(item.qte?.toString() || '0',10)||0)}
-                  </>:<>
-                    {(parseInt(item.product?.prix_unitaire?.toString() || '0',10) || 0) * (parseInt(item.qte?.toString() || '0',10)||0)}
-                  </>}
-                </Text>
-              </View>
+              <View style={styles.tableChild}><Text>{formatDate(item.created_at || '')}</Text></View>
+              <View style={styles.tableChild}><Text>{item.quantite}</Text></View>
+              <View style={styles.tableChild}><Text>{formatCurrency(parseInt(item.prix_achat?.toString() || '0',10),'XAF')}</Text></View>
             </React.Fragment>
           ))}
           
-
-          <View style={styles.tableTotalLabel}><Text style={{ textAlign:'right' }}>Montant Total</Text></View>
-          <View style={styles.tableTotal}><Text>{formatCurrency(parseInt(order.cout || '0',10) || 0,'XAF')}</Text></View>
         </View>
 
         <View style={styles.signature}><Text style={{ textAlign:'right' }}>La Direction</Text></View>
@@ -207,4 +198,4 @@ const FactureDocument: FC<TypeDocument> = ({
   );
 };
 
-export default FactureDocument;
+export default ProcurementPrint;
