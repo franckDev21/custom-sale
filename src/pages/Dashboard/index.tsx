@@ -7,17 +7,45 @@ import { FaBoxOpen, FaUserAlt, FaUsers } from 'react-icons/fa'
 import { BsShop } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import { TbArrowsRightLeft } from 'react-icons/tb'
+import { http_client } from '../../utils/axios-custum'
+import Storage from '../../service/Storage'
+import { formatCurrency } from '../../utils/function'
 
 type TypeDashboard = {}
+
+type TotalDashboardProps = {
+  totalUser ?: string|number,
+  totalCash ?: string|number,
+  totalProduct ?: string|number,
+  totalCustomer ?: string|number,
+  totalOrder ?: string|number,
+}
+
+const DASHBOARD_URL = '/dashboard';
 
 const Dashboard: React.FC<TypeDashboard> = () => {
 
   // if the component is destroyed, we delete the local Storage => we disconnect it
 
   const [user,setUser] = useState<User>({})
+  const [dashboardInfo,setDashboardInfo] = useState<TotalDashboardProps>({
+    totalCash : 0,
+    totalCustomer : 0,
+    totalProduct : 0,
+    totalUser : 0,
+    totalOrder : 0
+  })
 
   useEffect(() => {
     setUser(UserService.getUser())
+
+    http_client(Storage.getStorage("auth").token).get(DASHBOARD_URL)
+      .then(res => {
+        setDashboardInfo(res.data)
+      })
+      .catch(err => {
+        console.log(err);
+      })
   },[])
 
   return (
@@ -37,45 +65,46 @@ const Dashboard: React.FC<TypeDashboard> = () => {
       <div className="px-4 py-6 sm:px-0">
         <div className="min-h-[24rem]  rounded-lg border-4 border-dashed border-gray-300">
           <div className="grid grid-cols-3 gap-3 p-4">
-          <div className="bg-white cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start">
+          
+          <Link to='/users' className="bg-white cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start">
             <span className='inline-block overflow-hidden'><FaUserAlt className='text-4xl text-[#603d57]' /></span>
             <div className='ml-2'>
-              <h1 className='text-2xl font-bold text-gray-600 pb-1 border-b-2'>45 Users</h1>
+              <h1 className='text-2xl font-bold text-gray-600 pb-1 border-b-2'>{dashboardInfo.totalUser} Users</h1>
               <h2 className='text-sm font-bold text-[#603d57]'>Management of the users</h2>
             </div>
-          </div>
+          </Link>
 
-          <div className="bg-white cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start">
+          <Link to='/cashiers' className="bg-white cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start">
             <span className='inline-block overflow-hidden'><HiCurrencyDollar className='text-5xl text-[#603d57]' /></span>
             <div className='ml-2'>
-              <h1 className='text-2xl font-bold text-gray-600 pb-1 border-b-2'>56.000.500 FCFA</h1>
+              <h1 className='text-2xl font-bold text-gray-600 pb-1 border-b-2'>{formatCurrency(parseInt(dashboardInfo.totalCash?.toString() || '0',10),'XAF')}</h1>
               <h2 className='text-sm font-bold text-[#603d57]'>Management of the cash register</h2>
             </div>
-          </div>
+          </Link>
 
-          <div className="bg-white cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start">
+          <Link to='/products' className="bg-white cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start">
             <span className='inline-block overflow-hidden'><FaBoxOpen className='text-5xl text-[#603d57]' /></span>
             <div className='ml-2'>
-              <h1 className='text-2xl font-bold text-gray-600 pb-1 border-b-2'>5 product(s)</h1>
+              <h1 className='text-2xl font-bold text-gray-600 pb-1 border-b-2'>{dashboardInfo.totalProduct} product(s)</h1>
               <h2 className='text-sm font-bold text-[#603d57]'>Product management </h2>
             </div>
-          </div>
+          </Link>
 
-          <div className="bg-white cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start">
+          <Link to='/customers' className="bg-white cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start">
             <span className='inline-block overflow-hidden'><FaUsers className='text-5xl text-[#603d57]' /></span>
             <div className='ml-2'>
-              <h1 className='text-2xl font-bold text-gray-600 pb-1 border-b-2'>12 Customer(s)</h1>
+              <h1 className='text-2xl font-bold text-gray-600 pb-1 border-b-2'>{dashboardInfo.totalCustomer} Customer(s)</h1>
               <h2 className='text-sm font-bold text-[#603d57]'>Curstomer management </h2>
             </div>
-          </div>
+          </Link>
 
-          <div className="bg-white cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start">
+          <Link to='/orders' className="bg-white cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start">
             <span className='inline-block overflow-hidden'><BsShop className='text-5xl text-[#603d57]' /></span>
             <div className='ml-2 mr-2'>
-              <h1 className='text-2xl font-bold text-gray-600 pb-1 border-b-2'>2 Order(s)</h1>
+              <h1 className='text-2xl font-bold text-gray-600 pb-1 border-b-2'>{dashboardInfo.totalOrder} Order(s)</h1>
               <h2 className='text-sm font-bold text-[#603d57]'>Order management</h2>
             </div>
-          </div>
+          </Link>
 
           </div>
         </div>
