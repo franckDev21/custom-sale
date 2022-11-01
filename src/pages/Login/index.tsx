@@ -91,12 +91,14 @@ const Login: FC<LoginType> = () => {
             </Link>
             <h1 className="text-3xl font-bold text-center mb-4 cursor-pointer">
               {/* Create An Account */}
-              Login to your account
+              {/* Login to your account */}
+              Page de connexion
             </h1>
             <p className="w-80 text-center text-sm mb-8 font-semibold text-gray-700 tracking-wide cursor-pointer">
               {/* Create an account to enjoy all the services without any ads for
               free! */}
-              Log in to enjoy all the services for free without any advertising!
+              {/* Log in to enjoy all the services for free without any advertising! */}
+              Remplissez ce formulaire pour accéder à votre espace de gestion
             </p>
 
             {errorMessage && <div className="px-4 text-center py-3 text-sm bg-red-100 rounded-md mb-4 text-red-500 font-semibold">
@@ -108,7 +110,7 @@ const Login: FC<LoginType> = () => {
             <input
               type="text"
               name="email"
-              placeholder="Email Addres"
+              placeholder="Votre adresse email"
               className="block text-sm py-3 px-4 rounded-lg w-full border outline-none"
               value={form.email || ''}
               onChange={handleOnchange}
@@ -119,7 +121,7 @@ const Login: FC<LoginType> = () => {
                 ref={inputPassword}
                 type="password"
                 name="password"
-                placeholder="Password"
+                placeholder="mot de passe"
                 className="block text-sm py-3 px-4 rounded-lg w-full border outline-none"
                 value={form.password || ''}
                 onChange={handleOnchange}
@@ -142,11 +144,12 @@ const Login: FC<LoginType> = () => {
           </div>
           <div className="text-center mt-6">
             <button type="submit" className={`${loading ? 'disabled':''} py-3 active:scale-[98%] text-center inline-flex justify-center items-center w-64 text-xl text-white bg-[#ac3265] rounded-2xl`}>
-              {!loading ? 'Sin in': <Loader className="text-white text-2xl" />}
+              {!loading ? 'Connexion': <Loader className="text-white text-2xl" />}
             </button>
             <p className="mt-4 text-sm">
-              You don't have an account yet?{" "}
-              <Link to='/register' className="underline cursor-pointer"> Sign up</Link>
+              {/* You don't have an account yet?{" "} */}
+              Vous n’avez pas encore de compte  ?
+              <Link to='/register' className="underline cursor-pointer"> Créer un compte</Link>
             </p>
           </div>
         </div>

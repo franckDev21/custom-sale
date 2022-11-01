@@ -42,9 +42,9 @@ const Header:FC<TypeHeader> = ({ classname='' }) => {
           {((auth.token && auth.user) || Auth.isLogin() ) ?
             <>
               {init && <Link to='/dashboard' className='px-4 py-2 bg-[#ac3265] active:scale-[96%] inline-block hover:bg-[#5c3852] hover:border-transparent transition border-2 border-[#7e3151] rounded-md font-bold' >Dashboard </Link>}
-              {!init && <Link to='/star' className='px-4 py-2 bg-[#ac3265] active:scale-[96%] inline-block hover:bg-[#5c3852] hover:border-transparent transition border-2 border-[#7e3151] rounded-md font-bold' >Essai Gratuit </Link>}
+              {!init && <Link to='/star' className='px-4 py-2 bg-[#ac3265] active:scale-[96%] inline-block hover:bg-[#5c3852] hover:border-transparent transition border-2 border-[#7e3151] rounded-md font-bold' >Demander mon accès</Link>}
             </> : 
-           <Link to='/star' className='px-4 py-2 bg-[#ac3265] active:scale-[96%] inline-block hover:bg-[#5c3852] hover:border-transparent transition border-2 border-[#442a3d] rounded-md font-bold' >Essai Gratuit </Link>
+           <Link to='/star' className='px-4 py-2 bg-[#ac3265] active:scale-[96%] inline-block hover:bg-[#5c3852] hover:border-transparent transition border-2 border-[#442a3d] rounded-md font-bold' >Demander mon accès</Link>
           } 
 
           

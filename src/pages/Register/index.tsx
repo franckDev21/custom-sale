@@ -102,12 +102,14 @@ const Login: FC<LoginType> = () => {
               {/* Create An Account */}
               <img src={LOGO} width={100} alt="" />
             </Link>
-            <h1 className="text-3xl font-bold text-center mb-4 cursor-pointer">
-              Create an Account
+            <h1 className="text-3xl font-bold text-center mb-4">
+              {/* Create an Account */}
+              Créer votre compte
             </h1>
-            <p className="w-80 mx-auto text-center text-sm mb-8 font-semibold text-gray-700 tracking-wide cursor-pointer">
-              Create an account to enjoy all the services without any ads for
-              free!
+            <p className="w-80 mx-auto text-center text-sm mb-8 font-semibold text-gray-700 tracking-wide">
+              {/* Create an account to enjoy all the services without any ads for
+              free! */}
+              Créer votre compte et commencer à profiter de votre application de gestion !
             </p>
 
             {errorMessage && <div className="px-4 text-center py-3 text-sm bg-red-100 rounded-md mb-4 text-red-500 font-semibold">
@@ -120,7 +122,7 @@ const Login: FC<LoginType> = () => {
               <input
                 type="text"
                 name="firstname"
-                placeholder="Your first name"
+                placeholder="Votre prénom"
                 className="block text-sm py-3 px-4 rounded-lg w-full border outline-none"
                 value={form.firstname || ''}
                 onChange={handleOnchange}
@@ -139,7 +141,7 @@ const Login: FC<LoginType> = () => {
             <input
               type="email"
               name="email"
-              placeholder="Email Addres"
+              placeholder="Adresse email"
               className="block text-sm py-3 px-4 rounded-lg w-full border outline-none"
               value={form.email || ''}
               onChange={handleOnchange}
@@ -150,7 +152,7 @@ const Login: FC<LoginType> = () => {
                 ref={inputPassword}
                 type="password"
                 name="password"
-                placeholder="Password"
+                placeholder="mot de passe"
                 className="block text-sm py-3 px-4 rounded-lg w-full border outline-none"
                 value={form.password || ''}
                 onChange={handleOnchange}
@@ -175,7 +177,7 @@ const Login: FC<LoginType> = () => {
                 ref={inputPassword2}
                 type="password"
                 name="password_confirmation"
-                placeholder="confirm password"
+                placeholder="confirmer votre mot de passe"
                 className="block text-sm py-3 px-4 rounded-lg w-full border outline-none"
                 value={form.password_confirmation || ''}
                 onChange={handleOnchange}
@@ -199,11 +201,12 @@ const Login: FC<LoginType> = () => {
           </div>
           <div className="text-center mt-6">
             <button type="submit" className={`${loading ? 'disabled':''} py-3 text-center inline-flex justify-center items-center w-64 text-xl text-white bg-[#ac3265ee] rounded-2xl`}>
-              {!loading ? 'Sin up': <Loader className="text-white text-2xl" />}
+              {!loading ? 'Inscription': <Loader className="text-white text-2xl" />}
             </button>
             <p className="mt-4 text-sm">
-              you already have an account ?{" "}
-              <Link to='/login' className="underline cursor-pointer"> Sign in</Link>
+              {/* you already have an account ?{" "} */}
+              Vous avez déjà un compte ?
+              <Link to='/login' className="underline cursor-pointer"> Connectez vous</Link>
             </p>
           </div>
         </div>

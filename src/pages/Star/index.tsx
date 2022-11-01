@@ -25,6 +25,7 @@ const Star: FC<TypeStar> = () => {
   const [step, setStep] = useState(1);
   const [errForm, setErrForm] = useState('');
   const [sending,setSending] = useState(false);
+  const [success,setSuccess] = useState(false);
 
   const [showPassword,setShowPassword] = useState(false)
   const inputPassword = useRef(null)
@@ -140,9 +141,11 @@ const Star: FC<TypeStar> = () => {
               'user' : newUser
             })
 
+            setSuccess(true)
+
             setSending(false);
 
-            navigate('/dashboard')
+            // navigate('/dashboard')
             
           })
           .catch(err => {
@@ -176,16 +179,12 @@ const Star: FC<TypeStar> = () => {
         >
           <div className="absolute bg-gradient-to-b from-[#ac3265c1] to-[#ac3265b3] opacity-75 inset-0 z-0"></div>
           <div className="w-full  max-w-md z-10">
-            <div className="sm:text-4xl xl:text-5xl font-bold leading-tight mb-6">
-              A software made especially for you, start now ...
+            <div className="sm:text-4xl xl:text-5xl font-extrabold mb-6 leading-[300px]">
+              <span className="inline-block">La gestion et management simplifier avec</span> <span className='inline-block text-primary bg-white px-3 py-1 pb-3'>gm smart</span>
             </div>
             <div className="sm:text-sm xl:text-md text-gray-200 font-normal">
               {" "}
-              What is Lorem Ipsum Lorem Ipsum is simply dummy text of the
-              printing and typesetting industry Lorem Ipsum has been the
-              industry's standard dummy text ever since the 1500s when an
-              unknown printer took a galley of type and scrambled it to make a
-              type specimen book it has?
+              Choisissez un logiciel fait pour vos besoins . De la gestion commerciale à la gestion comptable, <span className="text-primary bg-white bg-opacity-50 px-1 py-1 font-bold">gm smart</span> vous aide et vous accompagne tout au long de la croissance de votre entreprise . Des interfaces intuitives et ergonomie pour un manipulation simple 
             </div>
           </div>
           <ul className="circles">
@@ -203,12 +202,20 @@ const Star: FC<TypeStar> = () => {
         </div>
         <div className="md:flex md:items-center md:justify-center sm:w-auto md:h-full w-2/5 xl:w-3/6 p-8  md:p-10 lg:p-14 sm:rounded-lg md:rounded-none overflow-hidden bg-white">
           <div className="max-w-md w-full space-y-4">
+
+            {success ? <>
+              <div className="p-6 bg-green-100 text-green-500 shadow rounded-md text-3xl font-bold text-center first-letter:text-primary">
+                Merci pour votre inscription. Notre équipe vous contactera pour la validation de vos accès
+              </div>
+            </>:<>
+
             <div className="text-center">
               <h2 className="mt-0 text-3xl font-bold text-gray-700">
-                Welcom Back !
+                Bienvenue !
               </h2>
               <p className="mt-2 text-sm text-gray-500">
-                Create your account and start right away
+                {/* Create your account and start right away */}
+                Créer rapidement votre compte et commencer à profiter
               </p>
             </div>
             <div>
@@ -222,7 +229,7 @@ const Star: FC<TypeStar> = () => {
                   <div className="relative flex justify-between items-start space-x-3">
                     <div>
                       <label className="ml-3 text-sm font-bold text-gray-700 tracking-wide">
-                        First name
+                        Prénom
                       </label>
                       <input
                         onChange={handleOnchange} 
@@ -231,13 +238,13 @@ const Star: FC<TypeStar> = () => {
                         value={user.firstname || ''}
                         className=" w-full px-4 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type=""
-                        placeholder="Enter your first name"
+                        placeholder="Entrer votre prénom"
                         required
                       />
                     </div>
                     <div>
                       <label className="ml-3 text-sm font-bold text-gray-700 tracking-wide">
-                        Last name
+                        Nom
                       </label>
                       <input
                         onChange={handleOnchange} 
@@ -246,7 +253,7 @@ const Star: FC<TypeStar> = () => {
                         value={user.lastname || ''}
                         className=" w-full px-4 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type=""
-                        placeholder="Enter your last name"
+                        placeholder="Entrer votre nom"
                         required
                       />
                     </div>
@@ -267,7 +274,7 @@ const Star: FC<TypeStar> = () => {
                   </div>
                   <div className="mt-4 content-center">
                     <label className="ml-3 text-sm font-bold text-gray-700 tracking-wide">
-                      Password
+                      Mot de passe
                     </label>
                     <div className="relative">
                       <input
@@ -278,7 +285,7 @@ const Star: FC<TypeStar> = () => {
                         value={user.password || ''}
                         className="w-full border-x-0 border-t-0 ring-0 focus:ring-0 outline-none  content-center text-base px-4 py-2 border-b  border-gray-300 focus:outline-none focus:border-indigo-500"
                         type="password"
-                        placeholder="Enter your password"
+                        placeholder="Entrer votre mot de passe"
                         required
                       />
                       <span onClick={_=>{
@@ -301,7 +308,7 @@ const Star: FC<TypeStar> = () => {
                       type="submit"
                       className="w-full items-center  flex justify-center bg-gradient-to-r from-[#ac3265] to-[#ac3265ee]  hover:bg-gradient-to-l hover:from-gray-700 hover:to-gray-600 text-gray-100 p-4  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
                     >
-                      <span>Next step</span>{" "}
+                      <span>Etape suivante</span>{" "}
                       <HiArrowRight className="text-xl ml-4 text-white" />
                     </button>
                   </div>
@@ -314,7 +321,7 @@ const Star: FC<TypeStar> = () => {
                   <div className="relative flex justify-between items-start space-x-4">
                     <div className="w-1/2">
                       <label className="ml-3 text-sm font-bold text-gray-700 tracking-wide">
-                        Company name
+                        Nom de votre entreprise
                       </label>
                       <input
                         onChange={handleOnchangeTwo}
@@ -323,13 +330,13 @@ const Star: FC<TypeStar> = () => {
                         value={company.name || ''}
                         className=" w-full px-4 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type=""
-                        placeholder="company name"
+                        placeholder="Entrer le nom de votre Entreprise"
                         required
                       />
                     </div>
                     <div className="w-1/2">
                       <label className="ml-3 text-sm font-bold text-gray-700 tracking-wide">
-                        Email of your company 
+                        Email de l’entreprise
                       </label>
                       <input
                         onChange={handleOnchangeTwo}
@@ -337,7 +344,7 @@ const Star: FC<TypeStar> = () => {
                         value={company.email || ''}
                         className=" w-full px-4 border-x-0 border-t-0 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type="email"
-                        placeholder="mail@gmail.com"
+                        placeholder="company@gmail.com"
                         required
                       />
                     </div>
@@ -345,7 +352,7 @@ const Star: FC<TypeStar> = () => {
                   <div className="relative flex justify-between items-start space-x-4 mt-4">
                     <div className="w-1/2">
                       <label className="ml-3 text-sm font-bold text-gray-700 tracking-wide">
-                        Number of employees
+                        Nombre d'employés
                       </label>
                       <input
                         onChange={handleOnchangeTwo}
@@ -354,13 +361,13 @@ const Star: FC<TypeStar> = () => {
                         className=" w-full focus:ring-0 border-t-0 border-x-0 text-sm px-4 py-2 border-b border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type="number"
                         min={1}
-                        placeholder="Number of employees"
+                        placeholder="combien d'employés ? "
                         required
                       />
                     </div>
                     <div className="w-1/2">
                       <label className="ml-3 text-sm font-bold text-gray-700 tracking-wide">
-                        Address
+                        Adresse de l’entreprise
                       </label>
                       <input
                         onChange={handleOnchangeTwo}
@@ -376,7 +383,7 @@ const Star: FC<TypeStar> = () => {
                   <div className="relative flex justify-between items-start space-x-4 mt-4">
                     <div className="w-1/2">
                       <label className="ml-3 text-sm font-bold text-gray-700 tracking-wide">
-                      Country
+                        Pays
                       </label>
                       <input
                         onChange={handleOnchangeTwo}
@@ -384,13 +391,13 @@ const Star: FC<TypeStar> = () => {
                         value={company.country || ''}
                         className=" w-full outline-none ring-0 focus:ring-0 border-t-0 border-x-0 text-sm px-4 py-2 border-b border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type="text"
-                        placeholder="in which country is your company?"
+                        placeholder="Pays de l'entreprise"
                         required
                       />
                     </div>
                     <div className="w-1/2">
                       <label className="ml-3 text-sm font-bold text-gray-700 tracking-wide">
-                        City
+                        Ville
                       </label>
                       <input
                         onChange={handleOnchangeTwo}
@@ -398,7 +405,7 @@ const Star: FC<TypeStar> = () => {
                         value={company.city || ''}
                         className=" w-full px-4 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type=""
-                        placeholder="City of your company"
+                        placeholder="ville de l'entreprise"
                         required
                       />
                     </div>
@@ -409,13 +416,13 @@ const Star: FC<TypeStar> = () => {
                       className=" items-center  flex justify-center min-w-[200px] bg-gradient-to-r from-[#ac3265] to-[#ac3265ee]  hover:bg-gradient-to-l hover:from-gray-700 hover:to-gray-600 text-gray-100 px-6 py-2  rounded-md tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
                     >
                       <HiArrowLeft className="text-xl mr-4 text-white" />{" "}
-                      <span>Previous step</span>
+                      <span>Etape précédente</span>
                     </button>
                     <button
                       type="submit"
                       className=" items-center  flex justify-center min-w-[200px] bg-gradient-to-r from-[#ac3265] to-[#ac3265ee]  hover:bg-gradient-to-l hover:from-gray-700 hover:to-gray-600 text-gray-100 px-6 py-2  rounded-md tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
                     >
-                      <span>Next step</span>{" "}
+                      <span>Etape suivante</span>{" "}
                       <HiArrowRight className="text-xl ml-4 text-white" />
                     </button>
                   </div>
@@ -425,22 +432,23 @@ const Star: FC<TypeStar> = () => {
             {step === 3 && (
               <>
                 <form onSubmit={submitForm} className="mt-0 relative">
-                  <div className="p-3 bg-green-700 text-white text-center font-bold rounded-sm">
+                  <div className="p-3 bg-gray-700 text-white text-center font-bold rounded-sm">
                     <div className="flex items-center justify-center">
                     <AiFillCheckCircle className="mr-3 text-2xl" /> <span>corfirmation </span>
                     </div>
                     
                   </div>
-                  <button className={`px-6 justify-center ${sending && 'disabled'} items-center flex py-3 bg-gray-700 border-4 rounded-full mt-3 min-w-[250px] mx-auto text-white`}>
-                    {sending ? <Loader className="text-2xl" />:'Click here to finish 😊'}
+                  <button className={`px-6 justify-center ${sending && 'disabled'} items-center flex py-3 font-bold hover:bg-green-800 transition bg-green-700 border-4 rounded-full mt-3 min-w-[250px] mx-auto text-white`}>
+                    {sending ? <Loader className="text-2xl" />:'Confirmer l’enregistrement de mon compte'}
                   </button>
+
                   <div className="pt-8 flex items-center justify-center space-x-4">
                     <button
                       onClick={(_) => prev()}
-                      className=" items-center  flex justify-center min-w-[200px] bg-gradient-to-r from-[#ac3265] to-[#ac3265ee]  hover:bg-gradient-to-l hover:from-gray-700 hover:to-gray-600 text-gray-100 px-6 py-2  rounded-md tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
+                      className=" items-center  flex justify-center min-w-[200px] bg-gradient-to-r from-[#ac3265] to-[#ac3265ee]  hover:bg-gradient-to-l hover:from-green-700 hover:to-gray-600 text-gray-100 px-6 py-2  rounded-md tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
                     >
                       <HiArrowLeft className="text-xl mr-4 text-white" />{" "}
-                      <span>Previous step</span>
+                      <span>Etape précédente</span>
                     </button>
                     <button
                       type="submit"
@@ -456,6 +464,9 @@ const Star: FC<TypeStar> = () => {
             <p className="flex flex-col absolute -bottom-10 text-sm font-bold underline text-[#ac3265] w-full z-20 right-0 items-center justify-center mt-0 text-center text-md italic">
               <span>Home page</span>
             </p>
+              
+            </>}
+            
           </div>
         </div>
       </div>
