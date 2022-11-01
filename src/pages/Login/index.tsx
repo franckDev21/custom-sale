@@ -59,10 +59,14 @@ const Login: FC<LoginType> = () => {
     axiosCustum.post(LOGIN_URL,form)
       .then(res => {
         setLoading(false)
-        dispatch(setAuth(res.data))
-        Storage.removeStorage('auth')
-        Storage.setStorage('auth',res.data)
-        console.log(res.data)
+        if(res.data.error){
+          setErrorMessage(res.data.error)
+        }else{
+          dispatch(setAuth(res.data))
+          Storage.removeStorage('auth')
+          Storage.setStorage('auth',res.data)
+        }
+        
       })
       .catch((err: any) => {
         setLoading(false)

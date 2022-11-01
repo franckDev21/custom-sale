@@ -1,14 +1,13 @@
-import React, { FC } from "react";
-import { Page, Text, View, Document, StyleSheet, Image } from "@react-pdf/renderer";
-import { formatCurrency, formatDate } from "../../utils/function";
+import { Image, StyleSheet, Text, View } from '@react-pdf/renderer'
+import React, { useEffect, useState } from 'react'
+import Company from '../../Model/Company'
+import DefaultImage from '../../assets/img/logo/logo3.png'
+import { http_client } from '../../utils/axios-custum'
+import Storage from '../../service/Storage'
+import UserService from '../../service/UserService'
 
-import DefaultImage from '../../assets/img/default-product.png'
-import { baseURL } from "../../utils/axios-custum";
-import moment from "moment";
-import Customer from "../../Model/Customer";
-import ProductHistory from "../../Model/ProductHistory";
-import Procurement from "../../Model/Procurement";
-import HeaderInvoice from "../../molecules/HeaderInvoice";
+type HeaderInvoiceProps = {
+}
 
 // Create styles
 const styles = StyleSheet.create({
@@ -25,7 +24,7 @@ const styles = StyleSheet.create({
   image : {
     width : 130,
     height : 130,
-    backgroundColor: "#E4E4E4",
+    // backgroundColor: "#E4E4E4",
   },
   right : {
     width: '80%',
@@ -78,7 +77,7 @@ const styles = StyleSheet.create({
   },
   tableTh:{
     fontWeight: 'semibold',
-    width: '25%',
+    width: '14.12%',
     padding: 4,
     borderLeft:1,
     borderBottom: 1,
@@ -87,7 +86,7 @@ const styles = StyleSheet.create({
   },
   tableThLast:{
     fontWeight: 'semibold',
-    width: '25%',
+    width: '14.12%',
     padding: 4,
     borderLeft:1,
     borderBottom: 1,
@@ -97,7 +96,7 @@ const styles = StyleSheet.create({
   },
   tableThFirst:{
     fontWeight: 'semibold',
-    width: '25%',
+    width: '14.12%',
     padding: 4,
     borderLeft:1,
     borderBottom: 1,
@@ -107,14 +106,14 @@ const styles = StyleSheet.create({
     borderLeftColor: '#000',
   },
   tableChild:{
-    width: '25%',
+    width: '14.12%',
     padding: 4,
     borderLeft:1,
     borderBottom: 1,
     minHeight: 30,
   },
   tableChildRigth:{
-    width: '25%',
+    width: '14.12%',
     padding: 4,
     borderLeft:1,
     borderBottom: 1,
@@ -133,6 +132,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     fontSize: '11px',
+    marginLeft: 3,
   },
   signature : {
     paddingTop: 8,
@@ -147,46 +147,35 @@ const styles = StyleSheet.create({
   }
 });
 
-type ProcurementPrintProps = {
-  className ?:  string,
-  histories ?: Procurement[],
-};
+const GET_COMPANY_URL = 'my/company'
 
+const HeaderInvoice:React.FC<HeaderInvoiceProps> = () => {
 
-const ProcurementPrint: FC<ProcurementPrintProps> = ({
-  className='',
-  histories = [],
-}) => {
+  const [company,setCompany] = useState<Company>({})
+
+  useEffect(() => {
+    http_client(Storage.getStorage("auth").token).get(`${GET_COMPANY_URL}`)
+      .then(res => {
+        setCompany(res.data)
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  },[])
+
   return (
-    <Document>
-      <Page wrap size="A4" style={styles.page}>
+    <View style={styles.header}>
+      <View style={styles.image}>
+        <Image src={company.photo ? company.photo : DefaultImage} />
+      </View>
+      <View style={styles.right}>
+        <View style={styles.rightBottom}><Text style={{ padding:4, marginLeft: 5 }}>{company.name}</Text></View>
+        <View style={styles.rightBottom}><Text style={{ padding:4, marginLeft: 5 }}>Commerce Général - Prestations de Services</Text></View>
+        {/* <View style={styles.rightBottom}><Text style={{ padding:4, marginLeft: 5 }}>B.P : 7754 Douala Tél : (237) 243 043 918 / 696 975 548</Text></View> */}
+        {/* <View style={styles.rightBottom}><Text>Site internet : https://solumat-sarl.com/</Text></View> */}
+      </View>
+    </View>
+  )
+}
 
-        <HeaderInvoice />
-
-        <View style={styles.tableTile}><Text style={{ padding: 5 }}>Liste d'approvisionnement | {moment().format('MMMM Do YYYY')}</Text></View>
-        
-        <View style={styles.table}>
-          <View style={styles.tableThFirst}><Text>Nom du produit</Text></View>
-          <View style={styles.tableTh}><Text>Date</Text></View>
-          <View style={styles.tableTh}><Text>Quantité</Text></View>
-          <View style={styles.tableTh}><Text>Prix d'âchat </Text></View>
-
-          {histories.map(item => (
-            <React.Fragment key={item.id}>
-              <View style={styles.tableChild}><Text>{item.product?.name}</Text></View>
-              <View style={styles.tableChild}><Text>{formatDate(item.created_at || '')}</Text></View>
-              <View style={styles.tableChild}><Text>{item.quantite}</Text></View>
-              <View style={styles.tableChild}><Text>{formatCurrency(parseInt(item.prix_achat?.toString() || '0',10),'XAF')}</Text></View>
-            </React.Fragment>
-          ))}
-          
-        </View>
-
-        <View style={styles.signature}><Text style={{ textAlign:'right' }}>La Direction</Text></View>
-
-      </Page>
-    </Document>
-  );
-};
-
-export default ProcurementPrint;
+export default HeaderInvoice

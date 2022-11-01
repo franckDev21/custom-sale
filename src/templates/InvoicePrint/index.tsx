@@ -8,6 +8,7 @@ import Invoice from "../../Model/Invoice";
 import { baseURL } from "../../utils/axios-custum";
 import Product from "../../Model/Product";
 import moment from "moment";
+import HeaderInvoice from "../../molecules/HeaderInvoice";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -163,17 +164,7 @@ const InvoicePrint: FC<InvoicePrintProps> = ({
     <Document>
       <Page wrap size="A4" style={styles.page}>
 
-        <View style={styles.header}>
-          <View style={styles.image}>
-            <Image src={DefaultImage} />
-          </View>
-          <View style={styles.right}>
-            <View style={styles.rightBottom}><Text style={{ padding:4, marginLeft: 5 }}>COMPANY Name</Text></View>
-            <View style={styles.rightBottom}><Text style={{ padding:4, marginLeft: 5 }}>Commerce Général - Prestations de Services</Text></View>
-            <View style={styles.rightBottom}><Text style={{ padding:4, marginLeft: 5 }}>B.P : 7754 Douala Tél : (237) 243 043 918 / 696 975 548</Text></View>
-            {/* <View style={styles.rightBottom}><Text>Site internet : https://solumat-sarl.com/</Text></View> */}
-          </View>
-        </View>
+        <HeaderInvoice />
 
         <View style={styles.tableTile}><Text style={{ padding: 5 }}>Liste des factures | {moment().format('MMMM Do YYYY')}</Text></View>
         

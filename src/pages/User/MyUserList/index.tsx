@@ -20,7 +20,6 @@ import UserService from "../../../service/UserService";
 import { BiUserPlus } from "react-icons/bi";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import UserPrint from "../../../templates/Userprint";
-import { TbArrowsRightLeft } from "react-icons/tb";
 
 type TypeMyUserList = {};
 
@@ -139,6 +138,11 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
     {
       name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Email</span>,
       selector: (row) => row.email || "",
+      sortable: true,
+    },
+    {
+      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Role</span>,
+      selector: (row) => row.role || "",
       sortable: true,
     },
     {

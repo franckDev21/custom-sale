@@ -13,8 +13,8 @@ const Home: React.FC<typeHome> = () => {
           <h2 className='text-2xl mb-4'>
             Simplifiez vous la vie avec
           </h2>
-          <h1 className='text-6xl font-bold py-5'>Votre logiciel <br /> extraordinaire de gestion </h1>
-          <p className='mt-2 w-[70%] my-5'>
+          <h1 className='text-6xl font-bold py-5'>Notre logiciel <br /> extraordinaire de gestion </h1>
+          <p className='mt-2 w-[70%] my-5 leading-10'>
             La seule plate-forme dont vous aurez besoin pour la gestion complète de votre entreprise: <br />
             Gestion comptable, gestion de stock, gestion commerciale , gestions des ressources humaines  .
           </p>

@@ -125,25 +125,26 @@ const Star: FC<TypeStar> = () => {
       .then(res => {
         
         dispatch(setAuth(res.data))
-        Storage.setStorage('auth',res.data)
+        // Storage.setStorage('auth',res.data)
 
         toast.success(res.data.message)
         
-        http_client(Storage.getStorage('auth').token).post(`${CREATE_COMPANY_URL}`,company)
+        axiosCustum.post(`${CREATE_COMPANY_URL}/${res.data.user.id}`,company)
           .then(res => {
             toast.success(res.data.message)
 
-            let user: User = Storage.getStorage('auth').user
-            let newUser : User = { ...user, as_company: true, company_id: res.data.company_id }
+            // let user: User = Storage.getStorage('auth').user
+            // let newUser : User = { ...user, as_company: true, company_id: res.data.company_id }
 
-            Storage.setStorage('auth',{
-              'token' : Storage.getStorage('auth').token,
-              'user' : newUser
-            })
+            // Storage.setStorage('auth',{
+            //   'token' : Storage.getStorage('auth').token,
+            //   'user' : newUser
+            // })
 
             setSuccess(true)
 
             setSending(false);
+            
 
             // navigate('/dashboard')
             
@@ -158,8 +159,6 @@ const Star: FC<TypeStar> = () => {
         setErrForm(err.response.data.message)
         console.log(err)
       })
-
-    console.log(user,company);
     
   }
 
@@ -179,10 +178,10 @@ const Star: FC<TypeStar> = () => {
         >
           <div className="absolute bg-gradient-to-b from-[#ac3265c1] to-[#ac3265b3] opacity-75 inset-0 z-0"></div>
           <div className="w-full  max-w-md z-10">
-            <div className="sm:text-4xl xl:text-5xl font-extrabold mb-6 leading-[300px]">
-              <span className="inline-block">La gestion et management simplifier avec</span> <span className='inline-block text-primary bg-white px-3 py-1 pb-3'>gm smart</span>
+            <div className="sm:text-4xl xl:text-3xl font-extrabold mb-6" style={{ lineHeight: '1.4' }}>
+              La gestion et management simplifiés avec <span className=' rounded-full text-primary bg-white px-3  '>gm smart</span>
             </div>
-            <div className="sm:text-sm xl:text-md text-gray-200 font-normal">
+            <div className="sm:text-sm xl:text-md text-gray-200 font-normal" style={{ textShadow: '1px 1px 20px black' }}>
               {" "}
               Choisissez un logiciel fait pour vos besoins . De la gestion commerciale à la gestion comptable, <span className="text-primary bg-white bg-opacity-50 px-1 py-1 font-bold">gm smart</span> vous aide et vous accompagne tout au long de la croissance de votre entreprise . Des interfaces intuitives et ergonomie pour un manipulation simple 
             </div>
@@ -234,7 +233,7 @@ const Star: FC<TypeStar> = () => {
                       <input
                         onChange={handleOnchange} 
                         name='firstname'
-                        min={2}
+                        min={3}
                         value={user.firstname || ''}
                         className=" w-full px-4 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type=""
@@ -249,7 +248,7 @@ const Star: FC<TypeStar> = () => {
                       <input
                         onChange={handleOnchange} 
                         name='lastname'
-                        min={2}
+                        min={3}
                         value={user.lastname || ''}
                         className=" w-full px-4 py-2 border-b text-sm border-gray-300 focus:outline-none  focus:border-indigo-500"
                         type=""
@@ -413,14 +412,14 @@ const Star: FC<TypeStar> = () => {
                   <div className="pt-8 flex items-center justify-center space-x-4">
                     <button
                       onClick={(_) => prev()}
-                      className=" items-center  flex justify-center min-w-[200px] bg-gradient-to-r from-[#ac3265] to-[#ac3265ee]  hover:bg-gradient-to-l hover:from-gray-700 hover:to-gray-600 text-gray-100 px-6 py-2  rounded-md tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
+                      className=" items-center  flex justify-center min-w-[240px] bg-gradient-to-r from-[#ac3265] to-[#ac3265ee]  hover:bg-gradient-to-l hover:from-gray-700 hover:to-gray-600 text-gray-100 px-6 py-2  rounded-md tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
                     >
                       <HiArrowLeft className="text-xl mr-4 text-white" />{" "}
                       <span>Etape précédente</span>
                     </button>
                     <button
                       type="submit"
-                      className=" items-center  flex justify-center min-w-[200px] bg-gradient-to-r from-[#ac3265] to-[#ac3265ee]  hover:bg-gradient-to-l hover:from-gray-700 hover:to-gray-600 text-gray-100 px-6 py-2  rounded-md tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
+                      className=" items-center  flex justify-center min-w-[240px] bg-gradient-to-r from-[#ac3265] to-[#ac3265ee]  hover:bg-gradient-to-l hover:from-gray-700 hover:to-gray-600 text-gray-100 px-6 py-2  rounded-md tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
                     >
                       <span>Etape suivante</span>{" "}
                       <HiArrowRight className="text-xl ml-4 text-white" />
@@ -445,14 +444,14 @@ const Star: FC<TypeStar> = () => {
                   <div className="pt-8 flex items-center justify-center space-x-4">
                     <button
                       onClick={(_) => prev()}
-                      className=" items-center  flex justify-center min-w-[200px] bg-gradient-to-r from-[#ac3265] to-[#ac3265ee]  hover:bg-gradient-to-l hover:from-green-700 hover:to-gray-600 text-gray-100 px-6 py-2  rounded-md tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
+                      className=" items-center text-md flex justify-center min-w-[240px] bg-gradient-to-r from-[#ac3265] to-[#ac3265ee]  hover:bg-gradient-to-l hover:from-green-700 hover:to-gray-600 text-gray-100 px-6 py-2  rounded-md tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
                     >
                       <HiArrowLeft className="text-xl mr-4 text-white" />{" "}
                       <span>Etape précédente</span>
                     </button>
                     <button
                       type="submit"
-                      className=" items-center opacity-0 disabled  flex justify-center min-w-[200px] bg-gradient-to-r from-[#ac3265] to-[#ac3265ee]  hover:bg-gradient-to-l hover:from-gray-700 hover:to-gray-600 text-gray-100 px-6 py-2  rounded-md tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
+                      className=" items-center opacity-0 disabled  flex justify-center min-w-[240px] bg-gradient-to-r from-[#ac3265] to-[#ac3265ee]  hover:bg-gradient-to-l hover:from-gray-700 hover:to-gray-600 text-gray-100 px-6 py-2  rounded-md tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
                     >
                       <span>Next step</span>{" "}
                       <HiArrowRight className="text-xl ml-4 text-white" />
