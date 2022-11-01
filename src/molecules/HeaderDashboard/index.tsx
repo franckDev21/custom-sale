@@ -43,15 +43,15 @@ const HeaderDashboard = () => {
 
                   {UserService.getUser().role !== 'USER' && <NavLink to="/users" className="nav-link">Users</NavLink>}
 
-                  <NavLink to="/products" className="nav-link">Products</NavLink>
+                  <NavLink to="/products" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Products</NavLink>
                   
-                  <NavLink to="/customers" className="nav-link">Customers</NavLink>
+                  <NavLink to="/customers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Customers</NavLink>
                   
-                  <NavLink to="/orders" className="nav-link">Orders</NavLink>
+                  <NavLink to="/orders" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Orders</NavLink>
 
-                  <NavLink to="/invoices" className="nav-link">Invoices</NavLink>
+                  <NavLink to="/invoices" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Invoices</NavLink>
                   
-                  <NavLink to="/cashiers" className="nav-link">Cashier</NavLink>
+                  <NavLink to="/cashiers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Cashier</NavLink>
 
                 </div>
               </div>
