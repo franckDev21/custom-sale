@@ -39,19 +39,19 @@ const HeaderDashboard = () => {
               </Link>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
-                  <NavLink to="/dashboard" className="nav-link" aria-current="page">Dashboard</NavLink>
+                  <NavLink to="/dashboard" className="nav-link" aria-current="page">Tableau de bord</NavLink>
 
-                  {UserService.getUser().role !== 'USER' && <NavLink to="/users" className="nav-link">Users</NavLink>}
+                  {UserService.getUser().role !== 'USER' && <NavLink to="/users" className="nav-link">Utilisateurs</NavLink>}
 
-                  <NavLink to="/products" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Products</NavLink>
+                  <NavLink to="/products" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Produits</NavLink>
                   
-                  <NavLink to="/customers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Customers</NavLink>
+                  <NavLink to="/customers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Clients</NavLink>
                   
-                  <NavLink to="/orders" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Orders</NavLink>
+                  <NavLink to="/orders" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Commandes</NavLink>
 
-                  <NavLink to="/invoices" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Invoices</NavLink>
+                  <NavLink to="/invoices" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Factures</NavLink>
                   
-                  <NavLink to="/cashiers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Cashier</NavLink>
+                  <NavLink to="/cashiers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Caisse</NavLink>
 
                 </div>
               </div>
