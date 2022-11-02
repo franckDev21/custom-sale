@@ -129,7 +129,7 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
       )
     },
     {
-      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Name</span>,
+      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Nom</span>,
       cell: (row) => <span className="font-bold">
         {row.firstname} {row.lastname}
       </span>,
@@ -148,11 +148,11 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
     {
       name: (
         <span className=" font-bold text-xs text-[#ac3265] uppercase translate-x-5">
-          State
+          Etat
         </span>
       ),
       cell: (row) => (
-        <h1 className="pl-3 translate-x-4">
+        <h1 className="pl-3">
           <span
             onClick={(_) => toggleActive(row.id || "1")}
             className={`w-14 ${
@@ -170,8 +170,8 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
     },
     {
       name: (
-        <span className=" font-bold text-xs text-[#ac3265] uppercase translate-x-5">
-          Created at
+        <span className=" font-bold text-xs text-[#ac3265] uppercase ">
+          Date de création
         </span>
       ),
       selector: (row) => formatDate(row.created_at || ""),
@@ -257,15 +257,15 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
 
   return (
     <DashboardLayout
-      titleClass="w-[11%]"
-      title="My users"
+      titleClass="w-[29%]"
+      title="Gestion des utilisateurs"
       headerContent={
         <>
-          <div className="ml-4 w-[88%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
-           <span>| List of users</span> 
+          <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
+           <span>| Liste</span> 
             <div className="flex items-center justify-end">
-              <Link to='/my/company/view' className={`flex ${(UserService.getUser().role === 'ENTREPRISE' && !UserService.getUser().as_company) && 'disabled'}  justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}><BsBuilding className="mr-2" />  see my company </Link>
-              <Link to='/users/create' className={`flex ${(UserService.getUser().role === 'ENTREPRISE' && !UserService.getUser().as_company) && 'disabled'}  justify-start text-sm border-4 border-gray-700 items-center space-x-2 rounded px-2 py-1 text-white bg-gray-700 hover:bg-gray-800 transition w-auto ml-3`}>Create a new user <BiUserPlus className="ml-2 text-lg" /></Link>
+              <Link to='/my/company/view' className={`flex ${(UserService.getUser().role === 'ENTREPRISE' && !UserService.getUser().as_company) && 'disabled'}  justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}><BsBuilding className="mr-2" />Voir mon entreprise</Link>
+              <Link to='/users/create' className={`flex ${(UserService.getUser().role === 'ENTREPRISE' && !UserService.getUser().as_company) && 'disabled'}  justify-start text-sm border-4 border-gray-700 items-center space-x-2 rounded px-2 py-1 text-white bg-gray-700 hover:bg-gray-800 transition w-auto ml-3`}>Créer un utilisateur <BiUserPlus className="ml-2 text-lg" /></Link>
             </div>
            
           </div>
@@ -284,7 +284,7 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
             <div className="text-center">
               <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Are you sure you want to delete this company ?
+                Voulez-vous vraiment supprimer cette Utilisateur ?
               </h3>
               <div className="flex justify-center gap-4">
                 <button
@@ -295,7 +295,7 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
                   {deleting ? (
                     <Loader className="flex justify-center items-center" />
                   ) : (
-                    "Yes, I'm sure"
+                    "Oui, supprimer"
                   )}
                 </button>
                 <button
@@ -303,7 +303,7 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
                   onClick={onClose}
                   className="bg-gray-500 text-white rounded-md px-4 py-2"
                 >
-                  No, cancel
+                  Non, Annuler
                 </button>
               </div>
             </div>
@@ -314,7 +314,7 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
       <div className="mx-auto max-w-7xl py-4 sm:px-6 lg:px-8">
         <div className="flex font-bold items-center">
           <PDFDownloadLink document={<UserPrint users={users} />} fileName="liste-des-utilisateurs.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
-            Print the list of users
+            Imprimer la liste des utilisateurs
           </PDFDownloadLink >
         </div>
       </div>
@@ -324,7 +324,7 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
           <>
             <DataTable
               className=" rounded-md overflow-hidden"
-              title="Users"
+              title="Utilisateurs"
               pagination
               columns={columns}
               data={filteredItems}

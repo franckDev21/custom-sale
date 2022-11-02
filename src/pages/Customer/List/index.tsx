@@ -129,7 +129,7 @@ const CustomerList: FC<TypeCustomerList> = () => {
     {
       name: (
         <span className="  font-bold text-xs text-[#ac3265] uppercase">
-          Name
+          Nom
         </span>
       ),
       cell: (row) => (
@@ -142,7 +142,7 @@ const CustomerList: FC<TypeCustomerList> = () => {
     {
       name: (
         <span className="  font-bold text-xs text-[#ac3265] uppercase">
-          Tel
+          Téléphone
         </span>
       ),
       cell: (row) => <span className="">{row.tel || "Aucun"}</span>,
@@ -160,16 +160,16 @@ const CustomerList: FC<TypeCustomerList> = () => {
     {
       name: (
         <span className="  font-bold text-xs text-[#ac3265] uppercase">
-          Total order
+          Total commande
         </span>
       ),
-      cell: (row) => <span>{row.orders?.length || '0'} Order{(row.orders?.length || 0) > 1 && 's'}</span>,
+      cell: (row) => <span>{row.orders?.length || '0'} Commande{(row.orders?.length || 0) > 1 && 's'}</span>,
       sortable: true,
     },
     {
       name: (
-        <span className=" font-bold text-xs text-[#ac3265] uppercase translate-x-5">
-          Created at
+        <span className=" font-bold text-xs text-[#ac3265] uppercase">
+          Date de création
         </span>
       ),
       selector: (row) => formatDate(row.created_at || ""),
@@ -208,13 +208,13 @@ const CustomerList: FC<TypeCustomerList> = () => {
 
   return (
     <DashboardLayout
-      titleClass="w-[30%]"
-      title="Customer management"
+      titleClass="w-[24%]"
+      title="Gestion des clients"
       headerContent={
         <>
-          <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
+          <div className="ml-4 w-[74%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
             <span>
-              | <span className="ml-2">List</span>
+              | <span className="ml-2">Liste</span>
             </span>{" "}
             <div className="flex items-center justify-end">
               <Link
@@ -225,7 +225,7 @@ const CustomerList: FC<TypeCustomerList> = () => {
                   "disabled"
                 }  justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}
               >
-                <BsBuilding className="mr-2" /> see my company{" "}
+                <BsBuilding className="mr-2" /> Voir mon entreprise{" "}
               </Link>
               <Link
                 to="/customers/create/new"
@@ -235,7 +235,7 @@ const CustomerList: FC<TypeCustomerList> = () => {
                   "disabled"
                 }  justify-start text-sm border-4 border-gray-700 items-center space-x-2 rounded px-2 py-1 text-white bg-gray-700 hover:bg-gray-800 transition w-auto ml-3`}
               >
-                Create a new customer <BiUserPlus className="ml-2 text-lg" />
+                Crée un nouvelle utilisateur <BiUserPlus className="ml-2 text-lg" />
               </Link>
             </div>
           </div>
@@ -254,7 +254,7 @@ const CustomerList: FC<TypeCustomerList> = () => {
             <div className="text-center">
               <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Are you sure you want to delete this Customer ?
+                Voulez vous vraiment supprimer le client ?
               </h3>
               <div className="flex justify-center gap-4">
                 <button
@@ -284,7 +284,7 @@ const CustomerList: FC<TypeCustomerList> = () => {
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center">
           <PDFDownloadLink document={<CustomerPrint customers={users} />} fileName="liste-des-clients.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
-            Print the list of customers
+            Imprimer la liste des clients
           </PDFDownloadLink >
         </div>
       </div>
@@ -294,7 +294,7 @@ const CustomerList: FC<TypeCustomerList> = () => {
           <>
             <DataTable
               className=" rounded-md overflow-hidden"
-              title="Customers"
+              title="Clients"
               pagination
               columns={columns}
               data={filteredItems}

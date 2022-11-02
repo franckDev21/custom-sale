@@ -102,13 +102,13 @@ const AddCustomer:FC<TypeAddCustomer> = () => {
 
   return (
     <DashboardLayout
-      titleClass="w-[30%]"
-      title='Customer management'
+      titleClass="w-[23%]"
+      title='Gestion des clients'
       headerContent={
         <>
-          <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
+          <div className="ml-4 w-[70%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
             <span>| {' '} 
-              {editing ? <>Editing customer information <span className='text-gray-500'>{customer.firstname} {customer.lastname}</span></>:<span className='ml-2'>add a new customer</span>}
+              {editing ? <>Edition des informations du client <span className='text-gray-500'>{customer.firstname} {customer.lastname}</span></>:<span className='ml-2'>add a new customer</span>}
             </span>
           </div>
         </>
@@ -136,37 +136,37 @@ const AddCustomer:FC<TypeAddCustomer> = () => {
 
             <div className="flex justify-between items-start space-x-4 mb-4">
               <div className=' flex-col flex w-1/2'>
-                <label htmlFor="firstname">Client's first name</label>
-                <input autoFocus required onChange={handleOnchange} name='firstname' value={customer.firstname || ''} type="text" placeholder='Enter your first name' className='px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full' />
+                <label htmlFor="firstname">Prénom du client</label>
+                <input autoFocus required onChange={handleOnchange} name='firstname' value={customer.firstname || ''} type="text" placeholder='Prénom' className='px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full' />
               </div>
               <div className=' flex-col flex w-1/2'>
-                <label htmlFor="lastname">Client's last name</label>
-                <input required onChange={handleOnchange} name='lastname' value={customer.lastname || ''} type="text" placeholder='Enter your last name' className='px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full' />
+                <label htmlFor="lastname">Nom du client</label>
+                <input required onChange={handleOnchange} name='lastname' value={customer.lastname || ''} type="text" placeholder='Nom' className='px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full' />
               </div>
             </div>
 
             <div className="flex justify-between items-start space-x-4 mb-4">
               <div className=' flex-col flex w-1/2'>
                 <label htmlFor="email">Email <span className='text-sm italic text-gray-400'>( optional )</span></label>
-                <input onChange={handleOnchange} name='email' value={customer.email || ''} type="email" placeholder="Enter your customer's email" className='px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full' />
+                <input onChange={handleOnchange} name='email' value={customer.email || ''} type="email" placeholder="Adresse email du client" className='px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full' />
               </div>
               <div className=' flex-col flex w-1/2'>
-                <label htmlFor="tel">Phone number <span className='text-sm italic text-gray-400'>( optional )</span></label>
-                <input onChange={handleOnchange} name='tel' value={customer.tel || ''} type="tel" placeholder='Enter the phone number of your customer' className='px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full' />
+                <label htmlFor="tel">Téléphone<span className='text-sm italic text-gray-400'>( optional )</span></label>
+                <input onChange={handleOnchange} name='tel' value={customer.tel || ''} type="tel" placeholder='Numéro de téléphone du client' className='px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full' />
               </div>
             </div>
 
             <div className="flex justify-between items-start space-x-4 mb-4">
               <div className=' flex-col flex w-full'>
                 <label htmlFor="address">Address <span className='text-sm italic text-gray-400'>( optional )</span></label>
-                <input onChange={handleOnchange} name='address' value={customer.address || ''} type="address" placeholder="Enter the customer's address" className='px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full' />
+                <input onChange={handleOnchange} name='address' value={customer.address || ''} type="address" placeholder="Adresse" className='px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full' />
               </div>
             </div>
 
             <div className="flex items-center justify-end">
               <button type='submit' className={`px-4 ${sending && 'disabled'} flex justify-center items-center py-[0.48rem] bg-[#ac3265] hover:bg-[#951f50] transition min-w-[200px] text-white text-sm font-semibold rounded-md`}>
                 {sending ? <Loader className=' inline-block text-xl' /> : <>
-                  {editing ? "update your client":"'Register new customer'"}
+                  {editing ? "Mettre à jour le client":"'Enregistrer le nouveau client'"}
                 </>}
               </button>
             </div>

@@ -147,7 +147,7 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
 
   return (
     <DashboardLayout
-      title="Product management"
+      title="Gestion des produits"
       headerContent={
         <>
           <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
@@ -155,16 +155,16 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
               <>
                 <span>| {product.name}</span>
 
-                <div className="flex space-x-4 font-bold items-center">
+                <div className="flex space-x-4 font-bold items-center ml-4">
                   <button onClick={_ => {
                     onClick('OUTPUT')
                     setModalType('OUTPUT')
-                  }} className='text-sm text-white px-4 rounded-md bg-red-400 py-2'> <FaMinus size={16} className='inline-block  mr-1' />Add an output</button>
+                  }} className='text-sm text-white px-4 rounded-md bg-red-400 py-2'> <FaMinus size={16} className='inline-block  mr-1' />Ajouter une sortie</button>
                   <button onClick={_ => {
                     onClick('INPUT')
                     setModalType('INPUT')
-                  }} className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaPlus size={16} className='inline-block mr-1' />Add an entry</button>
-                  <Link to='/approvisionnement' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <RiArrowLeftRightFill size={20} className='inline-block rotate-90  mr-1' />History of entries</Link>
+                  }} className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaPlus size={16} className='inline-block mr-1' />Ajouter une entrées</button>
+                  <Link to='/approvisionnement' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <RiArrowLeftRightFill size={20} className='inline-block rotate-90  mr-1' />Historique d'E/S</Link>
                 </div>
               </>
             }
@@ -293,8 +293,8 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
                 {product.image && <img className=" absolute h-auto w-full object-cover" src={`${API_STORAGE_URL}/${product.image}` || ''} alt='imagerduit' />}
               </div>
               <div className="mt-4 space-y-6 border-t pt-4">
-                <h2><span className="font-semibold">In stock ? </span>: <span className={`px-3 py-2 text-white ${product.is_stock ? 'bg-green-500':'bg-red-500'} rounded-full opacity-70`}>{product.is_stock ? 'Yes still in stock':'No stock sold out'}</span></h2>
-                <h2><span className="font-semibold">Alert stock </span>: <span className={`px-3 py-2 text-red-500 rounded-full opacity-70`}>{product.qte_stock_alert} {product.type_approvisionnement}{(product.qte_stock_alert || 0) > 1 && 's'}</span></h2>
+                <h2><span className="font-semibold">En stock ? </span>: <span className={`px-3 py-2 text-white ${product.is_stock ? 'bg-green-500':'bg-red-500'} rounded-full opacity-70`}>{product.is_stock ? 'Yes still in stock':'No stock sold out'}</span></h2>
+                <h2><span className="font-semibold">Stock d'alerte  </span>: <span className={`px-3 py-2 text-red-500 rounded-full opacity-70`}>{product.qte_stock_alert} {product.type_approvisionnement}{(product.qte_stock_alert || 0) > 1 && 's'}</span></h2>
               </div>
             </div>
             <div className="w-[calc(100%-300px)] flex flex-col">
@@ -335,12 +335,12 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
 
               <div className="flex space-x-4 mt-3 items-center">
                 <div className="flex items-center space-x-3 text-xl">
-                  <label htmlFor="desc" className="mb-1 inline-block">Category : </label>
+                  <label htmlFor="desc" className="mb-1 inline-block">Categorie : </label>
                   <div className="p-2 rounded-md text-[#ac3265]">{product.category?.name}</div>
                 </div>
                 <span className="h-5 w-[1px] bg-slate-400 inline-block"></span>
                 <div className="flex items-center space-x-3 text-xl">
-                  <label htmlFor="desc" className="mb-1 inline-block">Provider : </label>
+                  <label htmlFor="desc" className="mb-1 inline-block">Fournisseur : </label>
                   <div className="p-2 rounded-md text-[#ac3265]">{product.product_supplier?.name}</div>
                 </div>
               </div>

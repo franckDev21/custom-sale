@@ -278,22 +278,22 @@ const Cashier: React.FC<TypeCashier> = () => {
 
   return (
     <DashboardLayout
-      title='Cashier'
+      title='Caisse'
       headerContent={
         <>
           <div className="ml-4 w-[90%] font-bold text-2xl text-[#ac3265] flex items-center justify-end">
             <div className='flex justify-between space-x-2 '>
               <PDFDownloadLink document={<CashierPrint cashiers={cashiers} total={totalCash.montant} />} fileName="caisse.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
-                Print the list of cashiers
+                Imprimer l'état de la caisse
               </PDFDownloadLink >
               <button onClick={_ => {
                     onClick('OUTPUT')
                     setModalType('OUTPUT')
-                  }} className='text-sm text-white px-4 rounded-md bg-red-400 py-2'> <FaMinus size={16} className='inline-block  mr-1' />Add an output</button>
+                  }} className='text-sm text-white px-4 rounded-md bg-red-400 py-2'> <FaMinus size={16} className='inline-block  mr-1' />Ajouter une nouvelle sortie</button>
                   <button onClick={_ => {
                     onClick('INPUT')
                     setModalType('INPUT')
-                  }} className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaPlus size={16} className='inline-block mr-1' />Add an entry</button>
+                  }} className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaPlus size={16} className='inline-block mr-1' />Ajouter une nouvelle entrée</button>
             </div> 
           </div>
         </>

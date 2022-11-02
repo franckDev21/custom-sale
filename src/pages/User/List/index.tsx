@@ -20,6 +20,7 @@ import UserService from "../../../service/UserService";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import UserPrint from "../../../templates/Userprint";
 import { TbArrowsRightLeft } from "react-icons/tb";
+import { BiUserPlus } from "react-icons/bi";
 
 type TypeUserList = {};
 
@@ -124,10 +125,10 @@ const UserList: React.FC<TypeUserList> = () => {
     {
       name: (
         <span className="  font-bold text-xs text-[#ac3265] uppercase">
-          Name
+          Nom
         </span>
       ),
-      selector: (row) => row.company?.name || "",
+      selector: (row) => row.company?.name || "Pas encore crée",
       sortable: true,
     },
     {
@@ -142,13 +143,13 @@ const UserList: React.FC<TypeUserList> = () => {
     {
       name: (
         <span className="  font-bold text-xs text-[#ac3265] uppercase">
-          Country city
+          Pays, ville
         </span>
       ),
       cell: (row) => (
         <h1 className="py-4">
           <span className="font-semibold inline-block pb-1">
-            {row.company?.country || ""}
+            {row.company?.country || "Pas encore crée"}
           </span>{" "}
           <br /> {row.company?.city || ""}
         </h1>
@@ -173,7 +174,7 @@ const UserList: React.FC<TypeUserList> = () => {
     {
       name: (
         <span className=" font-bold text-xs text-[#ac3265] uppercase translate-x-5">
-          State
+          Etat
         </span>
       ),
       cell: (row) => (
@@ -195,8 +196,8 @@ const UserList: React.FC<TypeUserList> = () => {
     },
     {
       name: (
-        <span className=" font-bold text-xs text-[#ac3265] uppercase translate-x-5">
-          Created at
+        <span className=" font-bold text-xs text-[#ac3265] uppercase">
+          Date de création
         </span>
       ),
       selector: (row) => formatDate(row.created_at || ""),
@@ -282,12 +283,12 @@ const UserList: React.FC<TypeUserList> = () => {
 
   return (
     <DashboardLayout
-      titleClass="w-[6%]"
-      title="Users"
+      titleClass="w-[28.8%]"
+      title="Gestion des utilisateurs"
       headerContent={
         <>
-          <div className="ml-4 w-[94%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
-            <span>| List of users</span>{" "}
+          <div className="ml-4 w-[70%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
+            <span>| Liste</span>{" "}
             <div className="flex items-center justify-end">
               <BsBuilding />{" "}
               <Link
@@ -298,8 +299,9 @@ const UserList: React.FC<TypeUserList> = () => {
                     : "disabled"
                 } justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}
               >
-                see my company <HiEye className="ml-2" />
+                Voir mon entreprise <HiEye className="ml-2" />
               </Link>
+              <Link to='/users/create' className={`flex ${(UserService.getUser().role === 'ENTREPRISE' && !UserService.getUser().as_company) && 'disabled'}  justify-start text-sm border-4 border-gray-700 items-center space-x-2 rounded px-2 py-1 text-white bg-gray-700 hover:bg-gray-800 transition w-auto ml-3`}>Créer un utilisateur <BiUserPlus className="ml-2 text-lg" /></Link>
             </div>
           </div>
         </>
@@ -317,7 +319,7 @@ const UserList: React.FC<TypeUserList> = () => {
             <div className="text-center">
               <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Are you sure you want to delete this company ?
+                Voulez-vous vraiment supprimer cette entreprise ?
               </h3>
               <div className="flex justify-center gap-4">
                 <button
@@ -328,7 +330,7 @@ const UserList: React.FC<TypeUserList> = () => {
                   {deleting ? (
                     <Loader className="flex justify-center items-center" />
                   ) : (
-                    "Yes, I'm sure"
+                    "Oui confirmer"
                   )}
                 </button>
                 <button
@@ -336,7 +338,7 @@ const UserList: React.FC<TypeUserList> = () => {
                   onClick={onClose}
                   className="bg-gray-500 text-white rounded-md px-4 py-2"
                 >
-                  No, cancel
+                  Non , Annuler
                 </button>
               </div>
             </div>
@@ -346,9 +348,9 @@ const UserList: React.FC<TypeUserList> = () => {
 
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center">
-          <Link to='/products/history/all' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <TbArrowsRightLeft size={16} className='inline-block  mr-1' /> History of entries</Link>
+          <Link to='/products/history/all' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <TbArrowsRightLeft size={16} className='inline-block  mr-1' /> Historiques des entrés sorties produit</Link>
           <PDFDownloadLink document={<UserPrint users={filteredItems} />} fileName="liste-des-utilisateurs.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
-            Print the list of users
+            Imprimer le liste des utilisateurs
           </PDFDownloadLink >
         </div>
       </div>
@@ -358,7 +360,7 @@ const UserList: React.FC<TypeUserList> = () => {
           <>
             <DataTable
               className=" rounded-md overflow-hidden"
-              title="Companies"
+              title="Entreprises"
               pagination
               columns={columns}
               data={filteredItems}

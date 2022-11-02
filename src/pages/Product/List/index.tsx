@@ -125,7 +125,7 @@ const ProducList:FC<TypeProducList> = () => {
     },
     {
       name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Encore en stock</span>,
-      cell: (row) => <div>{row.is_stock ? <span className='px-1 inline-block text-xs py-1 text-green-600 bg-green-100 rounded-full'>Yes in stock </span>:<span className='px-1 inline-block text-xs py-1 text-red-500 bg-red-100 rounded-full'>No stock sold out</span>}</div>,
+      cell: (row) => <div>{row.is_stock ? <span className='px-1 inline-block text-xs py-1 text-green-600 bg-green-100 rounded-full'>Oui, en stock</span>:<span className='px-1 inline-block text-xs py-1 text-red-500 bg-red-100 rounded-full'>Non stock écoulé</span>}</div>,
       sortable: true,
     },
     {
@@ -233,11 +233,11 @@ const ProducList:FC<TypeProducList> = () => {
 
   return (
     <DashboardLayout
-      title='Product management'
+      title='Gestion des produits'
       headerContent={
         <>
           <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
-            <Link to='/products/procurements' className='text-sm text-white px-4 rounded-md bg-cyan-700 py-2'> <TbArrowsRightLeft size={16} className='inline-block rotate-90 mr-1' /> Procurement history</Link>
+            <Link to='/products/procurements' className='text-sm text-white px-4 rounded-md bg-cyan-700 py-2'> <TbArrowsRightLeft size={16} className='inline-block rotate-90 mr-1' /> Historique d'approvisionnement </Link>
             <form className='flex justify-between space-x-2 w-[60%]'>
               <div className='relative w-[90%]'>
                 <ImSearch className='absolute top-1/2 -translate-y-1/2 right-4 opacity-80' size={20} />
@@ -251,11 +251,11 @@ const ProducList:FC<TypeProducList> = () => {
     >
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center">
-          <Link to='/products/history/all' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <TbArrowsRightLeft size={16} className='inline-block  mr-1' /> History of entries</Link>
+          <Link to='/products/history/all' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <TbArrowsRightLeft size={16} className='inline-block  mr-1' />Historique des entrées sorties</Link>
           <PDFDownloadLink onClick={download} document={<ProductPrint products={products} />} fileName="liste-des-produits.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
-            Print the list of products
+            Imprimer la liste des produits
           </PDFDownloadLink >
-          <Link to='/products/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaBoxOpen size={16} className='inline-block mr-1' /> Add new product</Link>
+          <Link to='/products/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaBoxOpen size={16} className='inline-block mr-1' /> Ajouter un nouveau produit</Link>
           <Link to='/approvisionnement' className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></Link>
         </div>
       </div>
@@ -272,7 +272,7 @@ const ProducList:FC<TypeProducList> = () => {
             <div className="text-center">
               <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Are you sure you want to delete this Product ?
+                Voulez-vous vraiment supprimer ce produit ?
               </h3>
               <div className="flex justify-center gap-4">
                 <button
@@ -283,7 +283,7 @@ const ProducList:FC<TypeProducList> = () => {
                   {deleting ? (
                     <Loader className="flex justify-center items-center" />
                   ) : (
-                    "Yes, I'm sure"
+                    "Oui, supprimer"
                   )}
                 </button>
                 <button
@@ -291,7 +291,7 @@ const ProducList:FC<TypeProducList> = () => {
                   onClick={onClose}
                   className="bg-gray-500 text-white rounded-md px-4 py-2"
                 >
-                  No, cancel
+                  Non, annuler
                 </button>
               </div>
             </div>
@@ -305,7 +305,7 @@ const ProducList:FC<TypeProducList> = () => {
           <>
             <DataTable
               className=" rounded-md overflow-hidden"
-              title="Products"
+              title="Produits"
               pagination
               columns={columns}
               data={filteredItems}

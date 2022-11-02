@@ -218,7 +218,7 @@ const OrderList = () => {
     {
       name: (
         <span className=" font-bold text-xs text-[#ac3265] uppercase">
-          Customer
+          Client
         </span>
       ),
       selector: (row) => `${row.customer?.firstname} ${row.customer?.lastname}` || '',
@@ -226,7 +226,7 @@ const OrderList = () => {
     {
       name: (
         <span className=" font-bold text-xs text-[#ac3265] uppercase">
-          Autor
+          Auteur
         </span>
       ),
       selector: (row) => `${row.user?.firstname} ${row.user?.lastname}` || '',
@@ -280,15 +280,16 @@ const OrderList = () => {
   
   return (
     <DashboardLayout
-      title='Order management'
+      title='Gestion des commandes'
+      titleClass="w-[31%]"
       headerContent={
         <>
-          <div className="ml-4 w-[74%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
-          <span>| List of orders</span>{" "}
+          <div className="ml-4 w-[65%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
+          <span>| Liste des commandes</span>{" "}
             <form className='flex justify-between space-x-2 w-[60%]'>
               <div className='relative w-[90%]'>
                 <ImSearch className='absolute top-1/2 -translate-y-1/2 right-4 opacity-80' size={20} />
-                <input type="text" className='px-4 pr-10 bg-gray-100 border-none outline-none w-full ring-0 focus:ring-0 rounded-md' placeholder='Search for your product ..'  />
+                <input type="text" className='px-4 pr-10 bg-gray-100 border-none outline-none w-full ring-0 focus:ring-0 rounded-md' placeholder='Search  ..'  />
               </div>
               <button className='px-4 py-2 rounded-md bg-[#ac3265] text-white text-sm'>Search</button>
             </form>
@@ -347,7 +348,7 @@ const OrderList = () => {
             <div className="text-center">
               <FaMoneyBillWave className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Do you really want to pay the order ?
+                Voulez-vous vraiment supprimer cette commande ?
               </h3>
               <div className="flex justify-center gap-4">
                 <button
@@ -377,9 +378,9 @@ const OrderList = () => {
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center">
           <PDFDownloadLink  document={<OrderPrint products={products} orders={orders} />} fileName="liste-des-commandes.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
-            Print the list of orders
+            Imprimer la liste des commandes
           </PDFDownloadLink >
-          <Link to='/orders/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaShoppingCart size={16} className='inline-block mr-1' />  Add a new order</Link>
+          <Link to='/orders/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaShoppingCart size={16} className='inline-block mr-1' />Ajouter une nouvelle commande</Link>
           <Link to='/approvisionnement' className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></Link>
         </div>
       </div>
@@ -391,7 +392,7 @@ const OrderList = () => {
           <>
             <DataTable
               className=" rounded-md overflow-hidden"
-              title="Orders"
+              title="Commandes"
               pagination
               columns={columns}
               data={filteredItems}

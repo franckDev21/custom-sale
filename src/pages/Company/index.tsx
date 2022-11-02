@@ -107,7 +107,7 @@ const Company: FC<TypeCompany> = () => {
     e.preventDefault();
     setSending(true);
     if(action === 'create'){      
-      http_client(Storage.getStorage('auth').token).post(`${CREATE_COMPANY_URL}`,company)
+      http_client(Storage.getStorage('auth').token).post(`${CREATE_COMPANY_URL}/${UserService.getUser().id}`,company)
         .then(res => {
           toast.success(res.data.message)
 

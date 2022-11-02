@@ -196,11 +196,11 @@ const Profil: FC<TypeProfil> = () => {
 
   return (
     <DashboardLayout
-      titleClass="w-[20%]"
-      title="Welcome 👋 😊 "
+      titleClass="w-[21%]"
+      title="Bienvenue 👋 😊 "
       headerContent={
         <>
-          <div className="ml-4 w-[80%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
+          <div className="ml-4 w-[79%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
             <span>
               {" "}
               {!loading && (
@@ -211,7 +211,7 @@ const Profil: FC<TypeProfil> = () => {
             </span>
             
 
-            <div className="flex items-center justify-end"><BsBuilding /> <Link to='/my/company/view' className={`flex ${user.role === 'ENTREPRISE' ? (!user.as_company && 'disabled') : 'disabled'} justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}>see my company <HiEye className="ml-2" /></Link></div>
+            <div className="flex items-center justify-end"><BsBuilding /> <Link to='/my/company/view' className={`flex ${user.role === 'ENTREPRISE' ? (!user.as_company && 'disabled') : 'disabled'} justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}>Voir mon entreprise <HiEye className="ml-2" /></Link></div>
           </div>
         </>
       }
@@ -252,7 +252,7 @@ const Profil: FC<TypeProfil> = () => {
             <div className="px-4 py-6 sm:px-0">
               <div className="flex justify-start space-x-4">
                 <label htmlFor="image" className=" cursor-pointer ">
-                  <div className="w-[150px] flex justify-center items-center overflow-hidden bg-gray-50 h-[150px] relative rounded-t-md">
+                  <div className="w-[160px] flex justify-center items-center overflow-hidden bg-gray-50 h-[150px] relative rounded-t-md">
                     {imgSending ? (
                       <Loader className=" text-4xl" />
                     ) : (
@@ -265,7 +265,7 @@ const Profil: FC<TypeProfil> = () => {
                   </div>
 
                   <button className="py-2 uppercase rounded-b-md text-xs inline-block bg-gray-700 text-white w-full">
-                    update my picture
+                    mettre a jour la photo
                   </button>
                 </label>
 
@@ -294,7 +294,7 @@ const Profil: FC<TypeProfil> = () => {
                       onClick={(_) => setEditing(!editing)}
                       className="flex justify-start text-sm border-4 border-[#ac3265] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto"
                     >
-                      Edition form <FaPen className="ml-2" />
+                      Editer mon profil <FaPen className="ml-2" />
                     </button>
                   </div>
                 ) : (
@@ -355,7 +355,7 @@ const Profil: FC<TypeProfil> = () => {
                           {sending ? (
                             <Loader className="text-lg" />
                           ) : (
-                            "Save changes"
+                            "sauvegarder "
                           )}
                         </button>
                       </div>
@@ -411,7 +411,7 @@ const Profil: FC<TypeProfil> = () => {
                             <Loader className="text-lg" />
                           ) : (
                             <>
-                              Save password{" "}
+                              Sauvegarder le mot de passe{" "}
                               <RiLockPasswordFill className="ml-2" />
                             </>
                           )}

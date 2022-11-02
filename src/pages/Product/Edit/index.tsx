@@ -167,12 +167,12 @@ const ProductEdit: FC<TypeProductEdit> = () => {
 
   return (
     <DashboardLayout
-      title="Product management"
+      title="Gestion des produits"
       headerContent={
         <>
           <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
             {!loading && <>
-              <span>| Edit product <span className="text-gray-700">{product.name}</span></span>
+              <span>| Edition du produit <span className="text-gray-700">{product.name}</span></span>
               <Link to='/products/create' className="text-white px-4 py-2 rounded-md bg-green-600 text-sm">Add new product</Link>
             </>}
           </div>
