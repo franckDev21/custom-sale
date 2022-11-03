@@ -237,7 +237,7 @@ const Setting:React.FC<TypeSetting> = () => {
     {
       name: (
         <span className=" font-bold text-xs text-[#ac3265] uppercase">
-          category name
+          Nom de la catégorie
         </span>
       ),
       selector: (row) => `${row.name}` || '',
@@ -280,7 +280,7 @@ const Setting:React.FC<TypeSetting> = () => {
           email
         </span>
       ),
-      selector: (row) => row.email || 'empty',
+      selector: (row) => row.email || 'Aucun',
     },
     {
       name: (
@@ -288,7 +288,7 @@ const Setting:React.FC<TypeSetting> = () => {
           address
         </span>
       ),
-      selector: (row) => row.address || 'empty',
+      selector: (row) => row.address || 'Aucun',
     },
     {
       name: (
@@ -296,7 +296,7 @@ const Setting:React.FC<TypeSetting> = () => {
           tel
         </span>
       ),
-      selector: (row) => row.tel || 'empty',
+      selector: (row) => row.tel || 'Aucun',
     },
     {
       name: "",
@@ -385,7 +385,7 @@ const Setting:React.FC<TypeSetting> = () => {
 
   return (
     <DashboardLayout
-      title='Settings'
+      title='Paramètre'
     >
       <React.Fragment>
         <Modal
@@ -399,7 +399,7 @@ const Setting:React.FC<TypeSetting> = () => {
             <div className="text-center">
               <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              Do you really want to delete this category ?
+              voulez vous vraiment supprimer cette catégorie ?
               </h3>
               <div className="flex justify-center gap-4">
                 <button
@@ -410,7 +410,7 @@ const Setting:React.FC<TypeSetting> = () => {
                   {deleting ? (
                     <Loader className="flex justify-center items-center" />
                   ) : (
-                    "Yes, I'm sure"
+                    "Oui,supprimer"
                   )}
                 </button>
                 <button
@@ -418,7 +418,7 @@ const Setting:React.FC<TypeSetting> = () => {
                   onClick={onClose}
                   className="bg-gray-500 text-white rounded-md px-4 py-2"
                 >
-                  No, cancel
+                  Non, annuler
                 </button>
               </div>
             </div>
@@ -438,7 +438,7 @@ const Setting:React.FC<TypeSetting> = () => {
             <div className="text-center">
               <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Do you really want to delete this Supplier ?
+              Voulez vous vraiment supprimer ce fournisseur ?
               </h3>
               <div className="flex justify-center gap-4">
                 <button
@@ -449,7 +449,7 @@ const Setting:React.FC<TypeSetting> = () => {
                   {deletingTwo ? (
                     <Loader className="flex justify-center items-center" />
                   ) : (
-                    "Yes, I'm sure"
+                    "Oui,supprimer"
                   )}
                 </button>
                 <button
@@ -457,7 +457,7 @@ const Setting:React.FC<TypeSetting> = () => {
                   onClick={onCloseTwo}
                   className="bg-gray-500 text-white rounded-md px-4 py-2"
                 >
-                  No, cancel
+                  Non, annuler
                 </button>
               </div>
             </div>
@@ -467,10 +467,10 @@ const Setting:React.FC<TypeSetting> = () => {
 
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center mb-4">
-          <h1 className='text-3xl text-primary font-bold'>List of categories |</h1>
+          <h1 className='text-3xl text-primary font-bold'>Liste des categories |</h1>
           <div className="flex space-x-4 font-bold items-center">
-            <button onClick={() => setShowFormCategory(!showFormCategory)} className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <BsPlusLg size={16} className='inline-block  mr-1' />Add a category</button>
-            <button  className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block  mr-1' />Print the list of categories </button>
+            <button onClick={() => setShowFormCategory(!showFormCategory)} className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <BsPlusLg size={16} className='inline-block  mr-1' />Ajouter une nouvelle catégorie</button>
+            <button  className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block  mr-1' />Imprimer la liste des catégories </button>
             <button  className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></button>
           </div>
         </div>
@@ -478,10 +478,10 @@ const Setting:React.FC<TypeSetting> = () => {
         {showFormCategory && 
           <form onSubmit={handleSubmitOne} className='p-4 bg-white rounded-md text-lg mb-4'>
             <label htmlFor="name" className='flex space-y-3 flex-col relative'>
-              <span>Categary name</span>
+              <span>Nom de la catégorie</span>
               <div className="flex justify-start space-x-3">
-                <input required value={categorieInput} onChange={e => setCategorieInput(e.target.value)} type="text" placeholder='Category name' className='px-4 w-[40%] rounded-md py-2 bg-gray-100'   />
-                <button type='submit' className={`bg-green-400 ${!categorieInput && 'disabled select-none'} hover:bg-green-600 transition text-white px-4 py-2 uppercase font-bold rounded-md flex items-center`}>{sendingOne ? <Loader className='text-lg inline-block' />:'Save'}</button>
+                <input required value={categorieInput} onChange={e => setCategorieInput(e.target.value)} type="text" placeholder='Nom de la catégorie' className='px-4 w-[40%] rounded-md py-2 bg-gray-100'   />
+                <button type='submit' className={`bg-green-400 ${!categorieInput && 'disabled select-none'} hover:bg-green-600 transition text-white px-4 py-2 uppercase font-bold rounded-md flex items-center`}>{sendingOne ? <Loader className='text-lg inline-block' />:'Sauvegarder'}</button>
               </div>
               <span onClick={() => setShowFormCategory(false)} title='Close' className=' absolute -top-4 right-0 bg-red-100 p-2 rounded-md transition text-red-500 cursor-pointer hover:bg-red-500 hover:text-white'><FaTimes /></span>
             </label>
@@ -513,10 +513,10 @@ const Setting:React.FC<TypeSetting> = () => {
 
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center mb-4 mt-10">
-          <h1 className='text-3xl text-primary font-bold'>List of suppliers |</h1>
+          <h1 className='text-3xl text-primary font-bold'>Liste des fournisseurs |</h1>
           <div className="flex space-x-4 font-bold items-center">
-            <button onClick={() => setShowFormSupplier(!showFormSupplier)} className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <BsPlusLg size={16} className='inline-block  mr-1' />Add a new supplier</button>
-            <button  className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block  mr-1' />Print the list of suppliers </button>
+            <button onClick={() => setShowFormSupplier(!showFormSupplier)} className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <BsPlusLg size={16} className='inline-block  mr-1' />Ajouter un nouveau fournisseurr</button>
+            <button  className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block  mr-1' />Imprimer la liste des fournisseurs</button>
             <button  className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></button>
           </div>
         </div>
@@ -524,14 +524,14 @@ const Setting:React.FC<TypeSetting> = () => {
         {showFormSupplier && 
           <form onSubmit={handleSubmitTwo} className='p-4 bg-white rounded-md text-lg mb-4'>
             <label htmlFor="name" className='flex space-y-3 flex-col relative'>
-              <span>Register a new supplier</span>
+              <span>Création d’un nouveau fournisseur</span>
               <div className="flex justify-start space-x-3">
-                <input required value={supplierForm.name || ''} onChange={handleOnchange} type="text" name='name' placeholder='name' className='px-4 w-1/2 rounded-md py-2 bg-gray-100'   />
-                <input  value={supplierForm.address || ''} onChange={handleOnchange} type="address" name='address' placeholder='address (Not required)' className='px-4 w-1/2 placeholder:italic rounded-md py-2 bg-gray-100'   />
+                <input required value={supplierForm.name || ''} onChange={handleOnchange} type="text" name='name' placeholder='Nom' className='px-4 w-1/2 rounded-md py-2 bg-gray-100'   />
+                <input  value={supplierForm.address || ''} onChange={handleOnchange} type="address" name='address' placeholder='address (optionnel)' className='px-4 w-1/2 placeholder:italic rounded-md py-2 bg-gray-100'   />
               </div>
               <div className="flex justify-start space-x-3 mt-3">
-                <input  value={supplierForm.email || ''} onChange={handleOnchange} name='email' type="email" placeholder='email (Not required)' className='px-4 placeholder:italic w-1/2 rounded-md py-2 bg-gray-100'   />
-                <input  value={supplierForm.tel || ''} onChange={handleOnchange} type="tel" name='tel' placeholder='tel (Not required)' className='px-4 placeholder:italic w-1/2 rounded-md py-2 bg-gray-100'   />
+                <input  value={supplierForm.email || ''} onChange={handleOnchange} name='email' type="email" placeholder='email (optionnel)' className='px-4 placeholder:italic w-1/2 rounded-md py-2 bg-gray-100'   />
+                <input  value={supplierForm.tel || ''} onChange={handleOnchange} type="tel" name='tel' placeholder='tel (optionnel)' className='px-4 placeholder:italic w-1/2 rounded-md py-2 bg-gray-100'   />
               </div>
               <span onClick={() => setShowFormSupplier(false)} title='Close' className=' absolute -top-4 right-0 bg-red-100 p-2 rounded-md transition text-red-500 cursor-pointer hover:bg-red-500 hover:text-white'><FaTimes /></span>
 

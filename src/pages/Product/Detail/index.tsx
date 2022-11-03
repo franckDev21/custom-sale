@@ -164,7 +164,7 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
                     onClick('INPUT')
                     setModalType('INPUT')
                   }} className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaPlus size={16} className='inline-block mr-1' />Ajouter une entrées</button>
-                  <Link to='/approvisionnement' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <RiArrowLeftRightFill size={20} className='inline-block rotate-90  mr-1' />Historique d'E/S</Link>
+                  <Link to='/products/history/all' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <RiArrowLeftRightFill size={20} className='inline-block rotate-90  mr-1' />Historique d'E/S</Link>
                 </div>
               </>
             }
@@ -187,12 +187,12 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
             <Modal.Body>
               <form onSubmit={confirmAddOutput} className="text-left">
                 <h3 className="mb-5 font-bold text-lg pb-3 border-b text-[#ac3265] dark:text-gray-400">
-                  Add output for the product
+                  Ajouter une sortie produit
                 </h3>
                 <div className="flex flex-col space-y-4 mt-4 mb-6">
                   <div>
-                    <label htmlFor="quantite" className="inline-block mb-2 font-semibold text-gray-700">Quantity</label>
-                    <input name="quantite" onChange={handleOnchange} value={dataOutputForm.quantite || ''} required autoFocus type="number" id="quantite" placeholder="Quantity of supply" min={0} className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600' />
+                    <label htmlFor="quantite" className="inline-block mb-2 font-semibold text-gray-700">Quantité</label>
+                    <input name="quantite" onChange={handleOnchange} value={dataOutputForm.quantite || ''} required autoFocus type="number" id="quantite" placeholder="Quantité à retirer" min={0} className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600' />
                   </div>
                   {product.product_type?.name !== 'VENDU_PAR_PIECE' &&
                     <div>
@@ -206,8 +206,8 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
                   }
                   {product.product_type?.name === 'VENDU_PAR_PIECE' && <input type='hidden' className='hidden' name='type' hidden value={dataOutputForm.type} />}
                   <div>
-                    <label htmlFor="motif" className="inline-block mb-2 font-semibold text-gray-700">Your reason</label>
-                    <textarea name="motif" onChange={handleOnchange} value={dataOutputForm.motif || ''} required id="quantite" placeholder="Enter your reason" className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600' rows={6}></textarea>
+                    <label htmlFor="motif" className="inline-block mb-2 font-semibold text-gray-700">Motif</label>
+                    <textarea name="motif" onChange={handleOnchange} value={dataOutputForm.motif || ''} required id="quantite" placeholder="Entrer le motif du retrait" className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600' rows={6}></textarea>
                   </div>
                 </div>
                 <div className="flex justify-center space-x-3">
@@ -218,7 +218,7 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
                     {sending2 ? (
                       <Loader className="flex justify-center text-lg items-center" />
                     ) : (
-                      "Confirm output"
+                      "Confirmer"
                     )}
                   </button>
                   <button
@@ -226,7 +226,7 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
                     onClick={onClose}
                     className="bg-gray-500 hover:bg-gray-700 transition text-white rounded-md px-3 font-semibold uppercase py-2 w-1/2 inline-block"
                   >
-                    No, cancel
+                    Non, annuler
                   </button>
                 </div>
               </form>
@@ -245,16 +245,16 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
             <Modal.Body>
               <form onSubmit={confirmAddInput} className="text-left">
                 <h3 className="mb-5 font-bold text-lg pb-3 border-b text-[#ac3265] dark:text-gray-400">
-                  Add a supply for this product
+                  Ajouter un nouvelle approvisionnement
                 </h3>
                 <div className="flex flex-col space-y-4 mt-4 mb-6">
                   <div>
-                    <label htmlFor="quantite" className="inline-block mb-2 font-semibold text-gray-700">Quantity <span className=" italic text-sm font-light ">({product.type_approvisionnement})</span></label>
-                    <input name="quantite" onChange={handleOnchange} value={dataInputForm.quantite || ''} required autoFocus type="number" id="quantite" placeholder="Quantity of supply" min={0} className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600' />
+                    <label htmlFor="quantite" className="inline-block mb-2 font-semibold text-gray-700">Quantité <span className=" italic text-sm font-light ">({product.type_approvisionnement})</span></label>
+                    <input name="quantite" onChange={handleOnchange} value={dataInputForm.quantite || ''} required autoFocus type="number" id="quantite" placeholder="Entrer la quantité d’approvisionnement" min={0} className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600' />
                   </div>
                   <div>
-                    <label htmlFor="price" className="inline-block mb-2 font-semibold text-gray-700">Purchase price  </label>
-                    <input name="prix_achat" onChange={handleOnchange} value={dataInputForm.prix_achat || ''} required type="number" id="price" placeholder="price (FCFA)" min={0} className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600' />
+                    <label htmlFor="price" className="inline-block mb-2 font-semibold text-gray-700">Prix d’achat </label>
+                    <input name="prix_achat" onChange={handleOnchange} value={dataInputForm.prix_achat || ''} required type="number" id="price" placeholder="prix (FCFA)" min={0} className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600' />
                   </div>
                 </div>
                 <div className="flex justify-center space-x-3">
@@ -265,7 +265,7 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
                     {sending ? (
                       <Loader className="flex justify-center text-lg items-center" />
                     ) : (
-                      "Confirm registration"
+                      "Enregistrer"
                     )}
                   </button>
                   <button
@@ -273,7 +273,7 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
                     onClick={onClose}
                     className="bg-gray-500 hover:bg-gray-700 transition text-white rounded-md px-3 font-semibold uppercase py-2 w-1/2 inline-block"
                   >
-                    No, cancel
+                    Non, annuler
                   </button>
                 </div>
               </form>

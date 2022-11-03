@@ -137,7 +137,7 @@ const ProductHistory:React.FC<TypeProductHistory> = () => {
           actions
         </span>
       ),
-      cell: (row) => <button className='p-2 text-white bg-gray-600 rounded-md text-lg'><FaEye /></button>,
+      cell: (row) => <Link to={`/products/show/${row.id}/${row.product?.name?.split(' ').join('-').toLowerCase()}`} className='p-2 text-white bg-gray-600 rounded-md text-lg'><FaEye /></Link>,
     },
   ];
 

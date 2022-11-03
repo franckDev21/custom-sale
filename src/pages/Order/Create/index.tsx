@@ -246,11 +246,11 @@ const OrderCreate = () => {
 
   return (
     <DashboardLayout
-      title="Order management"
+      title="Gestion des commandes"
       headerContent={
         <>
-          <div className="ml-4 w-[74%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
-            <span>| Creation of a new order</span>
+          <div className="ml-4 w-[64%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
+            <span>| Creation d'une commande</span>
           </div>
         </>
       }
@@ -281,7 +281,7 @@ const OrderCreate = () => {
                       onChange={(e) => setClient(e.target.value)}
                       className="px-6 w-[70%] py-2 border-2 bg-gray-100 rounded-md shadow-sm border-gray-500 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-gray-600 outline-none border-none"
                     >
-                      <option value="">-- select your customer --</option>
+                      <option value="">-- Choisissez votre client --</option>
                       {customers.map((customer) => (
                         <option value={customer.id} key={customer.id}>
                           {customer.firstname} {customer.lastname}

@@ -136,11 +136,11 @@ const ProductCreate: FC<TypeProductCreate> = () => {
 
   return (
     <DashboardLayout
-      title="Product management"
+      title="Gestion des produits"
       headerContent={
         <>
           <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
-            | Add new product
+            | Ajouter un nouveau produit
           </div>
         </>
       }
@@ -163,27 +163,27 @@ const ProductCreate: FC<TypeProductCreate> = () => {
             />
 
             <div className="w-[calc(100%-250px)]">
-              <label htmlFor="description" className=' inline-block mb-1 text-sm '>Product description <span className="text-sm italic">(Optional)</span></label>
-              <textarea onChange={handleOnchange} name="description" placeholder="Enter your product description here .... " id="description" cols={10} rows={3} className='placeholder:text-gray-300 text-sm w-full ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500'>{product.description}</textarea>
+              <label htmlFor="description" className=' inline-block mb-1 text-sm '>Description du produit <span className="text-sm italic">(Optionnel )</span></label>
+              <textarea onChange={handleOnchange} name="description" placeholder="Entrer le description de votre produit ici .... " id="description" cols={10} rows={3} className='placeholder:text-gray-300 text-sm w-full ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500'>{product.description}</textarea>
 
               <div className="flex items-center justify-between space-x-4 mt-3">
                 <div className="w-1/2">
-                  <label htmlFor="name" className=" inline-block mb-1 text-sm">Product name</label>
-                  <input onChange={handleOnchange} value={product.name || ''} name="name" autoFocus required type="text" placeholder="Enter product name" className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500" />
+                  <label htmlFor="name" className=" inline-block mb-1 text-sm">Non du produit</label>
+                  <input onChange={handleOnchange} value={product.name || ''} name="name" autoFocus required type="text" placeholder="Entrer le nom du produit ici .." className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500" />
                 </div>
 
                 <div className="w-1/2">
-                  <label htmlFor="prix_unitaire" className=" inline-block mb-1 text-sm">Unit price <span className="text-sm italic">(In FCFA)</span></label>
-                  <input onChange={handleOnchange} value={product.prix_unitaire || ''} name="prix_unitaire" required type="number" placeholder="Enter the product's unit price" className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500" />
+                  <label htmlFor="prix_unitaire" className=" inline-block mb-1 text-sm">Prix unitaire <span className="text-sm italic">(In FCFA)</span></label>
+                  <input onChange={handleOnchange} value={product.prix_unitaire || ''} name="prix_unitaire" required type="number" placeholder="Entrer le prix unitaire du produit" className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500" />
                 </div>
               </div>
             </div>
           </div>
           <div className="flex space-x-4 mb-4">
             <div className="w-1/2">
-              <label htmlFor="product_type_id" className=" inline-block mb-1 text-sm">Type of product</label>
+              <label htmlFor="product_type_id" className=" inline-block mb-1 text-sm">Type de produit</label>
               <select required onChange={handleOnchange} name="product_type_id" value={product.product_type_id || ''} id="product_type_id" className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500">
-                <option value="" className="text-gray-300">-- Product type --</option>
+                <option value="" className="text-gray-300">-- Type de produit --</option>
                 {productTypes.map(type => (
                   <option value={type.id} key={type.id}>{type.slug}</option>
                 ))}
@@ -192,15 +192,15 @@ const ProductCreate: FC<TypeProductCreate> = () => {
 
             {currentType && (currentType === 'VENDU_PAR_PIECE' || currentType === 'VENDU_PAR_KG') &&
               <div className="w-1/2">
-                <label htmlFor="poids" className=" inline-block mb-1 text-sm">Enter the product weight <span className="text-sm italic">(Kg,g)</span></label>
-                <input onChange={handleOnchange} value={product.poids || ''} name="poids" required type="number" placeholder="product weight" step={0.5} min={0.5} className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500" />
+                <label htmlFor="poids" className=" inline-block mb-1 text-sm">Entrer le poids du produit <span className="text-sm italic">(Kg,g)</span></label>
+                <input onChange={handleOnchange} value={product.poids || ''} name="poids" required type="number" placeholder="poids" step={0.5} min={0.5} className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500" />
               </div>
             }
 
             {currentType && currentType === 'VENDU_PAR_LITRE' &&
               <div className="w-1/2">
-                <label htmlFor="qte_en_litre" className=" inline-block mb-1 text-sm">Enter the quantity in liters <span className="text-sm italic">(L,ml)</span></label>
-                <input onChange={handleOnchange} value={product.qte_en_litre || ''} name="qte_en_litre" required type="number" placeholder="Enter the quantity in liter" step={0.5} min={0.5} className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500" />
+                <label htmlFor="qte_en_litre" className=" inline-block mb-1 text-sm">Entrer la quantité en litre du produit <span className="text-sm italic">(L,ml)</span></label>
+                <input onChange={handleOnchange} value={product.qte_en_litre || ''} name="qte_en_litre" required type="number" placeholder="Combien de litres par conteneur ?" step={0.5} min={0.5} className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500" />
               </div>
             }
 
@@ -208,13 +208,13 @@ const ProductCreate: FC<TypeProductCreate> = () => {
               <div className="w-1/2">
                 <div className="flex space-x-2">
                   <div className="w-1/2">
-                    <label htmlFor="nbre_par_carton" className=" inline-block mb-1 text-sm">Number by container</label>
-                    <input onChange={handleOnchange} value={product.nbre_par_carton || ''} name="nbre_par_carton" required type="number" placeholder="How many items ?" step={1} min={1} className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500" />
+                    <label htmlFor="nbre_par_carton" className=" inline-block mb-1 text-sm">Nombre d'élément par conteneur</label>
+                    <input onChange={handleOnchange} value={product.nbre_par_carton || ''} name="nbre_par_carton" required type="number" placeholder="How many itemsCombien d'éléments par conteneur pour ce produit ?" step={1} min={1} className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500" />
                   </div>
 
                   <div className="w-1/2">
-                    <label htmlFor="poids" className=" inline-block mb-1 text-sm">Enter the product weight <span className="text-sm italic">(Kg,g)</span></label>
-                    <input onChange={handleOnchange} value={product.poids || ''} name="poids" required type="number" placeholder="product weight" step={0.5} min={0.5} className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500" />
+                    <label htmlFor="poids" className=" inline-block mb-1 text-sm">Entrer le poids du produit <span className="text-sm italic">(Kg,g)</span></label>
+                    <input onChange={handleOnchange} value={product.poids || ''} name="poids" required type="number" placeholder="poids" step={0.5} min={0.5} className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500" />
                   </div>
                 </div>
               </div>
@@ -224,21 +224,21 @@ const ProductCreate: FC<TypeProductCreate> = () => {
 
           <div className="flex space-x-4 mb-4">
             <div className="w-1/2">
-              <label htmlFor="qte_stock_alert" className=" inline-block mb-1 text-sm">Alert stock quantity</label>
-              <input onChange={handleOnchange} value={product.qte_stock_alert || ''} name="qte_stock_alert" required type="number" placeholder="Enter alert stock quantity" className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500" />
+              <label htmlFor="qte_stock_alert" className=" inline-block mb-1 text-sm">Quantité stock d'alerte</label>
+              <input onChange={handleOnchange} value={product.qte_stock_alert || ''} name="qte_stock_alert" required type="number" placeholder="Entrer le stock d'alert" className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500" />
             </div>
 
             <div className="w-1/2">
-              <label htmlFor="name" className=" inline-block mb-1 text-sm">Type of supply <span className="text-sm italic">(By piece, carton, bag, bucket, can ...)</span></label>
-              <input onChange={handleOnchange} value={product.type_approvisionnement || ''} name="type_approvisionnement" required type="text" placeholder="You supply yourself with ...(Carton,Can,Bag)" className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500" />
+              <label htmlFor="name" className=" inline-block mb-1 text-sm">Type d’approvisionnement <span className="text-sm italic">(Par pièce , carton , seau , sac ,bidon ...)</span></label>
+              <input onChange={handleOnchange} value={product.type_approvisionnement || ''} name="type_approvisionnement" required type="text" placeholder="Comment est-ce que vous vous approvisionner ?" className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500" />
             </div>
           </div>
 
           <div className="flex space-x-4 mb-4">
             <div className="w-1/2">
-              <label htmlFor="category_id" className=" inline-block mb-1 text-sm">Category</label>
+              <label htmlFor="category_id" className=" inline-block mb-1 text-sm">Categorie</label>
               <select required onChange={handleOnchange} value={product.category_id || ''} name="category_id" id="category_id" className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500">
-                <option value="" className="text-gray-300">-- Select the product category --</option>
+                <option value="" className="text-gray-300">-- Sélectionner la catégorie de produit --</option>
                 {categories.map(categoriy => (
                   <option value={categoriy.id} key={categoriy.id}>{categoriy.name}</option>
                 ))}
@@ -246,9 +246,9 @@ const ProductCreate: FC<TypeProductCreate> = () => {
             </div>
 
             <div className="w-1/2">
-              <label htmlFor="product_supplier_id" className=" inline-block mb-1 text-sm">Your supplier</label>
+              <label htmlFor="product_supplier_id" className=" inline-block mb-1 text-sm">Fournisseur</label>
               <select required onChange={handleOnchange} value={product.product_supplier_id || ''} name="product_supplier_id" id="product_supplier_id" className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500">
-                <option value="" className="text-gray-300">-- Choose your supplier --</option>
+                <option value="" className="text-gray-300">-- Sélectionner le fournisseur du produit --</option>
                 {productSuppliers.map(supplier => (
                   <option value={supplier.id} key={supplier.id}>{supplier.name}</option>
                 ))}
@@ -256,7 +256,7 @@ const ProductCreate: FC<TypeProductCreate> = () => {
             </div>
           </div>
           <div className="mt-3 flex justify-end">
-            <button type="submit" className={`px-4 ${sending && 'disabled'} py-2 bg-[#ac3265] text-white rounded-md flex justify-center items-center min-w-[200px] min-h-[35px]`}>{sending ? <Loader className="text-lg" />: 'Register the product'}</button>
+            <button type="submit" className={`px-4 ${sending && 'disabled'} py-2 bg-[#ac3265] text-white rounded-md flex justify-center items-center min-w-[200px] min-h-[35px]`}>{sending ? <Loader className="text-lg" />: 'Enregistrer le produit'}</button>
           </div>
         </div>
 
