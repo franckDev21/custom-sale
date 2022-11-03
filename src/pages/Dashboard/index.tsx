@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import DashboardLayout from '../../templates/DashboardLayout'
-import { HiCurrencyDollar, HiUserGroup } from 'react-icons/hi'
+import { HiCurrencyDollar } from 'react-icons/hi'
 import User from '../../Model/User'
 import UserService from '../../service/UserService'
 import { FaBoxOpen, FaUserAlt, FaUsers } from 'react-icons/fa'

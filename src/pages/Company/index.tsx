@@ -15,6 +15,14 @@ import User from "../../Model/User";
 import UserService from "../../service/UserService";
 
 
+type TotalDashboardProps = {
+  totalUser ?: string|number,
+  totalCash ?: string|number,
+  totalProduct ?: string|number,
+  totalCustomer ?: string|number,
+  totalOrder ?: string|number,
+}
+
 type TypeCompany = {};
 
 const GET_MY_COMPANY_URL = "my/company";
@@ -22,6 +30,7 @@ const UPDATE_PICTURE_COMPANY_URL = "my/company/picture";
 const UPDATE_COMPANY_URL = "my/company";
 const CREATE_COMPANY_URL = "my/company";
 const API_STORAGE_URL = `${baseURL}/storage`;
+const DASHBOARD_URL = '/dashboard';
 
 const Company: FC<TypeCompany> = () => {
   const [company, setCompany] = useState<CompanyModel>({});
@@ -31,6 +40,14 @@ const Company: FC<TypeCompany> = () => {
   const [urlImg, setUrlImg] = useState(
     "https://thumbs.dreamstime.com/z/realty-flat-apartment-modern-building-logo-design-graphic-style-realty-flat-apartment-modern-building-logo-design-graphic-style-158041756.jpg"
   );
+  const [dashboardInfo,setDashboardInfo] = useState<TotalDashboardProps>({
+    totalCash : 0,
+    totalCustomer : 0,
+    totalProduct : 0,
+    totalUser : 0,
+    totalOrder : 0
+  })
+
   const [imgSending, setImgSending] = useState(false);
 
   const { action } = useParams();
@@ -168,9 +185,20 @@ const Company: FC<TypeCompany> = () => {
     
   }, [action,navigate]);
 
+  useEffect(() => {
+
+    http_client(Storage.getStorage("auth").token).get(DASHBOARD_URL)
+      .then(res => {
+        setDashboardInfo(res.data)
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  },[])
+
   return (
     <DashboardLayout
-      title={`${action === 'create' ? 'Create my company':'My Company'}`}
+      title={`${action === 'create' ? 'Créer une entreprise':'Mon entreprise'}`}
       headerContent={
         <>
           <div className={`ml-4 ${action === 'create' ? 'w-[70%]':'w-[80%]'} font-bold text-2xl text-[#ac3265] flex items-center justify-between`}>
@@ -180,14 +208,14 @@ const Company: FC<TypeCompany> = () => {
 
                 <div className="flex items-center justify-end">
                   <button className="flex text-lg  justify-start border-4 items-center space-x-2 rounded px-2 py-1 text-gray-700 bg-gray-50 w-auto ml-3">
-                    <HiUserGroup /> <span className="pl-1"> 19 Users</span>
+                    <HiUserGroup /> <span className="pl-1"> {dashboardInfo.totalUser} Utilisateur(s)</span>
                   </button>
                   <button className="flex text-lg  justify-start border-4 items-center space-x-2 rounded px-2 py-1 text-gray-700 bg-gray-50 w-auto ml-3">
-                    <ImUserTie /> <span className="pl-1"> 734 Customers</span>
+                    <ImUserTie /> <span className="pl-1"> {dashboardInfo.totalCustomer} Client(s)</span>
                   </button>
                   <button className="flex text-lg  justify-start border-4 items-center space-x-2 rounded px-2 py-1 text-gray-700 bg-gray-50 w-auto ml-3">
                     <AiOutlineDropbox />{" "}
-                    <span className="pl-1"> 32 Products</span>
+                    <span className="pl-1"> {dashboardInfo.totalProduct} Product(s)</span>
                   </button>
                 </div>
               </>
@@ -209,7 +237,7 @@ const Company: FC<TypeCompany> = () => {
 
               {editing && <div className={`absolute right-2 top-2 flex justify-center items-center `}>
                 <button type="submit" className={`bg-green-500 font-bold mr-1 text-white uppercase ${sending ? 'px-3 py-2':'p-3'} rounded-md shadow-md text-sm`}>
-                  {sending ? <Loader className="inline-block text-lg mt-1" />:'Save information'}
+                  {sending ? <Loader className="inline-block text-lg mt-1" />:'Sauvegarder les informations'}
                 </button>
                 <button onClick={_=>setEditing(!editing)} title="Click here to edit the company" className="bg-gray-700  text-white text-xl p-3 rounded-md shadow-md">
                   <FaEye />
@@ -243,19 +271,19 @@ const Company: FC<TypeCompany> = () => {
                         </div>
 
                         <button className="py-2 uppercase rounded-b-md text-xs inline-block bg-gray-700 text-white w-full">
-                          {action !=='create' && 'update my logo'}
+                          {action !=='create' && 'mettre a jour mon logo'}
                         </button>
                       </label>
                     </div>
                     <div className="w-9/12 pl-2">
                       <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-                        Company Information
+                        Information de l'entreprise
                       </h6>
                       <div className="flex">
                         <div className="w-full lg:w-1/2 px-4">
                           <div className="relative w-full mb-3">
                             <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
-                              Name
+                              Nom
                             </label>
                             <input required disabled={!editing} value={company.name || ''} onChange={handleOnchange} name='name' type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ring-gray-700 focus:ring-gray-700 w-full ease-linear transition-all duration-150" placeholder="Microsoft" />
                           </div>
@@ -273,17 +301,17 @@ const Company: FC<TypeCompany> = () => {
                         <div className="w-full lg:w-1/2 px-4">
                           <div className="relative w-full mb-3">
                             <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
-                              Number of emolyer
+                              Nombre d'employés 
                             </label>
-                            <input required disabled={!editing}  value={company.number_of_employees || ''} onChange={handleOnchange} name='number_of_employees' type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ring-gray-700 focus:ring-gray-700 w-full ease-linear transition-all duration-150" placeholder="How many employees do you have?" />
+                            <input required disabled={!editing}  value={company.number_of_employees || ''} onChange={handleOnchange} name='number_of_employees' type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ring-gray-700 focus:ring-gray-700 w-full ease-linear transition-all duration-150" placeholder="Combien d'employés avez-vous ?" />
                           </div>
                         </div>
                         <div className="w-full lg:w-1/2 px-4">
                           <div className="relative w-full mb-3">
                             <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
-                              Tel
+                              Téléphone
                             </label>
-                            <input required disabled={!editing}  value={company.tel || ''} onChange={handleOnchange} name='tel' type="tel" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ring-gray-700 focus:ring-gray-700 w-full ease-linear transition-all duration-150" placeholder="phone number" />
+                            <input required disabled={!editing}  value={company.tel || ''} onChange={handleOnchange} name='tel' type="tel" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ring-gray-700 focus:ring-gray-700 w-full ease-linear transition-all duration-150" placeholder="Numéro de téléphone" />
                           </div>
                         </div>
                       </div>
@@ -292,13 +320,13 @@ const Company: FC<TypeCompany> = () => {
                   <hr className="mt-6 border-b-1 border-blueGray-300" />
 
                   <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-                    Contact Information
+                    Informations de contact
                   </h6>
                   <div className="flex flex-wrap">
                     <div className="w-full lg:w-12/12 px-4">
                       <div className="relative w-full mb-3">
                         <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
-                          Address
+                          Adresse
                         </label>
                         <input required disabled={!editing}  value={company.address || ''} onChange={handleOnchange} name='address' type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ring-gray-700 focus:ring-gray-700 w-full ease-linear transition-all duration-150" placeholder="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09" />
                       </div>
@@ -306,7 +334,7 @@ const Company: FC<TypeCompany> = () => {
                     <div className="w-full lg:w-4/12 px-4">
                       <div className="relative w-full mb-3">
                         <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
-                          City
+                          Ville
                         </label>
                         <input required disabled={!editing}  value={company.city || ''} onChange={handleOnchange} name='city' type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ring-gray-700 focus:ring-gray-700 w-full ease-linear transition-all duration-150" placeholder="New York" />
                       </div>
@@ -314,7 +342,7 @@ const Company: FC<TypeCompany> = () => {
                     <div className="w-full lg:w-4/12 px-4">
                       <div className="relative w-full mb-3">
                         <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
-                          Country
+                          Pays
                         </label>
                         <input required disabled={!editing}  value={company.country || ''} onChange={handleOnchange} name='country'  type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ring-gray-700 focus:ring-gray-700 w-full ease-linear transition-all duration-150" placeholder="United States" />
                       </div>
@@ -322,22 +350,22 @@ const Company: FC<TypeCompany> = () => {
                     <div className="w-full lg:w-4/12 px-4">
                       <div className="relative w-full mb-3">
                         <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
-                          Postal Code
+                          Code Postal 
                         </label>
-                        <input required disabled={!editing}  value={company.postal_code || ''} onChange={handleOnchange} name='postal_code'  type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ring-gray-700 focus:ring-gray-700 w-full ease-linear transition-all duration-150" placeholder="Postal Code" />
+                        <input required disabled={!editing}  value={company.postal_code || ''} onChange={handleOnchange} name='postal_code'  type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ring-gray-700 focus:ring-gray-700 w-full ease-linear transition-all duration-150" placeholder="Code Postal " />
                       </div>
                     </div>
                   </div>
                   <hr className="mt-6 border-b-1 border-blueGray-300" />
 
                   <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-                    About Me
+                    A propos de nous
                   </h6>
                   <div className="flex flex-wrap">
                     <div className="w-full lg:w-12/12 px-4">
                       <div className="relative w-full mb-3">
                         <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
-                          About me
+                          Description de l'entreprise
                         </label>
                         <textarea disabled={!editing}   value={company.description || ''} name='description' onChange={handleOnchange} className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ring-gray-700 focus:ring-gray-700 w-full ease-linear transition-all duration-150" rows={4}>{company.description||''}</textarea>
                       </div>
