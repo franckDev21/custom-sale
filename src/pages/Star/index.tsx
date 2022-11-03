@@ -8,8 +8,7 @@ import { AiFillCheckCircle } from "react-icons/ai";
 import User from "../../Model/User";
 import Company from "../../Model/Company";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import axiosCustum, { http_client } from "../../utils/axios-custum";
-import Storage from "../../service/Storage";
+import axiosCustum from "../../utils/axios-custum";
 import { toast } from "react-toastify";
 import { setAuth } from "../../store/features/auth/authSlice";
 import { useDispatch } from "react-redux";
@@ -20,15 +19,19 @@ type TypeStar = {};
 
 const REGISTER_URL = 'auth/register'
 const CREATE_COMPANY_URL = "my/company";
+const CREATE_COMPANY_LOGO_URL = "my/company/logo";
 
 const Star: FC<TypeStar> = () => {
   const [step, setStep] = useState(1);
   const [errForm, setErrForm] = useState('');
   const [sending,setSending] = useState(false);
   const [success,setSuccess] = useState(false);
+  const [urlImg, setUrlImg] = useState('https://thumbs.dreamstime.com/z/realty-flat-apartment-modern-building-logo-design-graphic-style-realty-flat-apartment-modern-building-logo-design-graphic-style-158041756.jpg');
 
   const [showPassword,setShowPassword] = useState(false)
   const inputPassword = useRef(null)
+
+  const refFormCompany = useRef(null)
 
   const [user,setUser]  = useState<User>({
     type : 'ENTREPRISE'
@@ -55,6 +58,17 @@ const Star: FC<TypeStar> = () => {
     if (step >= 0) {
       setStep((s) => s - 1);
     }
+  };
+
+  const handleChangImageFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) {
+      setUrlImg('https://thumbs.dreamstime.com/z/realty-flat-apartment-modern-building-logo-design-graphic-style-realty-flat-apartment-modern-building-logo-design-graphic-style-158041756.jpg');
+      return;
+    }
+    setCompany({...company,photo: file})
+    let url = URL.createObjectURL(file);
+    setUrlImg(url);
   };
 
   const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -96,6 +110,12 @@ const Star: FC<TypeStar> = () => {
       case 'address':
         setCompany({...company,address : e.target.value})
           break;
+      case 'tel':
+        setCompany({...company,tel : e.target.value})
+          break;
+      case 'description':
+        setCompany({...company,description : e.target.value})
+          break;
       case 'country':
         setCompany({...company,country : e.target.value})
           break;
@@ -124,7 +144,7 @@ const Star: FC<TypeStar> = () => {
     axiosCustum.post(REGISTER_URL,user)
       .then(res => {
         
-        dispatch(setAuth(res.data))
+        // dispatch(setAuth(res.data))
         // Storage.setStorage('auth',res.data)
 
         toast.success(res.data.message)
@@ -141,11 +161,23 @@ const Star: FC<TypeStar> = () => {
             //   'user' : newUser
             // })
 
-            setSuccess(true)
-
-            setSending(false);
+            // logo 
             
+            if(typeof company.photo !== 'undefined'){
+              let formData = new FormData()
+              formData.append('photo',company.photo);
 
+              axiosCustum.post(`${CREATE_COMPANY_LOGO_URL}/${res.data.company_id}`,formData)
+                .then( res2 => {
+                  setSuccess(true)
+                  setSending(false);                  
+                })
+            }else{
+              setSuccess(true)
+              setSending(false)
+            }
+            
+           
             // navigate('/dashboard')
             
           })
@@ -187,27 +219,20 @@ const Star: FC<TypeStar> = () => {
             </div>
           </div>
           <ul className="circles">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
+            <li className="rounded-full"></li>
+            <li className="rounded-full"></li>
+            <li className="rounded-full"></li>
+            <li className="rounded-full"></li>
+            <li className="rounded-full"></li>
+            <li className="rounded-full"></li>
+            <li className="rounded-full"></li>
+            <li className="rounded-full"></li>
+            <li className="rounded-full"></li>
+            <li className="rounded-full"></li>
           </ul>
         </div>
         <div className="md:flex md:items-center md:justify-center sm:w-auto md:h-full w-2/5 xl:w-3/6 p-8  md:p-10 lg:p-14 sm:rounded-lg md:rounded-none overflow-hidden bg-white">
           <div className="max-w-md w-full space-y-4">
-
-            {success ? <>
-              <div className="p-6 bg-green-100 text-green-500 shadow rounded-md text-3xl font-bold text-center first-letter:text-primary">
-                Merci pour votre inscription. Notre équipe vous contactera pour la validation de vos accès
-              </div>
-            </>:<>
-
             <div className="text-center">
               <h2 className="mt-0 text-3xl font-bold text-gray-700">
                 Bienvenue !
@@ -430,16 +455,96 @@ const Star: FC<TypeStar> = () => {
             )}
             {step === 3 && (
               <>
-                <form onSubmit={submitForm} className="mt-0 relative">
-                  <div className="p-3 bg-gray-700 text-white text-center font-bold rounded-sm">
-                    <div className="flex items-center justify-center">
-                    <AiFillCheckCircle className="mr-3 text-2xl" /> <span>corfirmation </span>
-                    </div>
-                    
+              <form ref={refFormCompany} onSubmit={sumitFormTwo} className="mt-0 relative">
+                <div className="relative flex justify-between items-start space-x-6 mt-4">
+                  <div className="w-1/2">
+                    <span className="uppercase font-bold text-sm">logo de votre entreprise</span>
+                    <label htmlFor="image" className="w-full h-[200px] inline-block cursor-pointer shadow-lg border-4 rounded-md relative overflow-hidden">
+                      <img src={urlImg} alt='product' className="absolute h-full w-full object-cover" />
+                      <div className="absolute flex items-center justify-center text-3xl uppercase font-bold text-white top-0 bottom-0 left-0 right-0 bg-gray-700 bg-opacity-20 z-20">
+                        Cliquez ici
+                      </div>
+                    </label>
+
+                    <input
+                      accept="image/*"
+                      name="image"
+                      onChange={handleChangImageFile}
+                      type="file"
+                      id="image"
+                      hidden
+                      className="hidden"
+                    />
                   </div>
-                  <button className={`px-6 justify-center ${sending && 'disabled'} items-center flex py-3 font-bold hover:bg-green-800 transition bg-green-700 border-4 rounded-full mt-3 min-w-[250px] mx-auto text-white`}>
-                    {sending ? <Loader className="text-2xl" />:'Confirmer l’enregistrement de mon compte'}
+                  
+                  <div className="w-1/2 overflow-hidden">
+                    <label className="ml-3 text-sm font-bold text-gray-700 tracking-wide">
+                      Téléphone
+                    </label>
+                    <input
+                      onChange={handleOnchangeTwo}
+                      name='tel'
+                      value={company.tel || ''}
+                      className=" w-full border-none px-4 py-2 text-sm ring-0 focus:ring-0 focus:border-none focus:outline-none "
+                      type="tel"
+                      placeholder="(+237) Numéro de tél.."
+                      required
+                    />
+                    <span className="h-[1px] -translate-y-3 w-full bg-gray-500 rounded-md inline-block"></span>
+                  </div>
+                </div>
+                <div className="relative flex justify-between items-start space-x-6 mt-4">
+                
+                  <div className="w-full overflow-hidden">
+                    <label className="text-sm font-bold text-gray-700 tracking-wide">
+                      Description de l’entreprise
+                    </label>
+                    <textarea onChange={handleOnchangeTwo} value={company.description || ''} placeholder="Entrer la description de votre entreprise ..." name="description" id="" cols={4} rows={4} className=' w-full shadow-md border-2 rounded-md border-gray-300 focus:border-2 focus:border-gray-300 px-4 py-2 text-sm ring-0 focus:ring-0  focus:outline-none'></textarea>
+                  </div>
+                </div>
+                <div className="pt-8 flex items-center justify-center space-x-4">
+                  <button
+                    onClick={(_) => prev()}
+                    className=" items-center  flex justify-center min-w-[240px] bg-gradient-to-r from-[#ac3265] to-[#ac3265ee]  hover:bg-gradient-to-l hover:from-gray-700 hover:to-gray-600 text-gray-100 px-6 py-2  rounded-md tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
+                  >
+                    <HiArrowLeft className="text-xl mr-4 text-white" />{" "}
+                    <span>Etape précédente</span>
                   </button>
+                  <button
+                    type="submit"
+                    className=" items-center  flex justify-center min-w-[240px] bg-gradient-to-r from-[#ac3265] to-[#ac3265ee]  hover:bg-gradient-to-l hover:from-gray-700 hover:to-gray-600 text-gray-100 px-6 py-2  rounded-md tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
+                  >
+                    <span>Etape suivante</span>{" "}
+                    <HiArrowRight className="text-xl ml-4 text-white" />
+                  </button>
+                </div>
+              </form>
+                
+              </>
+            )}
+            {step === 4 && (
+              <>
+                <form onSubmit={submitForm} className="mt-0 relative">
+                  
+                  {success ? 
+                    <div className="p-6 bg-green-100 text-green-500 shadow rounded-md text-3xl font-bold text-center first-letter:text-primary">
+                      Merci pour votre inscription. Notre équipe vous contactera pour la validation de vos accès
+                    </div>:
+                    <div className="p-3 bg-gray-700 text-white text-center font-bold rounded-sm">
+                      <div className="flex items-center justify-center">
+                        <AiFillCheckCircle className="mr-3 text-2xl" /> <span>corfirmation </span>
+                      </div>
+                    </div>
+                  }
+
+                  {!success && <button className={`px-6 justify-center ${sending && 'disabled'} items-center flex py-3 font-bold hover:bg-green-800 transition bg-green-700 border-4 rounded-full mt-3 min-w-[250px] mx-auto text-white`}>
+                    {sending ? <Loader className="text-2xl" />:'Confirmer l’enregistrement de mon compte'}
+                  </button>}
+
+                  {success && <Link to='/' className={`px-6 justify-center items-center flex py-3 font-bold hover:bg-green-800 transition bg-green-700 border-4 rounded-full mt-3 min-w-[250px] mx-auto text-white`}>
+                    Retourner à la page d'accueil
+                  </Link>}
+
 
                   <div className="pt-8 flex items-center justify-center space-x-4">
                     <button
@@ -464,7 +569,6 @@ const Star: FC<TypeStar> = () => {
               <span>Home page</span>
             </p>
               
-            </>}
             
           </div>
         </div>

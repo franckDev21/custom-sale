@@ -283,11 +283,11 @@ const UserList: React.FC<TypeUserList> = () => {
 
   return (
     <DashboardLayout
-      titleClass="w-[28.8%]"
+      titleClass="w-[29.4%]"
       title="Gestion des utilisateurs"
       headerContent={
         <>
-          <div className="ml-4 w-[70%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
+          <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
             <span>| Liste</span>{" "}
             <div className="flex items-center justify-end">
               <BsBuilding />{" "}

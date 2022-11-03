@@ -1,6 +1,6 @@
 export default interface Company {
   id ?: string|number,
-  photo ?: string,
+  photo ?: any,
   name ?: string,
   description  ?: string,
   email     ?: string,
