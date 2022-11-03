@@ -120,7 +120,7 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
 
     {
       name: <span className="  font-bold text-xs text-[#ac3265] uppercase">NUMÉRO</span>,
-      cell: (row) => <div className="font-bold flex space-y-1 flex-col justify-start items-start">N⁰{row.id} /{row.day} / {row.year}</div>,
+      cell: (row) => <div className="font-bold flex space-y-1 flex-col justify-start items-start">N⁰{row.reference}</div>,
       sortable: true,
     },
     {

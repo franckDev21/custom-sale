@@ -51,13 +51,13 @@ const OrderShow = () => {
 
   return (
     <DashboardLayout
-      title='Order management'
+      title='Gestion des commandes'
       headerContent={
         <>
-          <div className="ml-4 w-[74%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
+          <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
           <span>| order #{reference} | {order.customer?.firstname} {order.customer?.lastname}</span>{" "}
             <div className='flex justify-between space-x-2 '>
-              <Link to='/invoices' className='px-4 py-2 rounded-md bg-slate-500 hover:bg-slate-700 transition text-white text-sm flex items-center'><FaFileInvoiceDollar className='mr-2' /> List of all customer invoices</Link>
+              <Link to='/invoices' className='px-4 py-2 rounded-md bg-slate-500 hover:bg-slate-700 transition text-white text-sm flex items-center'><FaFileInvoiceDollar className='mr-2' />Liste de toute les factures</Link>
             </div> 
           </div>
         </>
@@ -70,14 +70,14 @@ const OrderShow = () => {
               <div className='text-2xl font-bold text-gray-600'>Total prix :  <span className='text-primary'> {formatCurrency(parseInt(order.cout?.toString() || '0') || 0,'XAF')}</span></div>
               <div className="flex text-xs space-x-4">
                 <PDFDownloadLink onClick={invoices} document={<FactureDocument invoice={invoice} order={order} orderProducts={orderProducts} />} fileName="facture.pdf" className='px-4 py-2 bg-green-500 hover:bg-green-600 font-bold transition text-white rounded-md'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
-                  INVOICE THE CUSTOMER
+                  Imprimer la facture du client
                 </PDFDownloadLink >
                 {/* <button className='px-4 py-2 bg-primary opacity-80 hover:opacity-100 transition font-bold text-white rounded-md' >INVOICE THE CUSTOMER</button> */}
               </div>
             </header>
 
             <div className="py-3 border-b">
-              <span className='text-2xl font-bold text-gray-600'>List of ordered products</span>
+              <span className='text-2xl font-bold text-gray-600'>Liste de tous les produits de la commande</span>
 
               <div className='grid grid-cols-3 gap-4'>
                 {orderProducts?.map(item => (
