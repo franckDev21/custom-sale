@@ -7,7 +7,6 @@ type TypeAuthLayout = {
 
 const AuthLayout: FC<TypeAuthLayout> = ({ children }) => {
   return <>
-    <Header />
     {children}
   </>
 }

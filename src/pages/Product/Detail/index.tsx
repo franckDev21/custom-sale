@@ -200,7 +200,7 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
                       <select name="type" onChange={handleOnchange} value={dataOutputForm.type || ''} required  id="price" placeholder="price (FCFA)" className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600'>
                         <option value=""> -- SELECT --</option>
                         <option value="UNITE">In units</option>
-                        <option value="CONTENEUR">{product.type_approvisionnement}</option>
+                        <option value="CARTON">{product.type_approvisionnement}</option>
                       </select>
                     </div>
                   }

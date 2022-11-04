@@ -219,16 +219,16 @@ const Star: FC<TypeStar> = () => {
             </div>
           </div>
           <ul className="circles">
-            <li className="rounded-full"></li>
-            <li className="rounded-full"></li>
-            <li className="rounded-full"></li>
-            <li className="rounded-full"></li>
-            <li className="rounded-full"></li>
-            <li className="rounded-full"></li>
-            <li className="rounded-full"></li>
-            <li className="rounded-full"></li>
-            <li className="rounded-full"></li>
-            <li className="rounded-full"></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
           </ul>
         </div>
         <div className="md:flex md:items-center md:justify-center sm:w-auto md:h-full w-2/5 xl:w-3/6 p-8  md:p-10 lg:p-14 sm:rounded-lg md:rounded-none overflow-hidden bg-white">
