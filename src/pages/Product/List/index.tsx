@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState, ChangeEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { TbArrowsRightLeft } from 'react-icons/tb'
 import DashboardLayout from '../../../templates/DashboardLayout'
@@ -7,7 +7,7 @@ import { BsPrinterFill } from 'react-icons/bs'
 import { FaBoxOpen, FaEye, FaTrash } from 'react-icons/fa'
 import { HiOutlineExclamationCircle, HiRefresh } from 'react-icons/hi'
 import Product from '../../../Model/Product'
-import { baseURL, http_client } from '../../../utils/axios-custum'
+import axiosCustum, { baseURL, http_client } from '../../../utils/axios-custum'
 import Storage from '../../../service/Storage'
 import { toast } from 'react-toastify'
 import DataTable, { TableColumn } from 'react-data-table-component'
@@ -19,12 +19,14 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 
 import DefautProductImage from '../../../assets/img/default-product.png';
 import ProductPrint from '../../../templates/ProductPrint'
+import { AiOutlineVerticalAlignBottom } from 'react-icons/ai'
 
 type TypeProducList = {}
 
 const GET_PRODUCT_URL = '/products'
 const API_STORAGE_URL = `${baseURL}/storage`;
 const DELETE_PRODUCT_URL = 'product'
+const BASE64_URL = 'base64'
 
 
 const ProducList:FC<TypeProducList> = () => {
@@ -220,6 +222,24 @@ const ProducList:FC<TypeProducList> = () => {
     // },3000)
   }
 
+  const uploadCsv = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) {
+      return;
+    }
+    const formData = new FormData()
+    formData.append('image',file)
+
+    axiosCustum.post(BASE64_URL,formData)
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+
+  }
+
   useEffect(() => {
     const fetUsers = async () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
@@ -256,8 +276,13 @@ const ProducList:FC<TypeProducList> = () => {
             Imprimer la liste des produits
           </PDFDownloadLink >
           <Link to='/products/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaBoxOpen size={16} className='inline-block mr-1' /> Ajouter un nouveau produit</Link>
+          <label htmlFor='image' className='text-sm cursor-pointer text-white px-4 rounded-md bg-blue-700 py-2'> <AiOutlineVerticalAlignBottom size={16} className='inline-block mr-1' />
+            Importer un fichier excel
+            <input onChange={uploadCsv} id='image' type='file' hidden className='hidden' />
+          </label>
           <Link to='/approvisionnement' className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></Link>
         </div>
+        {/* <img src='data:QzpcVXNlcnNcRlJBTkNLXEFwcERhdGFcTG9jYWxcVGVtcFxwaHA4MjBCLnRtcA==' alt='' /> */}
       </div>
 
       <React.Fragment>

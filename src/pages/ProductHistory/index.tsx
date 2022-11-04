@@ -97,7 +97,7 @@ const ProductHistory:React.FC<TypeProductHistory> = () => {
       sortable: true,
     },
     {
-      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">DATE & HEURE</span>,
+      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">DATE</span>,
       cell: (row) => <span className="">
         {formatDate(row.created_at || "")|| "Aucun"}
       </span>,
@@ -137,7 +137,7 @@ const ProductHistory:React.FC<TypeProductHistory> = () => {
           actions
         </span>
       ),
-      cell: (row) => <Link to={`/products/show/${row.id}/${row.product?.name?.split(' ').join('-').toLowerCase()}`} className='p-2 text-white bg-gray-600 rounded-md text-lg'><FaEye /></Link>,
+      cell: (row) => <Link to={`/products/show/${row.product?.id}/${row.product?.name?.split(' ').join('-').toLowerCase()}`} className='p-2 text-white bg-gray-600 rounded-md text-lg'><FaEye /></Link>,
     },
   ];
 

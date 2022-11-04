@@ -4,7 +4,6 @@ import Company from '../../Model/Company'
 import DefaultImage from '../../assets/img/logo/logo3.png'
 import { http_client } from '../../utils/axios-custum'
 import Storage from '../../service/Storage'
-import UserService from '../../service/UserService'
 
 type HeaderInvoiceProps = {
 }

@@ -1,5 +1,6 @@
 export default interface Company {
   id ?: string|number,
+  logo ?: any,
   photo ?: any,
   name ?: string,
   description  ?: string,

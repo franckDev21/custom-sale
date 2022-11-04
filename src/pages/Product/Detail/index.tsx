@@ -288,8 +288,8 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
         ) : (
           <div className="max-w-5xl bg-white p-5 rounded-md mx-auto flex space-x-5 relative overflow-hidden">
             <Link to={`/products/edit/${product.id}/${product.name?.split(' ').join('-').toLowerCase()}`} className=" absolute top-0 right-0 px-4 py-2 bg-green-400 text-white"><BiPencil size={17} /></Link>
-            <div className=" min-h-[400px] w-[300px]">
-              <div className={`h-[300px] ${!product.image && 'bg-slate-200'} relative`}>
+            <div className=" min-h-[400px]  w-[300px]">
+              <div className={`h-[300px] overflow-hidden ${!product.image && 'bg-slate-200'} relative`}>
                 {product.image && <img className=" absolute h-auto w-full object-cover" src={`${API_STORAGE_URL}/${product.image}` || ''} alt='imagerduit' />}
               </div>
               <div className="mt-4 space-y-6 border-t pt-4">
