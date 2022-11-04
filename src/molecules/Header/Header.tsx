@@ -34,7 +34,7 @@ const Header:FC<TypeHeader> = ({ classname='' }) => {
               <button onClick={_=>{
                 logoutUser()
                 setInit(false)
-              }} className='px-4 bg-gray-800 py-2 font-bold active:scale-[96%] inline-block hover:bg-[#ffffff20] border-2 border-transparent rounded-full mr-2 transition' >Se deconnecter</button>
+              }} className='px-4 bg-[#203A62] py-2 font-bold active:scale-[96%] inline-block border-2 border-transparent rounded-full mr-2 transition' >Se deconnecter</button>
             </> : 
             // <Link to='/login' className='px-4 bg-gray-800 py-2 font-bold active:scale-[96%] inline-block border-2 border-transparent rounded-full mr-2 transition' >Se connecter </Link>
             <Link to='/login' className='px-4 bg-[#203A62] py-2 font-bold active:scale-[96%] inline-block border-2 border-transparent rounded-full mr-2 transition' >Se connecter </Link>
