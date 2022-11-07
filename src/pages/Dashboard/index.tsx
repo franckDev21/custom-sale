@@ -56,8 +56,8 @@ const Dashboard: React.FC<TypeDashboard> = () => {
   }>
     <div className="mx-auto max-w-7xl pt-4 sm:px-6 lg:px-8">
       <div className="flex space-x-4 font-bold items-center">
-        <Link to='/products/history/all' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <TbArrowsRightLeft size={16} className='inline-block  mr-1' /> Historiques des entrées sorties produits</Link>
-        <Link to='/products/procurements' className='text-sm text-white px-4 rounded-md bg-cyan-700 py-2'> <TbArrowsRightLeft size={16} className='inline-block rotate-90 mr-1' />Historique des approvisionnements</Link>
+        {UserService.getUser().role !== 'SUPER' && <Link to='/products/history/all' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <TbArrowsRightLeft size={16} className='inline-block  mr-1' /> Historiques des entrées sorties produits</Link>}
+        {UserService.getUser().role !== 'SUPER' && <Link to='/products/procurements' className='text-sm text-white px-4 rounded-md bg-cyan-700 py-2'> <TbArrowsRightLeft size={16} className='inline-block rotate-90 mr-1' />Historique des approvisionnements</Link>}
       </div>
     </div>
 
@@ -74,7 +74,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
             </div>
           </Link>
 
-          <Link to='/cashiers' className="bg-white cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start">
+          <Link to='/cashiers' className={`bg-white ${UserService.getUser().role === 'SUPER' && 'disabled'} cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start`}>
             <span className='inline-block overflow-hidden'><HiCurrencyDollar className='text-5xl text-[#603d57]' /></span>
             <div className='ml-3'>
               <h1 className='text-2xl font-bold text-gray-600 pb-1 border-b-2'>{formatCurrency(parseInt(dashboardInfo.totalCash?.toString() || '0',10),'XAF')}</h1>
@@ -82,7 +82,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
             </div>
           </Link>
 
-          <Link to='/products' className="bg-white cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start">
+          <Link to='/products' className={`bg-white ${UserService.getUser().role === 'SUPER' && 'disabled'} cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start`}>
             <span className='inline-block overflow-hidden'><FaBoxOpen className='text-5xl text-[#603d57]' /></span>
             <div className='ml-3'>
               <h1 className='text-2xl font-bold text-gray-600 pb-1 border-b-2'>{dashboardInfo.totalProduct} produits(s)</h1>
@@ -90,7 +90,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
             </div>
           </Link>
 
-          <Link to='/customers' className="bg-white cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start">
+          <Link to='/customers' className={`bg-white ${UserService.getUser().role === 'SUPER' && 'disabled'} cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start`}>
             <span className='inline-block overflow-hidden'><FaUsers className='text-5xl text-[#603d57]' /></span>
             <div className='ml-3'>
               <h1 className='text-2xl font-bold text-gray-600 pb-1 border-b-2'>{dashboardInfo.totalCustomer} Client(s)</h1>
@@ -98,7 +98,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
             </div>
           </Link>
 
-          <Link to='/orders' className="bg-white cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start">
+          <Link to='/orders' className={`bg-white ${UserService.getUser().role === 'SUPER' && 'disabled'} cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start`}>
             <span className='inline-block overflow-hidden'><BsShop className='text-5xl text-[#603d57]' /></span>
             <div className='ml-3 mr-2'>
               <h1 className='text-2xl font-bold text-gray-600 pb-1 border-b-2'>{dashboardInfo.totalOrder} Commande(s)</h1>

@@ -20,6 +20,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import DefautProductImage from '../../../assets/img/default-product.png';
 import ProductPrint from '../../../templates/ProductPrint'
 import { AiOutlineVerticalAlignBottom } from 'react-icons/ai'
+import UserService from '../../../service/UserService'
 
 type TypeProducList = {}
 
@@ -271,7 +272,7 @@ const ProducList:FC<TypeProducList> = () => {
     >
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center">
-          <Link to='/products/history/all' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <TbArrowsRightLeft size={16} className='inline-block  mr-1' />Historique des entrées sorties</Link>
+          {UserService.getUser().role !== 'SUPER' && <Link to='/products/history/all' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <TbArrowsRightLeft size={16} className='inline-block  mr-1' />Historique des entrées sorties</Link>}
           <PDFDownloadLink onClick={download} document={<ProductPrint products={products} />} fileName="liste-des-produits.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
             Imprimer la liste des produits
           </PDFDownloadLink >
