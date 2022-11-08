@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, ChangeEvent } from 'react'
+import React, { FC, useEffect, useState, ChangeEvent, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { TbArrowsRightLeft } from 'react-icons/tb'
 import DashboardLayout from '../../../templates/DashboardLayout'
@@ -21,14 +21,15 @@ import DefautProductImage from '../../../assets/img/default-product.png';
 import ProductPrint from '../../../templates/ProductPrint'
 import { AiOutlineVerticalAlignBottom } from 'react-icons/ai'
 import UserService from '../../../service/UserService'
+import { RiFileExcel2Fill } from 'react-icons/ri'
 
 type TypeProducList = {}
 
 const GET_PRODUCT_URL = '/products'
 const API_STORAGE_URL = `${baseURL}/storage`;
 const DELETE_PRODUCT_URL = 'product'
-const BASE64_URL = 'base64'
-
+// const BASE64_URL = 'base64'
+const IMPORT_PRODUCT_URL = '/import/product'
 
 const ProducList:FC<TypeProducList> = () => {
 
@@ -41,8 +42,10 @@ const ProducList:FC<TypeProducList> = () => {
     null
   );
   const [deleting, setDeleting] = useState(false);
-
+  const [exporting,setExporting] = useState(false);
   const navigate = useNavigate()
+
+  const formExcelRef = useRef(null)
 
   const filteredItems = products.filter(
     (item) =>
@@ -228,17 +231,39 @@ const ProducList:FC<TypeProducList> = () => {
     if (!file) {
       return;
     }
-    const formData = new FormData()
-    formData.append('image',file)
 
-    axiosCustum.post(BASE64_URL,formData)
+    // setExporting(true)
+    const formData = new FormData(formExcelRef.current || undefined)
+    
+    http_client(Storage.getStorage("auth").token).post(IMPORT_PRODUCT_URL,formData)
       .then(res => {
         console.log(res.data);
+        if(res.data.message){
+          reload().then(res => {
+            setExporting(false)
+          })
+          toast.success(res.data.message)
+        }
       })
       .catch(err => {
+        setExporting(false)
         console.log(err);
+        toast.error("Votre liste de produit n’as pas pu être enregistrer ! (Erreur de formatage ou un utilisateur existe déjà) !")
       })
 
+  }
+
+  const reload = () => {
+    return new Promise((resolve,reject) => {
+      const fetUsers = async () => {
+        const res = await http_client(Storage.getStorage("auth").token).get(
+          GET_PRODUCT_URL
+        );
+        resolve(true)
+        setProducts(res.data);
+      };
+      fetUsers();
+    })
   }
 
   useEffect(() => {
@@ -277,13 +302,23 @@ const ProducList:FC<TypeProducList> = () => {
             Imprimer la liste des produits
           </PDFDownloadLink >
           <Link to='/products/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaBoxOpen size={16} className='inline-block mr-1' /> Ajouter un nouveau produit</Link>
-          <label htmlFor='image' className='text-sm cursor-pointer text-white px-4 rounded-md bg-blue-700 py-2'> <AiOutlineVerticalAlignBottom size={16} className='inline-block mr-1' />
-            Importer un fichier excel
-            <input onChange={uploadCsv} id='image' type='file' hidden className='hidden' />
+          <label htmlFor='image' className={`${exporting && 'disabled'} flex items-center text-sm cursor-pointer text-white px-4 rounded-md bg-blue-700 py-2`}>
+            
+            {exporting ? <Loader className='inline-block text-2xl' />:
+              <>
+                <AiOutlineVerticalAlignBottom size={16} className='inline-block mr-1' /> Importer
+              </>
+            }
+
+            <RiFileExcel2Fill className='ml-2' />
+
+            <form ref={formExcelRef} className='inline-block'>
+              <input onChange={uploadCsv} id='image' type="file" name="file" hidden className='hidden' />
+            </form>
           </label>
           <Link to='/approvisionnement' className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></Link>
         </div>
-        {/* <img src='data:QzpcVXNlcnNcRlJBTkNLXEFwcERhdGFcTG9jYWxcVGVtcFxwaHA4MjBCLnRtcA==' alt='' /> */}
+        {/* <img src="data:image/jpeg;base64," alt='' /> */}
       </div>
 
       <React.Fragment>
