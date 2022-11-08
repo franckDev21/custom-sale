@@ -209,7 +209,7 @@ const ProductCreate: FC<TypeProductCreate> = () => {
                 <div className="flex space-x-2">
                   <div className="w-1/2">
                     <label htmlFor="nbre_par_carton" className=" inline-block mb-1 text-sm">Nombre d'élément par conteneur</label>
-                    <input onChange={handleOnchange} value={product.nbre_par_carton || ''} name="nbre_par_carton" required type="number" placeholder="How many itemsCombien d'éléments par conteneur pour ce produit ?" step={1} min={1} className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500" />
+                    <input onChange={handleOnchange} value={product.nbre_par_carton || ''} name="nbre_par_carton" required type="number" placeholder="Combien d'éléments par conteneur pour ce produit ?" step={1} min={1} className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500" />
                   </div>
 
                   <div className="w-1/2">

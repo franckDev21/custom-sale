@@ -301,7 +301,7 @@ const ProducList:FC<TypeProducList> = () => {
           <PDFDownloadLink onClick={download} document={<ProductPrint products={products} />} fileName="liste-des-produits.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
             Imprimer la liste des produits
           </PDFDownloadLink >
-          <Link to='/products/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaBoxOpen size={16} className='inline-block mr-1' /> Ajouter un nouveau produit</Link>
+          {UserService.getUser().company_id && <Link to='/products/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaBoxOpen size={16} className='inline-block mr-1' /> Ajouter un nouveau produit</Link>}
           <label htmlFor='image' className={`${exporting && 'disabled'} flex items-center text-sm cursor-pointer text-white px-4 rounded-md bg-blue-700 py-2`}>
             
             {exporting ? <Loader className='inline-block text-2xl' />:
@@ -316,7 +316,7 @@ const ProducList:FC<TypeProducList> = () => {
               <input onChange={uploadCsv} id='image' type="file" name="file" hidden className='hidden' />
             </form>
           </label>
-          <Link to='/approvisionnement' className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></Link>
+          <Link to='/products' className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></Link>
         </div>
         {/* <img src="data:image/jpeg;base64," alt='' /> */}
       </div>

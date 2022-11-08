@@ -12,6 +12,7 @@ import Loader from '../../../atoms/Loader'
 import Order from '../../../Model/Order'
 import Product from '../../../Model/Product'
 import Storage from '../../../service/Storage'
+import UserService from '../../../service/UserService'
 import DashboardLayout from '../../../templates/DashboardLayout'
 import OrderPrint from '../../../templates/OrderPrint'
 import { http_client } from '../../../utils/axios-custum'
@@ -252,7 +253,7 @@ const OrderList = () => {
           
           <button
             onClick={(_) => onClick(row.id || "1")}
-            className="font-medium ml-1 text-red-500 w-8 h-8 justify-center items-center  bg-red-100 rounded-md inline-flex dark:text-red-500 hover:underline"
+            className={`font-medium ml-1 ${row.etat?.toString() === 'PAYER' ? 'disabled text-gray-500 bg-gray-200':'bg-red-100 text-red-500 dark:text-red-500'}  w-8 h-8 justify-center items-center rounded-md inline-flex  hover:underline`}
           >
             <FaTrash />
           </button>
@@ -309,7 +310,7 @@ const OrderList = () => {
             <div className="text-center">
               <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Do you really want to delete this product order ?
+                Voulez-vous vraiment supprimer cette commande ?
               </h3>
               <div className="flex justify-center gap-4">
                 <button
@@ -320,7 +321,7 @@ const OrderList = () => {
                   {deleting ? (
                     <Loader className="flex justify-center items-center" />
                   ) : (
-                    "Yes, I'm sure"
+                    "Oui, supprimer"
                   )}
                 </button>
                 <button
@@ -328,7 +329,7 @@ const OrderList = () => {
                   onClick={onClose}
                   className="bg-gray-500 text-white rounded-md px-4 py-2"
                 >
-                  No, cancel
+                  Non, annuler
                 </button>
               </div>
             </div>
@@ -348,7 +349,7 @@ const OrderList = () => {
             <div className="text-center">
               <FaMoneyBillWave className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Voulez-vous vraiment supprimer cette commande ?
+                Voulez vous vraiment payer la commande ?
               </h3>
               <div className="flex justify-center gap-4">
                 <button
@@ -359,7 +360,7 @@ const OrderList = () => {
                   {sending ? (
                     <Loader className="flex justify-center items-center" />
                   ) : (
-                    "Pay the order"
+                    "Payer la commande"
                   )}
                 </button>
                 <button
@@ -367,7 +368,7 @@ const OrderList = () => {
                   onClick={onClosePay}
                   className="bg-gray-500 text-white rounded-md px-4 py-2"
                 >
-                  No, cancel
+                  Non, annuler
                 </button>
               </div>
             </div>
@@ -380,8 +381,8 @@ const OrderList = () => {
           <PDFDownloadLink  document={<OrderPrint products={products} orders={orders} />} fileName="liste-des-commandes.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
             Imprimer la liste des commandes
           </PDFDownloadLink >
-          <Link to='/orders/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaShoppingCart size={16} className='inline-block mr-1' />Ajouter une nouvelle commande</Link>
-          <Link to='/approvisionnement' className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></Link>
+          {UserService.getUser().company_id && <Link to='/orders/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaShoppingCart size={16} className='inline-block mr-1' />Ajouter une nouvelle commande</Link>}
+          <Link to='/orders' className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></Link>
         </div>
       </div>
 

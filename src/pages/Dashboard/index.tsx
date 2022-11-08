@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import DashboardLayout from '../../templates/DashboardLayout'
-import { HiCurrencyDollar } from 'react-icons/hi'
+import { HiCurrencyDollar, HiInformationCircle } from 'react-icons/hi'
 import User from '../../Model/User'
 import UserService from '../../service/UserService'
-import { FaBoxOpen, FaUserAlt, FaUsers } from 'react-icons/fa'
+import { FaBoxOpen, FaBuilding, FaUserAlt, FaUsers } from 'react-icons/fa'
 import { BsShop } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import { TbArrowsRightLeft } from 'react-icons/tb'
 import { http_client } from '../../utils/axios-custum'
 import Storage from '../../service/Storage'
 import { formatCurrency } from '../../utils/function'
+import { Alert } from 'flowbite-react'
 
 type TypeDashboard = {}
 
@@ -54,6 +55,36 @@ const Dashboard: React.FC<TypeDashboard> = () => {
       <div className="ml-4 font-bold text-2xl text-[#5c3652]"> | Bienvenue <span className='uppercase'>{user.firstname} {user.lastname}</span></div>
     </>
   }>
+    {(user.role !== 'SUPER' && !user.as_company && !user.company_id) && <div className="">
+      <Alert
+        color="info"
+        additionalContent={
+          <React.Fragment>
+            <div className="mt-2 mb-4 text-sm text-blue-700 dark:text-blue-800">
+              Bonjour, vous devez créer votre entreprise afin d'utiliser
+              l'application sinon votre compte sera suspendu
+              dans les 5 jours. cliquez sur le bouton suivant pour ajouter les
+              informations de votre entreprise
+            </div>
+            <div className="flex">
+              <Link 
+                to={`/my/company/create`}
+                type="button"
+                className="mr-2 inline-flex items-center rounded-lg bg-blue-700 px-3 py-1.5 text-center text-xs font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-800 dark:hover:bg-blue-900"
+              >
+                Créer votre entreprise {" "}
+                <FaBuilding className="-mr-0.5 ml-2" />
+              </Link>
+            </div>
+          </React.Fragment>
+        }
+        icon={HiInformationCircle}
+      >
+        <h3 className="text-lg font-medium text-blue-700 dark:text-blue-800">
+          Inscription incomplète
+        </h3>
+      </Alert>
+    </div>}
     <div className="mx-auto max-w-7xl pt-4 sm:px-6 lg:px-8">
       <div className="flex space-x-4 font-bold items-center">
         {UserService.getUser().role !== 'SUPER' && <Link to='/products/history/all' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <TbArrowsRightLeft size={16} className='inline-block  mr-1' /> Historiques des entrées sorties produits</Link>}

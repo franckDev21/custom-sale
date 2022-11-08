@@ -225,10 +225,10 @@ const Profil: FC<TypeProfil> = () => {
                 additionalContent={
                   <React.Fragment>
                     <div className="mt-2 mb-4 text-sm text-blue-700 dark:text-blue-800">
-                      Hello, you must create your company in order to use the
-                      application otherwise your account will be suspended
-                      within 5 days. click on the following button to add your
-                      company information
+                      Bonjour, vous devez créer votre entreprise afin d'utiliser
+                      l'application sinon votre compte sera suspendu
+                      dans les 5 jours. cliquez sur le bouton suivant pour ajouter les
+                      informations de votre entreprise
                     </div>
                     <div className="flex">
                       <Link 
@@ -236,7 +236,7 @@ const Profil: FC<TypeProfil> = () => {
                         type="button"
                         className="mr-2 inline-flex items-center rounded-lg bg-blue-700 px-3 py-1.5 text-center text-xs font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-800 dark:hover:bg-blue-900"
                       >
-                        Create your company{" "}
+                        Créer votre entreprise {" "}
                         <FaBuilding className="-mr-0.5 ml-2" />
                       </Link>
                     </div>
@@ -245,7 +245,7 @@ const Profil: FC<TypeProfil> = () => {
                 icon={HiInformationCircle}
               >
                 <h3 className="text-lg font-medium text-blue-700 dark:text-blue-800">
-                  Incomplete registration
+                  Inscription incomplète
                 </h3>
               </Alert>
             </div>}

@@ -173,7 +173,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
           <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
             {!loading && <>
               <span>| Edition du produit <span className="text-gray-700">{product.name}</span></span>
-              <Link to='/products/create' className="text-white px-4 py-2 rounded-md bg-green-600 text-sm">Add new product</Link>
+              <Link to='/products/create' className="text-white px-4 py-2 rounded-md bg-green-600 text-sm">Ajouter un nouveau produit</Link>
             </>}
           </div>
         </>
@@ -214,8 +214,8 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                   htmlFor="description"
                   className=" inline-block mb-1 text-sm "
                 >
-                  Product description{" "}
-                  <span className="text-sm italic">(Optional)</span>
+                  Description du produit{" "}
+                  <span className="text-sm italic">(Optionnel)</span>
                 </label>
                 <textarea
                   onChange={handleOnchange}
@@ -236,7 +236,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                       htmlFor="name"
                       className=" inline-block mb-1 text-sm"
                     >
-                      Product name
+                      Nom du produit
                     </label>
                     <input
                       onChange={handleOnchange}
@@ -245,7 +245,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                       autoFocus
                       required
                       type="text"
-                      placeholder="Enter product name"
+                      placeholder="Entrer le nom de votre produit"
                       className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500"
                     />
                   </div>
@@ -255,7 +255,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                       htmlFor="prix_unitaire"
                       className=" inline-block mb-1 text-sm"
                     >
-                      Unit price{" "}
+                      Prix unitaire{" "}
                       <span className="text-sm italic">(In FCFA)</span>
                     </label>
                     <input
@@ -264,7 +264,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                       name="prix_unitaire"
                       required
                       type="number"
-                      placeholder="Enter the product's unit price"
+                      placeholder="Entrer le prix unitaire de votre produit"
                       className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500"
                     />
                   </div>
@@ -277,7 +277,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                   htmlFor="product_type_id"
                   className=" inline-block mb-1 text-sm"
                 >
-                  Type of product
+                  Type de produit
                 </label>
                 <select
                   required
@@ -288,7 +288,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                   className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500"
                 >
                   <option value="" className="text-gray-300">
-                    -- Product type --
+                    -- Sélectionner le type de produit --
                   </option>
                   {productTypes.map((type) => (
                     <option value={type.id} key={type.id}>
@@ -306,7 +306,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                       htmlFor="poids"
                       className=" inline-block mb-1 text-sm"
                     >
-                      Enter the product weight{" "}
+                      Poids{" "}
                       <span className="text-sm italic">(Kg,g)</span>
                     </label>
                     <input
@@ -315,7 +315,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                       name="poids"
                       required
                       type="number"
-                      placeholder="product weight"
+                      placeholder="Entrer le poids du produit"
                       step={0.5}
                       min={0.5}
                       className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500"
@@ -329,7 +329,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                     htmlFor="qte_en_litre"
                     className=" inline-block mb-1 text-sm"
                   >
-                    Enter the quantity in liters{" "}
+                    Entrer quantité en litre {" "}
                     <span className="text-sm italic">(L,ml)</span>
                   </label>
                   <input
@@ -338,7 +338,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                     name="qte_en_litre"
                     required
                     type="number"
-                    placeholder="Enter the quantity in liter"
+                    placeholder="quantité en litre"
                     step={0.5}
                     min={0.5}
                     className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500"
@@ -354,7 +354,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                         htmlFor="nbre_par_carton"
                         className=" inline-block mb-1 text-sm"
                       >
-                        Number by container
+                        Nombre d'élément par conteneur 
                       </label>
                       <input
                         onChange={handleOnchange}
@@ -362,7 +362,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                         name="nbre_par_carton"
                         required
                         type="number"
-                        placeholder="How many items ?"
+                        placeholder="Combien d'éléments ?"
                         step={1}
                         min={1}
                         className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500"
@@ -374,7 +374,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                         htmlFor="poids"
                         className=" inline-block mb-1 text-sm"
                       >
-                        Enter the product weight{" "}
+                        Poids{" "}
                         <span className="text-sm italic">(Kg,g)</span>
                       </label>
                       <input
@@ -383,7 +383,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                         name="poids"
                         required
                         type="number"
-                        placeholder="product weight"
+                        placeholder="Entrer le poids du produit"
                         step={0.5}
                         min={0.5}
                         className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500"
@@ -400,7 +400,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                   htmlFor="qte_stock_alert"
                   className=" inline-block mb-1 text-sm"
                 >
-                  Alert stock quantity
+                  Quantité stock d’alerte
                 </label>
                 <input
                   onChange={handleOnchange}
@@ -408,16 +408,16 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                   name="qte_stock_alert"
                   required
                   type="number"
-                  placeholder="Enter alert stock quantity"
+                  placeholder="Entrer la quantité d’alerte"
                   className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500"
                 />
               </div>
 
               <div className="w-1/2">
                 <label htmlFor="name" className=" inline-block mb-1 text-sm">
-                  Type of supply{" "}
+                  Type d’approvisionnement{" "}
                   <span className="text-sm italic">
-                    (By piece, carton, bag, bucket, can ...)
+                    (Par pièce, carton, sac, bidon ...)
                   </span>
                 </label>
                 <input
@@ -426,7 +426,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                   name="type_approvisionnement"
                   required
                   type="text"
-                  placeholder="You supply yourself with ...(Carton,Can,Bag)"
+                  placeholder="En quoi  vous approvisionnez- vous ? (Sac, Carton, Seau, Bidon …)"
                   className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500"
                 />
               </div>
@@ -438,7 +438,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                   htmlFor="category_id"
                   className=" inline-block mb-1 text-sm"
                 >
-                  Category
+                  Catégorie
                 </label>
                 <select
                   required
@@ -449,7 +449,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                   className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500"
                 >
                   <option value="" className="text-gray-300">
-                    -- Select the product category --
+                    -- Sélectionner la catégorie du produits --
                   </option>
                   {categories.map((categoriy) => (
                     <option value={categoriy.id} key={categoriy.id}>
@@ -464,7 +464,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                   htmlFor="product_supplier_id"
                   className=" inline-block mb-1 text-sm"
                 >
-                  Your supplier
+                  Fournisseur
                 </label>
                 <select
                   required
@@ -475,7 +475,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                   className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500"
                 >
                   <option value="" className="text-gray-300">
-                    -- Choose your supplier --
+                    -- Sélectionner le fournisseur du produit --
                   </option>
                   {productSuppliers.map((supplier) => (
                     <option value={supplier.id} key={supplier.id}>
@@ -495,7 +495,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                 {sending ? (
                   <Loader className="text-lg" />
                 ) : (
-                  "Update the product"
+                  "Mettre à jour le produit"
                 )}
               </button>
             </div>

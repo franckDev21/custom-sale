@@ -10,6 +10,7 @@ import { toast } from 'react-toastify'
 import Loader from '../../atoms/Loader'
 import Invoice from '../../Model/Invoice'
 import Storage from '../../service/Storage'
+import UserService from '../../service/UserService'
 import DashboardLayout from '../../templates/DashboardLayout'
 import InvoicePrint from '../../templates/InvoicePrint'
 import { http_client } from '../../utils/axios-custum'
@@ -188,7 +189,7 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
         <>
           <div className="ml-4 w-[74%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
             <div className='flex justify-between space-x-2 '>
-            <Link to='/orders/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaShoppingCart size={16} className='inline-block mr-1' />  Ajouter une nouvelle commander</Link>
+            {UserService.getUser().company_id && <Link to='/orders/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaShoppingCart size={16} className='inline-block mr-1' />  Ajouter une nouvelle commander</Link>}
             </div> 
           </div>
         </>

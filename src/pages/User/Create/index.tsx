@@ -90,7 +90,7 @@ const CreateUser:React.FC<TypeCreateUser> = () => {
             <div className="p-5 max-w-4xl flex justify-between items-start  mx-auto rounded-lg text-center bg-green-50 border-green-400 border-4 text-green-400 font-bold text-3xl relative">
               <span className='flex items-start justify-start flex-col'>
                 <span className='flex items-start justify-start'><FaCheckCircle className='mr-2' /> <span>Votre utilisateur a été crée avec succès !</span></span>
-                <span className='text-sm italic text-gray-500 '>An email containing his login information has been sent to your user! </span>
+                <span className='text-sm italic text-gray-500 '>Un courriel contenant ses informations de connexion a été envoyé à votre utilisateur ! </span>
               </span> 
               <Link to='/users' className='px-4 items-center justify-center py-2 bg-[#ac3265] transition hover:bg-[#8a2a52] active:scale-[96%] text-white rounded-md text-base inline-block ml-4'>Liste</Link>
             </div>

@@ -10,7 +10,7 @@ import Product from "../../../Model/Product";
 import Storage from "../../../service/Storage";
 import DashboardLayout from "../../../templates/DashboardLayout";
 import { baseURL, http_client } from "../../../utils/axios-custum";
-import { formatCurrency, formatDate } from "../../../utils/function";
+import { extraiText, formatCurrency, formatDate } from "../../../utils/function";
 
 type TypeProductDetail = {};
 
@@ -153,7 +153,7 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
           <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
             {!loading && 
               <>
-                <span>| {product.name}</span>
+                <span>| {extraiText(product.name||'',17)}</span>
 
                 <div className="flex space-x-4 font-bold items-center ml-4">
                   <button onClick={_ => {
@@ -196,10 +196,10 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
                   </div>
                   {product.product_type?.name !== 'VENDU_PAR_PIECE' &&
                     <div>
-                      <label htmlFor="price" className="inline-block mb-2 font-semibold text-gray-700">Output type  </label>
+                      <label htmlFor="price" className="inline-block mb-2 font-semibold text-gray-700">Type de sortie</label>
                       <select name="type" onChange={handleOnchange} value={dataOutputForm.type || ''} required  id="price" placeholder="price (FCFA)" className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600'>
-                        <option value=""> -- SELECT --</option>
-                        <option value="UNITE">In units</option>
+                        <option value=""> -- Sélectionner un type de sortie --</option>
+                        <option value="UNITE">En unité</option>
                         <option value="CARTON">{product.type_approvisionnement}</option>
                       </select>
                     </div>

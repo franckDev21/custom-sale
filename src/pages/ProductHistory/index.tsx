@@ -154,7 +154,7 @@ const ProductHistory:React.FC<TypeProductHistory> = () => {
 
   return (
     <DashboardLayout
-      title='Histories E/S'
+      title='Historiques E/S'
     >
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center">
@@ -171,7 +171,7 @@ const ProductHistory:React.FC<TypeProductHistory> = () => {
           <>
             <DataTable
               className=" rounded-md overflow-hidden"
-              title="Histoy"
+              title="Historiques"
               pagination
               columns={columns}
               data={filteredItems}

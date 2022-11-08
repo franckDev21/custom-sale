@@ -49,10 +49,15 @@ const OrderCreate = () => {
       totalCommande: isValid().prix
     }
 
+    console.log(data);
+    
     http_client(Storage.getStorage("auth").token).post(CREATE_ORDER_URL,data)
       .then(res => {
         setSending(false)
         setSuccess(true)
+        
+        console.log(res.data);
+        
         if(res.data.message){
           toast.success(res.data.message)
           setOrderId(res.data.order_id)
@@ -262,11 +267,11 @@ const OrderCreate = () => {
             {success ? <>
               <div className="flex flex-col py-16 justify-center w-full items-center space-y-5">
                 <span className="text-7xl text-green-700"><BsCheckLg /> </span>
-                <h3 className="text-3xl text-gray-600 w-[40%] text-center mx-auto font-bold">The order has been registered successfully</h3>
-                <p>an email was sent to <span className="text-primary">{getCustomer(client || '1')?.firstname} {getCustomer(client || '1')?.lastname}</span> to invoice her order</p>
+                <h3 className="text-3xl text-gray-600 w-[40%] text-center mx-auto font-bold">La commande a été enregistrée avec succès !</h3>
+                <p>La commande de <span className="text-primary">{getCustomer(client || '1')?.firstname} {getCustomer(client || '1')?.lastname}</span> a été enregistré  </p>
                 <div className="flex items-center justify-center space-x-4">
                   <Link to='/orders' className="px-4 py-2 bg-slate-600 text-white rounded-md">Liste des commandes </Link>
-                  <Link to={`/orders/${orderId || 0}`} className="px-4 py-2 bg-primary text-white rounded-md">See the order </Link>
+                  <Link to={`/orders/show/${orderId || 0}/1659495`} className="px-4 py-2 bg-primary text-white rounded-md">Voir la commande</Link>
                 </div>
               </div>
             </>:<>

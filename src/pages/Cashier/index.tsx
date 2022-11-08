@@ -17,6 +17,7 @@ import { toast } from 'react-toastify'
 import { resolve } from 'path'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import CashierPrint from '../../templates/CashierPrint'
+import UserService from '../../service/UserService'
 
 type TypeCashier = {}
 
@@ -149,7 +150,7 @@ const Cashier: React.FC<TypeCashier> = () => {
         <h1 className=" flex items-center justify-center">
 
           {row.order_id && <Link
-            to={`/orders/show/`}
+            to={`/orders/show/${row.order?.id}/${(Date.now())}`}
             className="font-medium ml-1 text-base text-blue-500 p-2 bg-blue-100 rounded-md inline-block dark:text-blue-500 hover:underline"
           >
             <FaEye />
@@ -282,6 +283,7 @@ const Cashier: React.FC<TypeCashier> = () => {
       headerContent={
         <>
           <div className="ml-4 w-[90%] font-bold text-2xl text-[#ac3265] flex items-center justify-end">
+          {UserService.getUser().company_id && 
             <div className='flex justify-between space-x-2 '>
               <PDFDownloadLink document={<CashierPrint cashiers={cashiers} total={totalCash.montant} />} fileName="caisse.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
                 Imprimer l'état de la caisse
@@ -295,6 +297,7 @@ const Cashier: React.FC<TypeCashier> = () => {
                     setModalType('INPUT')
                   }} className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaPlus size={16} className='inline-block mr-1' />Ajouter une nouvelle entrée</button>
             </div> 
+            }
           </div>
         </>
       }

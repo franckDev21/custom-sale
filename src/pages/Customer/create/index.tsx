@@ -108,7 +108,7 @@ const AddCustomer:FC<TypeAddCustomer> = () => {
         <>
           <div className="ml-4 w-[70%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
             <span>| {' '} 
-              {editing ? <>Edition des informations du client <span className='text-gray-500'>{customer.firstname} {customer.lastname}</span></>:<span className='ml-2'>add a new customer</span>}
+              {editing ? <>Edition des informations du client <span className='text-gray-500'>{customer.firstname} {customer.lastname}</span></>:<span className='ml-2'>Ajout d'un nouveau client</span>}
             </span>
           </div>
         </>
@@ -117,12 +117,12 @@ const AddCustomer:FC<TypeAddCustomer> = () => {
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           {success &&
-            <div className="p-5 max-w-4xl flex justify-between items-start  mx-auto rounded-lg text-center bg-green-50 border-green-400 border-4 text-green-400 font-bold text-3xl relative">
+            <div className="p-5 max-w-4xl flex justify-between items-start  mx-auto rounded-lg text-center bg-green-50 border-green-400 border-4 text-green-400 font-bold text-2xl relative">
               <span className='flex items-start justify-start flex-col'>
-                <span className='flex items-start justify-start'><FaCheckCircle className='mr-2' /> <span>Your customer has been successfully created! </span></span>
-                <span className='text-sm italic text-gray-500 '>An email containing his login information has been sent to your customer ! </span>
+                <span className='flex items-start justify-start'><FaCheckCircle className='mr-2' /> <span>Votre nouveau client a été ajouté avec succès! </span></span>
+                {/* <span className='text-sm italic text-gray-500 '>An email containing his login information has been sent to your customer ! </span> */}
               </span> 
-              <Link to='/customers' className='px-4 items-center justify-center py-2 bg-[#ac3265] transition hover:bg-[#8a2a52] active:scale-[96%] text-white rounded-md text-base inline-block ml-4'>List of customer</Link>
+              <Link to='/customers' className='px-4 items-center justify-center py-2 bg-[#ac3265] transition hover:bg-[#8a2a52] active:scale-[96%] text-white rounded-md text-base inline-block ml-4'>Liste des clients</Link>
             </div>
           }
 
@@ -147,18 +147,18 @@ const AddCustomer:FC<TypeAddCustomer> = () => {
 
             <div className="flex justify-between items-start space-x-4 mb-4">
               <div className=' flex-col flex w-1/2'>
-                <label htmlFor="email">Email <span className='text-sm italic text-gray-400'>( optional )</span></label>
+                <label htmlFor="email">Email <span className='text-sm italic text-gray-400'>( optionnel  )</span></label>
                 <input onChange={handleOnchange} name='email' value={customer.email || ''} type="email" placeholder="Adresse email du client" className='px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full' />
               </div>
               <div className=' flex-col flex w-1/2'>
-                <label htmlFor="tel">Téléphone<span className='text-sm italic text-gray-400'>( optional )</span></label>
+                <label htmlFor="tel">Téléphone<span className='text-sm italic text-gray-400'>( optionnel  )</span></label>
                 <input onChange={handleOnchange} name='tel' value={customer.tel || ''} type="tel" placeholder='Numéro de téléphone du client' className='px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full' />
               </div>
             </div>
 
             <div className="flex justify-between items-start space-x-4 mb-4">
               <div className=' flex-col flex w-full'>
-                <label htmlFor="address">Address <span className='text-sm italic text-gray-400'>( optional )</span></label>
+                <label htmlFor="address">Address <span className='text-sm italic text-gray-400'>( optionnel  )</span></label>
                 <input onChange={handleOnchange} name='address' value={customer.address || ''} type="address" placeholder="Adresse" className='px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full' />
               </div>
             </div>

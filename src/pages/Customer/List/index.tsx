@@ -235,7 +235,7 @@ const CustomerList: FC<TypeCustomerList> = () => {
                   "disabled"
                 }  justify-start text-sm border-4 border-gray-700 items-center space-x-2 rounded px-2 py-1 text-white bg-gray-700 hover:bg-gray-800 transition w-auto ml-3`}
               >
-                Crée un nouvelle utilisateur <BiUserPlus className="ml-2 text-lg" />
+                Crée un nouveau client <BiUserPlus className="ml-2 text-lg" />
               </Link>
             </div>
           </div>
