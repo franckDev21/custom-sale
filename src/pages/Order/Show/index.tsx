@@ -68,7 +68,15 @@ const OrderShow = () => {
           <div className="p-4 bg-white rounded-md">
             <header className='flex justify-between items-center py-4 border-b w-full mb-2'>
               <div className='text-2xl font-bold text-gray-600'>Total prix :  <span className='text-primary'> {formatCurrency(parseInt(order.cout?.toString() || '0') || 0,'XAF')}</span></div>
-              <div className="flex text-xs space-x-4">
+              <div className="flex text-xs space-x-4 items-center">
+                {order.as_taxe === 1 && 
+                  <div className=' flex space-x-3 items-center'>
+                    <span className='text-lg font-bold text-gray-600'>Taxe : </span>
+                    <div className='px-4 py-1 bg-yellow-100 text-yellow-400 font-bold text-2xl'>
+                      {(order.invoice?.as_tva || '')  ? `TVA  19.5 %`:`IR   5.5%`}
+                    </div>
+                  </div>
+                }
                 <PDFDownloadLink onClick={invoices} document={<FactureDocument invoice={invoice} order={order} orderProducts={orderProducts} />} fileName="facture.pdf" className='px-4 py-2 bg-green-500 hover:bg-green-600 font-bold transition text-white rounded-md'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
                   Imprimer la facture du client
                 </PDFDownloadLink >

@@ -47,19 +47,16 @@ const OrderCreate = () => {
       client,
       carts,
       desc,
-      total_qte: isValid().qte,
-      totalCommande: isValid().prix
+      total_qte: pttc(isValid().qte),
+      totalCommande: isValid().prix,
+      taxe
     }
-
-    console.log(data);
     
     http_client(Storage.getStorage("auth").token).post(CREATE_ORDER_URL,data)
       .then(res => {
         setSending(false)
         setSuccess(true)
-        
-        console.log(res.data);
-        
+              
         if(res.data.message){
           toast.success(res.data.message)
           setOrderId(res.data.order_id)
@@ -190,7 +187,7 @@ const OrderCreate = () => {
     })
     return {
       ok : ((som > 0) && client !== ''),
-      prix : prix,
+      prix : pttc(prix,taxe),
       qte : som
     }
   }
@@ -404,7 +401,7 @@ const OrderCreate = () => {
                     
                     <span className="text-3xl text-gray-500 font-bold py-3 inline-block">
                       <span className="text-secondary pr-2">Total :  </span>
-                      <span>{formatCurrency(pttc(isValid().prix,!taxe ? 'AUCUN':taxe),'XAF')}</span>
+                      <span>{formatCurrency(isValid().prix,'XAF')}</span>
                     </span>
                     <select value={taxe} onChange={e => setTaxe(e.target.value)} className="mt-1 appearance-none px-8 text-center font-bold py-1 bg-gray-100 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-gray-600 outline-none border-none">
                       <option> --- Appliquer les taxes ---</option>

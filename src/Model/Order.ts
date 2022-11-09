@@ -17,5 +17,6 @@ export default interface Order {
   customer ?: Customer,
   user ?: User,
   invoice ?: Invoice,
+  as_taxe ?: boolean|number
   order_products ?: OrderProduct[]
 }

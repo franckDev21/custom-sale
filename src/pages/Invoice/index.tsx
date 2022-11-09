@@ -219,7 +219,7 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
                   {deleting ? (
                     <Loader className="flex justify-center items-center" />
                   ) : (
-                    "Yes, I'm sure"
+                    "Oui, Supprimer"
                   )}
                 </button>
                 <button
@@ -227,7 +227,7 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
                   onClick={onClose}
                   className="bg-gray-500 text-white rounded-md px-4 py-2"
                 >
-                  No, cancel
+                  Non, annuler
                 </button>
               </div>
             </div>

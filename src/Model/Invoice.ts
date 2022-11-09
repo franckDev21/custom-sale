@@ -12,6 +12,9 @@ export default interface Invoice {
   company_id ?: string,
   order_id ?: string,
   reference ?: string,
+  
+  as_tva ?: number|boolean,
+  as_ir ?: number|boolean,
 
   company ?: Company,
 
