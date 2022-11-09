@@ -13,7 +13,7 @@ import CustomerForm from "../../../molecules/CustomerForm";
 import Storage from "../../../service/Storage";
 import DashboardLayout from "../../../templates/DashboardLayout";
 import { baseURL, http_client } from "../../../utils/axios-custum";
-import { formatCurrency } from "../../../utils/function";
+import { formatCurrency, pttc } from "../../../utils/function";
 
 const GET_MY_CUSTOMERS = "/customers"; // changer et recuperer seulement les clients du user connecter
 const GET_PRODUCTS = "/products"; // changer et recuperer seulement les clients du user connecter
@@ -32,6 +32,8 @@ const OrderCreate = () => {
   const [sending,setSending] = useState(false)
   const [success,setSuccess] = useState(false)
   const [orderId,setOrderId] = useState(0)
+
+  const [taxe,setTaxe] = useState('')
 
   const API_STORAGE_URL = `${baseURL}/storage`;
   const CREATE_ORDER_URL = "orders";
@@ -398,11 +400,18 @@ const OrderCreate = () => {
                       <span className="text-base px-5">veillez réchercher le(s) et cliquez dessus pour les ajoutes dans la commande</span>
                     </div>
                   )}
-                  <div className="my-4 border-y flex justify-end items-center">
+                  <div className="my-4 border-y flex justify-end items-end flex-col-reverse py-2">
+                    
                     <span className="text-3xl text-gray-500 font-bold py-3 inline-block">
                       <span className="text-secondary pr-2">Total :  </span>
-                      <span>{formatCurrency(isValid().prix,'XAF')}</span>
+                      <span>{formatCurrency(pttc(isValid().prix,!taxe ? 'AUCUN':taxe),'XAF')}</span>
                     </span>
+                    <select value={taxe} onChange={e => setTaxe(e.target.value)} className="mt-1 appearance-none px-8 text-center font-bold py-1 bg-gray-100 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-gray-600 outline-none border-none">
+                      <option> --- Appliquer les taxes ---</option>
+                      <option value="TVA">TVA</option>
+                      <option value="IR">IR</option>
+                      <option value="AUCUN">AUCUN</option>
+                    </select>
                   </div>
                   <div className="py-3">
                     <button className={`bg-primary  ${(!isValid().ok || sending) && 'disabled'} border-2 border-primary transition text-white px-6 py-2 w-full rounded-md`}>{sending ? <Loader className="inline-block text-xl" /> :"Commander"}</button>
