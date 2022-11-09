@@ -8,6 +8,7 @@ export default interface Order {
   reference ?: string,
   quantite ?: string,
   cout ?: string,
+  total_ht ?: string,
   etat ?: string,
   customer_id ?: string,
   user_id ?: string,

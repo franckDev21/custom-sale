@@ -47,14 +47,19 @@ const OrderCreate = () => {
       client,
       carts,
       desc,
-      total_qte: pttc(isValid().qte),
-      totalCommande: isValid().prix,
-      taxe
+      total_qte: isValid().qte,
+      totalCommande: pttc(isValid().prix).pttc,
+      taxe,
+      total_ht : isValid().prix_ht
     }
     
     http_client(Storage.getStorage("auth").token).post(CREATE_ORDER_URL,data)
       .then(res => {
         setSending(false)
+
+        // console.log(res.data);
+        
+        
         setSuccess(true)
               
         if(res.data.message){
@@ -187,7 +192,8 @@ const OrderCreate = () => {
     })
     return {
       ok : ((som > 0) && client !== ''),
-      prix : pttc(prix,taxe),
+      prix : pttc(prix,taxe).pttc,
+      prix_ht : prix,
       qte : som
     }
   }

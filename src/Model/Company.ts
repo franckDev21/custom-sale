@@ -10,6 +10,8 @@ export default interface Company {
   postal_code  ?: string|null,
   city ?: string,
   tel      ?: string|null,
+  NUI      ?: string|null,
+  RCCM      ?: string|null,
   number_of_employees   ?: number|string,
   created_at ?: string,
   updated_at ?: string,

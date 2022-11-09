@@ -2,18 +2,13 @@ import React, { FC } from "react";
 import { Page, Text, View, Document, StyleSheet, Image } from "@react-pdf/renderer";
 import Order from "../../Model/Order";
 import OrderProduct from "../../Model/OrderProduct";
-import { formatCurrency, pttc } from "../../utils/function";
+import { formatCurrency, formatDate } from "../../utils/function";
 
 import DefaultImage from '../../assets/img/default-product.png'
 import Invoice from "../../Model/Invoice";
 import { baseURL } from "../../utils/axios-custum";
-// import HeaderInvoice from "../../molecules/HeaderInvoice";
-import NewHeaderInvoice from "../../molecules/NewHeaderInvoice";
-import { default as dayjs } from 'dayjs';
-import 'dayjs/locale/fr' // import locale
-
-
-dayjs.locale('fr') // use locale
+import moment from "moment";
+import HeaderInvoice from "../../molecules/HeaderInvoice";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -22,11 +17,10 @@ const styles = StyleSheet.create({
     fontSize: 13
   },
   header: {
+    padding: 8,
     display: 'flex',
     justifyContent : 'space-between',
     flexDirection: 'row',
-    width: '100%',
-    // backgroundColor: 'green'
   },
   image : {
     width : 130,
@@ -51,14 +45,15 @@ const styles = StyleSheet.create({
   },
   head : {
     // backgroundColor: 'yellow',
-    width: '40%',
+    width: '100%',
     display: 'flex',
-    margin: '0 10px'
+    padding: 8
   },
   content : {
+    maxWidth: 200,
     width: '100%',
-    // alignSelf: 'flex-end',
-    // marginLeft: 'auto',
+    alignSelf: 'flex-end',
+    marginLeft: 'auto',
     // backgroundColor: 'pink'
   },
   date : {
@@ -66,38 +61,34 @@ const styles = StyleSheet.create({
   },
   customer : {
     width: '100%',
+    maxWidth: 200,
     // backgroundColor : 'red',
     minHeight: 50,
     border: 1,
-    marginTop: 5,
-    padding: 8
+    marginTop: 5
   },
   tableTile : {
-    height: 3,
-    backgroundColor: '#000',
-    marginTop: 25,
-    marginBottom: 4,
-    marginLeft: 10,
-    marginRight: 10
+    width: '100%',
+    maxWidth: 200,
+    // backgroundColor: 'violet',
+    minHeight: 15,
+    marginTop: 4
   },
   tableTh:{
-    fontWeight: 'bold',
+    fontWeight: 'semibold',
     width: '25%',
     padding: 4,
-    // borderLeft:1,
-    // borderBottom: 1,
-    // borderTop: 1,
-    minHeight: 30,
-    color: '#000'
+    borderLeft:1,
+    borderBottom: 1,
+    borderTop: 1,
+    minHeight: 30
   },
   tableChild:{
     width: '25%',
     padding: 4,
-    // borderLeft:1,
+    borderLeft:1,
     borderBottom: 1,
-    minHeight: 30,
-    color: '#5f6063',
-    borderColor: '#5f6063'
+    minHeight: 30
   },
   tableTotalLabel: {
     width: '75%',
@@ -106,23 +97,19 @@ const styles = StyleSheet.create({
     minHeight: 30,
     borderBottom: 1,
     borderRight: 1,
-    transform: 'translateX(1px)',
-    color: '#5f6063',
-    borderColor: '#5f6063'
+    transform: 'translateX(1px)'
   },
   tableTotal: {
     width: '25%',
     padding: 4,
     minHeight: 30,
-    borderBottom: 1,
-    borderColor: '#5f6063'
+    borderBottom: 1
   },
   table : {
     display:'flex',
     flexWrap: 'wrap',
     width: '100%',
-    flexDirection: 'row',
-    padding: 10
+    flexDirection: 'row'
   },
   signature : {
     paddingTop: 8,
@@ -135,7 +122,7 @@ const styles = StyleSheet.create({
   }
 });
 
-type TypeDocument = {
+type NewInvoiceDocumentProps = {
   className ?:  string,
   order ?: Order,
   orderProducts ?: OrderProduct[],
@@ -144,7 +131,7 @@ type TypeDocument = {
 
 const API_STORAGE_URL = `${baseURL}/storage`;
 
-const FactureDocument: FC<TypeDocument> = ({
+const NewInvoiceDocument: FC<NewInvoiceDocumentProps> = ({
   className='',
   order = {},
   orderProducts = [],
@@ -154,35 +141,20 @@ const FactureDocument: FC<TypeDocument> = ({
     <Document>
       <Page wrap size="A4" style={styles.page}>
 
-        <NewHeaderInvoice />
+        <HeaderInvoice />
 
-        <View style={styles.header}>
-          <View style={styles.head}>
-            <View style={styles.content}>
-              <View style={styles.customer}>
-                <Text style={{ fontSize: 26, fontWeight:'extrabold', marginBottom: 7 }}>Facture</Text>
-                <Text style={{ marginBottom: 4 }}>N° : {order.invoice?.reference}</Text>
-                <Text style={{ marginBottom: 4 }}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
-                <Text style={{ marginBottom: 4 }}>Tél : {order.customer?.tel}</Text>
-                <Text style={{ marginBottom: 4 }}>Vendeur : {order.user?.firstname} {order.user?.lastname}</Text>
-              </View>
-            </View>
-          </View>
-
-          <View style={styles.head}>
-            <View style={styles.content}>
-              <Text style={styles.date}>Douala {dayjs().format('DD MMMM YYYY')}</Text>
-              <View style={styles.customer}>
-                <Text style={{ marginBottom: 3 }}>Nom : {order.customer?.firstname} {order.customer?.lastname}</Text>
-                <Text style={{ marginBottom: 3 }}>Email : {order.customer?.email}</Text>
-                <Text style={{ marginBottom: 3 }}>Tél : {order.customer?.tel}</Text>
-                <Text style={{ marginBottom: 3 }}>Localisation : {order.customer?.address}</Text>
-              </View>
+        <View style={styles.head}>
+          <View style={styles.content}>
+            <Text style={styles.date}>Douala {moment().format('MMMM Do YYYY')}</Text>
+            <View style={styles.customer}>
+              <Text>{order.customer?.firstname} {order.customer?.lastname}</Text>
+              <Text>Email : {order.customer?.email}</Text>
+              <Text>Tél : {order.customer?.tel}</Text>
             </View>
           </View>
         </View>
 
-        <View style={styles.tableTile}></View>
+        <View style={styles.tableTile}><Text style={{ padding: 5 }}>FACTURE N° {order.invoice?.id}/{invoice?.day}/{invoice?.year}</Text></View>
         <View style={styles.table}>
           <View style={styles.tableTh}><Text>Nom du produit</Text></View>
           <View style={styles.tableTh}><Text>Quantité</Text></View>
@@ -215,20 +187,7 @@ const FactureDocument: FC<TypeDocument> = ({
           ))}
           
 
-          <View style={styles.tableTotalLabel}><Text style={{ textAlign:'right' }}>Total HT</Text></View>
-          <View style={styles.tableTotal}><Text>{formatCurrency(parseInt(order.total_ht || '0',10) || 0,'XAF')}</Text></View>
-
-          {order.invoice?.as_tva && <>
-            <View style={styles.tableTotalLabel}><Text style={{ textAlign:'right' }}>Total TVA (19.5%)</Text></View>
-            <View style={styles.tableTotal}><Text>{formatCurrency(pttc(parseInt(order.total_ht || '0',10)).totalTVA,'XAF')}</Text></View>
-          </>}
-
-          {order.invoice?.as_ir && <>
-            <View style={styles.tableTotalLabel}><Text style={{ textAlign:'right' }}>Total IR (5.5%)</Text></View>
-            <View style={styles.tableTotal}><Text>{formatCurrency(pttc(parseInt(order.total_ht || '0',10)).totalIR,'XAF')}</Text></View>
-          </>}
-          
-          <View style={styles.tableTotalLabel}><Text style={{ textAlign:'right' }}>Total TTC</Text></View>
+          <View style={styles.tableTotalLabel}><Text style={{ textAlign:'right' }}>Montant Total</Text></View>
           <View style={styles.tableTotal}><Text>{formatCurrency(parseInt(order.cout || '0',10) || 0,'XAF')}</Text></View>
         </View>
 
@@ -239,4 +198,4 @@ const FactureDocument: FC<TypeDocument> = ({
   );
 };
 
-export default FactureDocument;
+export default NewInvoiceDocument;

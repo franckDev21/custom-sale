@@ -23,9 +23,10 @@ export const formatDate = (date: string) => {
   return moment(new Date(date)).format('MMMM Do YYYY')
 }
 
-export const pttc = (pht: number, type = 'AUCUN'): number => {
+export const pttc = (pht: number, type = 'AUCUN'): {pht: number,pttc: number, totalTVA: number, totalIR: number} => {
   const TVA = 19.5
   const IR = 5.5
+  const PHT = JSON.parse(JSON.stringify(pht))
 
   let subTva = pht * TVA/100
   let subIr  = pht * IR/100
@@ -39,5 +40,10 @@ export const pttc = (pht: number, type = 'AUCUN'): number => {
     pttc = pht
   }
   
-  return pttc
+  return {
+    pht : PHT,
+    pttc,
+    totalTVA : subTva,
+    totalIR: subIr,
+  }
 }
