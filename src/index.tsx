@@ -12,10 +12,6 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-window.addEventListener('beforeunload', function (e) { 
-  e.preventDefault(); 
-  Storage.removeStorage('auth')
-});
 
 root.render(
   // <React.StrictMode>

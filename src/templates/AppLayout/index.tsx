@@ -5,8 +5,16 @@ type TypeAppLayout = {
   children : React.ReactNode
 }
 
-const AppLayout: FC<TypeAppLayout> = ({ children }) => {
 
+const AppLayout: FC<TypeAppLayout> = ({ children }) => {
+  
+  useEffect(() => { 
+    return () => {
+      Storage.removeStorage('auth')
+  	};
+  },[])
+
+  // useEffect(() => )
 
   return <>
     {children}
