@@ -6,12 +6,7 @@ type TypeAppLayout = {
 }
 
 const AppLayout: FC<TypeAppLayout> = ({ children }) => {
-  
-  useEffect(() => { 
-    return () => {
-      Storage.removeStorage('auth')
-  	};
-  },[])
+
 
   return <>
     {children}
