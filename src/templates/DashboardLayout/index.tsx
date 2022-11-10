@@ -2,6 +2,7 @@ import React from 'react'
 import HeaderDashboard from '../../molecules/HeaderDashboard'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AppLayout from '../AppLayout';
 
 type TypeDashboardLayout = {
   children ?: React.ReactNode,
@@ -28,6 +29,7 @@ const DashboardLayout: React.FC<TypeDashboardLayout> = ({ children= <></>, title
 
       <ToastContainer />
     </div>
+    
   )
 }
 

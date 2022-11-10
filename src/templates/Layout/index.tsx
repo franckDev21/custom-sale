@@ -5,7 +5,7 @@ import { Outlet} from 'react-router-dom';
 
 type Layout = {}
 
-const AuthLayout: React.FC<Layout> = () => {
+const AppLayout: React.FC<Layout> = () => {
 
   const auth = useSelector((state :any) => state.auth)
   console.log(auth)
@@ -15,4 +15,4 @@ const AuthLayout: React.FC<Layout> = () => {
   </>
 }
 
-export default AuthLayout
+export default AppLayout
