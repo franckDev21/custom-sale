@@ -7,7 +7,7 @@ type TypeAppLayout = {
 
 const AppLayout: FC<TypeAppLayout> = ({ children }) => {
   
-  useEffect(() => {
+  useEffect(() => { 
     return () => {
       Storage.removeStorage('auth')
   	};

@@ -1,15 +1,13 @@
 import React from 'react'
 import Banner from '../../molecules/Banner'
 import { Link} from 'react-router-dom'
-import AppLayout from '../../templates/AppLayout'
 import DashImage from '../../assets/img/dash.svg'
 
 type typeHome = {}
 
 const Home: React.FC<typeHome> = () => {
   return <>
-    <AppLayout>
-      <Banner classname='text-white' classnameContent='flex mt-16 items-center justify-start space-x-6'>
+    <Banner classname='text-white' classnameContent='flex mt-16 items-center justify-start space-x-6'>
         <div className='pb-20 w-[70%]'>
           <h2 className='text-2xl mb-3'>
             Simplifiez vous la vie avec
@@ -27,8 +25,6 @@ const Home: React.FC<typeHome> = () => {
         </div>
         <img className='inline-block top-10 -right-14 absolute' width={600} src={DashImage} alt="" />
       </Banner>
-    </AppLayout>
-    
   </>
 }
 
