@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     fontWeight: 'extrabold'
   },
   text : {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: 'bold',
     marginBottom: 7
   },

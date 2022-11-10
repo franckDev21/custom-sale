@@ -19,7 +19,7 @@ dayjs.locale('fr') // use locale
 const styles = StyleSheet.create({
   page: {
     flexDirection:'column',
-    fontSize: 13
+    fontSize: 11
   },
   header: {
     display: 'flex',
@@ -142,7 +142,7 @@ type TypeDocument = {
   invoice ?: Invoice
 };
 
-const API_STORAGE_URL = `${baseURL}/storage`;
+// const API_STORAGE_URL = `${baseURL}/storage`;
 
 const FactureDocument: FC<TypeDocument> = ({
   className='',
@@ -160,7 +160,7 @@ const FactureDocument: FC<TypeDocument> = ({
           <View style={styles.head}>
             <View style={styles.content}>
               <View style={styles.customer}>
-                <Text style={{ fontSize: 26, fontWeight:'extrabold', marginBottom: 7 }}>Facture</Text>
+                <Text style={{ fontSize: 16, fontWeight:'extrabold', marginBottom: 7 }}>Facture</Text>
                 <Text style={{ marginBottom: 4 }}>N° : {order.invoice?.reference}</Text>
                 <Text style={{ marginBottom: 4 }}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                 <Text style={{ marginBottom: 4 }}>Tél : {order.customer?.tel}</Text>
@@ -192,22 +192,24 @@ const FactureDocument: FC<TypeDocument> = ({
           {orderProducts.map(item => (
             <React.Fragment key={item.id}>
               <View style={styles.tableChild}><Text>{item.product?.name}</Text></View>
-              <View style={styles.tableChild}><Text>{item.qte}</Text></View>
+              <View style={styles.tableChild}>
+                <Text>{item.qte} {item.type_de_vente}{(item.qte || 0) > 0 && 'S'}</Text>
+              </View>
               <View style={styles.tableChild}>
                 <Text>
                   {(item.prix_de_vente || '0').toString() !== (item.product?.prix_unitaire || '0').toString() ? <>
-                    {item.prix_de_vente}
+                    {formatCurrency((parseInt(item.prix_de_vente?.toString() || '0',10) || 0),'XAF').replace('FCFA','')}
                   </>:<>
-                    {item.product?.prix_unitaire}
+                    {formatCurrency((parseInt(item.product?.prix_unitaire?.toString() || '0',10) || 0),'XAF').replace('FCFA','')}
                   </>}
                 </Text>
               </View>
               <View style={styles.tableChild}>
                 <Text>
                   {(item.prix_de_vente || '0').toString() !== (item.product?.prix_unitaire || '0').toString() ? <>
-                    {(parseInt(item.prix_de_vente?.toString() || '0',10) || 0) * (parseInt(item.qte?.toString() || '0',10)||0)}
+                    {formatCurrency((parseInt(item.prix_de_vente?.toString() || '0',10) || 0) * (parseInt(item.qte?.toString() || '0',10)||0),'XAF').replace('FCFA','')}
                   </>:<>
-                    {(parseInt(item.product?.prix_unitaire?.toString() || '0',10) || 0) * (parseInt(item.qte?.toString() || '0',10)||0)}
+                    {formatCurrency((parseInt(item.product?.prix_unitaire?.toString() || '0',10) || 0) * (parseInt(item.qte?.toString() || '0',10)||0),'XAF').replace('FCFA','')}
                   </>}
                 </Text>
               </View>
