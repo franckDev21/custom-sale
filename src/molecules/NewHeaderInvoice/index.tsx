@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   title : {
-    fontSize: 20,
+    fontSize: 50,
     fontWeight: 'extrabold'
   },
   text : {
