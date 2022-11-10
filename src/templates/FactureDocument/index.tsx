@@ -193,7 +193,7 @@ const FactureDocument: FC<TypeDocument> = ({
             <React.Fragment key={item.id}>
               <View style={styles.tableChild}><Text>{item.product?.name}</Text></View>
               <View style={styles.tableChild}>
-                <Text>{item.qte} {item.type_de_vente}{(item.qte || 0) > 0 && 'S'}</Text>
+                <Text style={{ textTransform: 'uppercase' }}>{item.qte} {item.type_de_vente === 'PIECE' ? 'unité' : item.type_de_vente}{(item.qte || 0) > 0 && 'S'}</Text>
               </View>
               <View style={styles.tableChild}>
                 <Text>
