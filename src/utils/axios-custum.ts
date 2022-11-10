@@ -9,7 +9,7 @@ export const http_client = (token: string) =>  axios.create({
   // baseURL : 'http://localhost:8000/api/v1/',
   baseURL : 'https://gm-smart-api.gbionik.com/api/v1/',
   headers : {
-    'Authorization': `Bearer ${token}`
+    'Authorization': `Bearer ${token}` 
   }
 })
  
