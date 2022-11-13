@@ -1,13 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import User from "../../../Model/User";
+import TypeInitialeState from "../../../Model/type";
 
-interface TypeInitialeState {
-  user  : User|null,
-  token : string|null
-}
 const initialState: TypeInitialeState = {
   user : null,
-  token : null
+  token : null,
+  roles : null,
+  prermissions : null
 }
 
 const authSlice = createSlice({
@@ -17,6 +15,8 @@ const authSlice = createSlice({
     setAuth : (state, action) => {
       state.user = action.payload.user
       state.token = action.payload.token
+      state.roles = action.payload.roles
+      state.prermissions = action.payload.prermissions
     },
 
     logout : (state) => {

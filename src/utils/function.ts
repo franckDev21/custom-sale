@@ -47,3 +47,7 @@ export const pttc = (pht: number, type = 'AUCUN'): {pht: number,pttc: number, to
     totalIR: subIr,
   }
 }
+
+export const isContains = (tabSting : string[], search: string): boolean => {
+  return tabSting.join(',').toLocaleLowerCase().includes(search.toLocaleLowerCase())
+}

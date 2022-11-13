@@ -30,6 +30,8 @@ import InvoiceList from './pages/Invoice';
 import Cashier from './pages/Cashier';
 import Setting from './pages/Setting';
 import Contact from './pages/Contact';
+import CompanyList from './pages/Company/List';
+import AdminUser from './pages/Admin';
 
 function App() {
   return (
@@ -52,6 +54,10 @@ function App() {
           <Route path="/users/create" element={<CreateUser />} />
           <Route path="/users/company" element={<MyUserList />} />
           <Route path="/my/company/:action" element={<Company />} />
+
+          <Route path="/admins/list" element={<AdminUser />} />
+
+          <Route path='/companies' element={<CompanyList />} />
 
           <Route path="/customers" element={<CustomerList />} />
           <Route path="/customers/create/:action" element={<AddCustomer />} />

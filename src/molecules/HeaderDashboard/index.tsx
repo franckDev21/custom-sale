@@ -9,6 +9,7 @@ import Storage from '../../service/Storage'
 import { useSelector } from 'react-redux'
 import UserService from '../../service/UserService'
 import { baseURL } from '../../utils/axios-custum'
+import { isContains } from '../../utils/function'
 
 const API_STORAGE_URL = `${baseURL}/storage`;
 
@@ -41,17 +42,21 @@ const HeaderDashboard = () => {
                 <div className="ml-10 flex items-baseline space-x-4">
                   <NavLink to="/dashboard" className="nav-link" aria-current="page">Tableau de bord</NavLink>
 
-                  {UserService.getUser().role !== 'USER' && <NavLink to="/users" className="nav-link">Utilisateurs</NavLink>}
+                  {isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/admins/list" className="nav-link">Administrateurs</NavLink>}
+                  
+                  {!isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/users" className="nav-link">Utilisateurs</NavLink>}
 
-                  <NavLink to="/products" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Produits</NavLink>
+                  {!isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/companies" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Entreprises</NavLink>}
                   
-                  <NavLink to="/customers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Clients</NavLink>
+                  {!isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/products" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Produits</NavLink>}
                   
-                  <NavLink to="/orders" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Commandes</NavLink>
+                  {!isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/customers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Clients</NavLink>}
+                  
+                  {!isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/orders" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Commandes</NavLink>}
 
-                  <NavLink to="/invoices" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Factures</NavLink>
+                  {!isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/invoices" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Factures</NavLink>}
                   
-                  <NavLink to="/cashiers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Caisse</NavLink>
+                  {!isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/cashiers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Caisse</NavLink>}
 
                 </div>
               </div>
