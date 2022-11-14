@@ -1,20 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 type CardCompanyProps = {
   companyId: string;
   companyName: string;
   companyEmail: string;
+  companyActive?: boolean;
+  editing?: boolean;
+  onActive?: () => void;
+  activation?: boolean;
 };
 
 const CardCompany: React.FC<CardCompanyProps> = ({
   companyId,
   companyName,
   companyEmail,
+  companyActive = false,
+  editing = false,
+  onActive = () => {},
+  activation = false,
 }) => {
+  const toggleActive = () => {
+    onActive();
+  };
+
   return (
-    <div className="p-5 rounded-md bg-white shadow">
-      <div className="space-x-3 flex items-start">
+    <div
+      className={`p-5 rounded-md bg-white shadow ${activation && "disabled"}`}
+    >
+      <div className="space-x-3 flex items-start relative">
+        {editing && (
+          <span
+            onClick={(_) => toggleActive()}
+            className={`w-14 ${
+              activation && "disabled"
+            } cursor-pointer rounded-full flex items-center h-6 absolute right-0 -top-2 ${
+              companyActive
+                ? "bg-green-200 justify-end"
+                : "bg-red-200 justify-start"
+            }  py-1.5 px-0.5`}
+          >
+            <span className="w-5 h-5 bg-white shadow rounded-full"></span>
+          </span>
+        )}
         <div className="w-14 h-14 bg-gray-200 flex-none text-gray-500 rounded-full font-bold flex items-center text-sm justify-center">
           LOGO
         </div>
@@ -24,14 +52,16 @@ const CardCompany: React.FC<CardCompanyProps> = ({
         </div>
       </div>
 
-      <div className="mt-3">
-        <Link
-          to={`company/${companyId}/view`}
-          className="px-2 uppercase py-1.5 rounded-md bg-primary text-white text-xs"
-        >
-          voir la boutique
-        </Link>
-      </div>
+      {!editing && (
+        <div className="mt-3">
+          <Link
+            to={`company/${companyId}/view`}
+            className="px-2 uppercase py-1.5 rounded-md bg-primary text-white text-xs"
+          >
+            voir la boutique
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

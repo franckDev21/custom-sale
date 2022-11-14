@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import DataTable, { TableColumn } from "react-data-table-component";
 import { FaEye, FaTrash } from "react-icons/fa";
-import { MdAdminPanelSettings, MdOutgoingMail } from "react-icons/md";
+import { MdAdminPanelSettings } from "react-icons/md";
 
 import "./List.scss";
 import { Modal } from "flowbite-react";
@@ -10,12 +10,11 @@ import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import { BiUserPlus } from "react-icons/bi";
 import UserService from "../../service/UserService";
 import { http_client } from "../../utils/axios-custum";
 import Storage from "../../service/Storage";
 import User from "../../Model/User";
-import { extraiText, formatDate } from "../../utils/function";
+import { formatDate } from "../../utils/function";
 import DashboardLayout from "../../templates/DashboardLayout";
 import Loader from "../../atoms/Loader";
 import UserPrint from "../../templates/Userprint";
@@ -25,8 +24,8 @@ import { BsPrinterFill } from "react-icons/bs";
 type TypeAdminUser = {};
 
 const GET_ADMIN_URL = "admins";
-const DELETE_USERS_COMPANY_URL = "users/companies";
-const TOGGLE_ACTIVE_USERS_COMPANY_URL = "users/companies/toggle-active";
+const DELETE_ADMIN_USER_URL = "admins";
+const TOGGLE_ACTIVE_ADMIN_USER_URL = "admin-user/toggle-active";
 
 const AdminUser: React.FC<TypeAdminUser> = () => {
   const [loading, setLoading] = useState(true);
@@ -205,12 +204,12 @@ const AdminUser: React.FC<TypeAdminUser> = () => {
       name: "",
       cell: (row) => (
         <h1 className=" flex items-center justify-center">
-          <a
-            href="/"
+          <Link
+            to={`/admins/${row.id}/show`}
             className="font-medium ml-2 text-base text-blue-500 p-2 bg-blue-100 rounded-full inline-block dark:text-blue-500 hover:underline"
           >
             <FaEye />
-          </a>
+          </Link>
           <button
             onClick={(_) => onClick(row.id || "1")}
             className="font-medium ml-2 text-red-500 w-8 h-8 justify-center items-center  bg-red-100 rounded-full inline-flex dark:text-red-500 hover:underline"
@@ -233,7 +232,7 @@ const AdminUser: React.FC<TypeAdminUser> = () => {
     setDeleting(true);
     // delete user company
     http_client(Storage.getStorage("auth").token)
-      .delete(`${DELETE_USERS_COMPANY_URL}/${currentIdComapany}`)
+      .delete(`${DELETE_ADMIN_USER_URL}/${currentIdComapany}`)
       .then((res) => {
         setDeleting(false);
         deleteUser(currentIdComapany || "1");
@@ -264,7 +263,7 @@ const AdminUser: React.FC<TypeAdminUser> = () => {
   const toggleActive = (id: string) => {
     setActivations(true);
     http_client(Storage.getStorage("auth").token)
-      .post(`${TOGGLE_ACTIVE_USERS_COMPANY_URL}/${id}`)
+      .post(`${TOGGLE_ACTIVE_ADMIN_USER_URL}/${id}`)
       .then((res) => {
         setActivations(false);
         updateActive(id || "1");
@@ -297,7 +296,8 @@ const AdminUser: React.FC<TypeAdminUser> = () => {
                   "disabled"
                 }  justify-start text-sm border-4 border-gray-700 items-center space-x-2 rounded px-2 py-1 text-white bg-gray-700 hover:bg-gray-800 transition w-auto ml-3`}
               >
-                Créer un administrateur <MdAdminPanelSettings className="ml-2 text-lg" />
+                Créer un administrateur{" "}
+                <MdAdminPanelSettings className="ml-2 text-lg" />
               </Link>
             </div>
           </div>
@@ -316,7 +316,7 @@ const AdminUser: React.FC<TypeAdminUser> = () => {
             <div className="text-center">
               <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Voulez-vous vraiment supprimer cette entreprise ?
+                Voulez-vous vraiment supprimer cette administrateur ?
               </h3>
               <div className="flex justify-center gap-4">
                 <button

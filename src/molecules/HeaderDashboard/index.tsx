@@ -42,7 +42,7 @@ const HeaderDashboard = () => {
                 <div className="ml-10 flex items-baseline space-x-4">
                   <NavLink to="/dashboard" className="nav-link" aria-current="page">Tableau de bord</NavLink>
 
-                  {isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/admins/list" className="nav-link">Administrateurs</NavLink>}
+                  {isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/admins" className="nav-link">Administrateurs</NavLink>}
                   
                   {!isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/users" className="nav-link">Utilisateurs</NavLink>}
 

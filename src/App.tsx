@@ -32,6 +32,7 @@ import Setting from './pages/Setting';
 import Contact from './pages/Contact';
 import CompanyList from './pages/Company/List';
 import AdminUser from './pages/Admin';
+import AdminUserDetail from './pages/Admin/Detail';
 
 function App() {
   return (
@@ -55,7 +56,8 @@ function App() {
           <Route path="/users/company" element={<MyUserList />} />
           <Route path="/my/company/:action" element={<Company />} />
 
-          <Route path="/admins/list" element={<AdminUser />} />
+          <Route path="/admins" element={<AdminUser />} />
+          <Route path="/admins/:id/show" element={<AdminUserDetail />} />
 
           <Route path='/companies' element={<CompanyList />} />
 
