@@ -48,15 +48,15 @@ const HeaderDashboard = () => {
 
                   {!isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/companies" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Entreprises</NavLink>}
                   
-                  {!isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/products" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Produits</NavLink>}
+                  {!isContains(UserService.getAuth().roles || [''],'super') && !isContains(UserService.getAuth().roles || [''],'admin') && <NavLink to="/products" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Produits</NavLink>}
                   
-                  {!isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/customers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Clients</NavLink>}
+                  {!isContains(UserService.getAuth().roles || [''],'super') && !isContains(UserService.getAuth().roles || [''],'admin') && <NavLink to="/customers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Clients</NavLink>}
                   
-                  {!isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/orders" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Commandes</NavLink>}
+                  {!isContains(UserService.getAuth().roles || [''],'super') &&  !isContains(UserService.getAuth().roles || [''],'admin') &&  <NavLink to="/orders" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Commandes</NavLink>}
 
-                  {!isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/invoices" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Factures</NavLink>}
+                  {!isContains(UserService.getAuth().roles || [''],'super') &&  !isContains(UserService.getAuth().roles || [''],'admin') &&  <NavLink to="/invoices" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Factures</NavLink>}
                   
-                  {!isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/cashiers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Caisse</NavLink>}
+                  {!isContains(UserService.getAuth().roles || [''],'super') &&  !isContains(UserService.getAuth().roles || [''],'admin') &&  <NavLink to="/cashiers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Caisse</NavLink>}
 
                 </div>
               </div>
