@@ -58,6 +58,7 @@ function App() {
 
           <Route path="/admins" element={<AdminUser />} />
           <Route path="/admins/:id/show" element={<AdminUserDetail />} />
+          <Route path="/admins/create/new" element={<CreateUser type='admin' />} />
 
           <Route path='/companies' element={<CompanyList />} />
 

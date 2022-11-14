@@ -289,7 +289,7 @@ const AdminUser: React.FC<TypeAdminUser> = () => {
             <span>| Liste</span>{" "}
             <div className="flex items-center justify-end">
               <Link
-                to="/users/create"
+                to="/admins/create/new"
                 className={`flex ${
                   UserService.getUser().role === "ENTREPRISE" &&
                   !UserService.getUser().as_company &&
