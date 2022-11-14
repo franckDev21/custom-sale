@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 
 import DataTable, { TableColumn } from "react-data-table-component";
-import { FaTrash } from "react-icons/fa";
-import { MdOutgoingMail } from "react-icons/md";
-import { BsBuilding, BsPrinterFill } from "react-icons/bs";
+import { FaEye, FaTrash } from "react-icons/fa";
+import { MdAdminPanelSettings, MdOutgoingMail } from "react-icons/md";
 
 import "./List.scss";
 import { Modal } from "flowbite-react";
-import { HiEye, HiOutlineExclamationCircle } from "react-icons/hi";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { PDFDownloadLink } from "@react-pdf/renderer";
@@ -20,6 +19,8 @@ import { extraiText, formatDate } from "../../utils/function";
 import DashboardLayout from "../../templates/DashboardLayout";
 import Loader from "../../atoms/Loader";
 import UserPrint from "../../templates/Userprint";
+import AdminUserModel from "../../Model/AdminUser";
+import { BsPrinterFill } from "react-icons/bs";
 
 type TypeAdminUser = {};
 
@@ -29,7 +30,7 @@ const TOGGLE_ACTIVE_USERS_COMPANY_URL = "users/companies/toggle-active";
 
 const AdminUser: React.FC<TypeAdminUser> = () => {
   const [loading, setLoading] = useState(true);
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<AdminUserModel[]>([]);
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -43,22 +44,17 @@ const AdminUser: React.FC<TypeAdminUser> = () => {
 
   const filteredItems = users.filter(
     (item) =>
-      (item.company?.name &&
-        item.company.name.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item.company?.country &&
-        item.company.country
-          .toLowerCase()
-          .includes(filterText.toLowerCase())) ||
-      (item.company?.city &&
-        item.company.city.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item?.firstname &&
+        item.firstname.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item.lastname &&
+        item.lastname.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item.tel && item.tel.toLowerCase().includes(filterText.toLowerCase())) ||
       (item.firstname &&
         item.firstname.toLowerCase().includes(filterText.toLowerCase())) ||
       (item.lastname &&
         item.lastname.toLowerCase().includes(filterText.toLowerCase())) ||
       (item.email &&
-        item.email.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item.company?.email &&
-        item.company.email.toLowerCase().includes(filterText.toLowerCase()))
+        item.email.toLowerCase().includes(filterText.toLowerCase()))
   );
 
   const subHeaderComponentMemo = React.useMemo(() => {
@@ -114,7 +110,7 @@ const AdminUser: React.FC<TypeAdminUser> = () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
         GET_ADMIN_URL
       );
-      // setUsers(res.data);
+      setUsers(res.data);
       console.log(res.data);
 
       setLoading(false);
@@ -122,14 +118,18 @@ const AdminUser: React.FC<TypeAdminUser> = () => {
     fetUsers();
   }, [navigate]);
 
-  const columns: TableColumn<User>[] = [
+  const columns: TableColumn<AdminUserModel>[] = [
     {
       name: (
         <span className="  font-bold text-xs text-[#ac3265] uppercase">
-          Nom
+          Nom & prénom
         </span>
       ),
-      selector: (row) => row.company?.name || "Pas encore crée",
+      cell: (row) => (
+        <div className=" font-bold">
+          {row.firstname} {row.lastname}
+        </div>
+      ),
       sortable: true,
     },
     {
@@ -144,15 +144,12 @@ const AdminUser: React.FC<TypeAdminUser> = () => {
     {
       name: (
         <span className="  font-bold text-xs text-[#ac3265] uppercase">
-          Pays, ville
+          Tél
         </span>
       ),
       cell: (row) => (
         <h1 className="py-4">
-          <span className="font-semibold inline-block pb-1">
-            {row.company?.country || "Pas encore crée"}
-          </span>{" "}
-          <br /> {row.company?.city || ""}
+          <span className="inline-block pb-1">{row.tel || "Aucun"}</span>
         </h1>
       ),
       sortable: true,
@@ -160,15 +157,16 @@ const AdminUser: React.FC<TypeAdminUser> = () => {
     {
       name: (
         <span className="  font-bold text-xs text-[#ac3265] uppercase">
-          User{" "}
+          Totaux{" "}
         </span>
       ),
       cell: (row) => (
         <h1 className="flex flex-col min-w-[200px]">
           <span className="font-medium text-gray-900 inline-block pb-1">
-            {row.firstname} {row.lastname}
+            {row.companies?.length} Entreprise
+            {row.companies?.length || 0 > 1 ? "s" : ""} -{row.users?.length}{" "}
+            Utiliateur{row.users?.length || 0 > 1 ? "s" : ""}
           </span>
-          <span>{extraiText(row.email || "")}</span>
         </h1>
       ),
     },
@@ -211,7 +209,7 @@ const AdminUser: React.FC<TypeAdminUser> = () => {
             href="/"
             className="font-medium ml-2 text-base text-blue-500 p-2 bg-blue-100 rounded-full inline-block dark:text-blue-500 hover:underline"
           >
-            <MdOutgoingMail />
+            <FaEye />
           </a>
           <button
             onClick={(_) => onClick(row.id || "1")}
@@ -299,7 +297,7 @@ const AdminUser: React.FC<TypeAdminUser> = () => {
                   "disabled"
                 }  justify-start text-sm border-4 border-gray-700 items-center space-x-2 rounded px-2 py-1 text-white bg-gray-700 hover:bg-gray-800 transition w-auto ml-3`}
               >
-                Créer un administrateur <BiUserPlus className="ml-2 text-lg" />
+                Créer un administrateur <MdAdminPanelSettings className="ml-2 text-lg" />
               </Link>
             </div>
           </div>
