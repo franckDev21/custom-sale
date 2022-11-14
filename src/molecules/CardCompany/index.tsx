@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { baseURL } from "../../utils/axios-custum";
 
 type CardCompanyProps = {
   companyId: string;
@@ -9,9 +10,13 @@ type CardCompanyProps = {
   editing?: boolean;
   onActive?: () => void;
   activation?: boolean;
+  urlCompany?: string;
 };
 
+const API_STORAGE_URL = `${baseURL}/storage`;
+
 const CardCompany: React.FC<CardCompanyProps> = ({
+  urlCompany,
   companyId,
   companyName,
   companyEmail,
@@ -43,8 +48,12 @@ const CardCompany: React.FC<CardCompanyProps> = ({
             <span className="w-5 h-5 bg-white shadow rounded-full"></span>
           </span>
         )}
-        <div className="w-14 h-14 bg-gray-200 flex-none text-gray-500 rounded-full font-bold flex items-center text-sm justify-center">
-          LOGO
+        <div className="w-14 h-14 bg-gray-200 flex-none text-gray-500 overflow-hidden relative rounded-full font-bold flex items-center text-sm justify-center">
+          {urlCompany ? (
+            <img src={`${API_STORAGE_URL}/${urlCompany}`} className=' absolute w-full h-full object-cover' alt="logo" />
+          ) : (
+            "LOGO"
+          )}
         </div>
         <div>
           <h1 className="text-xl font-bold text-gray-600">{companyName}</h1>
@@ -55,7 +64,7 @@ const CardCompany: React.FC<CardCompanyProps> = ({
       {!editing && (
         <div className="mt-3">
           <Link
-            to={`company/${companyId}/view`}
+            to={`${companyId}/view`}
             className="px-2 uppercase py-1.5 rounded-md bg-primary text-white text-xs"
           >
             voir la boutique

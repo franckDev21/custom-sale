@@ -213,7 +213,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
 
               {isContains(UserService.getAuth().roles || [""], "admin") && (
                 <Link
-                  to="/cashiers"
+                  to="/companies"
                   className={`bg-white ${
                     UserService.getUser().role === "SUPER" && "disabled"
                   } cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start`}

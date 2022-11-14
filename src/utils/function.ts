@@ -62,3 +62,5 @@ export const isContains = (tabSting: string[], search: string): boolean => {
 
 export const roleIs = (role: string): boolean =>
   isContains(UserService.getAuth().roles || [""], role);
+
+export const user = () => UserService.getUser()

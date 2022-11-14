@@ -61,10 +61,11 @@ function App() {
           <Route path="/admins/create/new" element={<CreateUser type='admin' />} />
 
           <Route path='/companies' element={<CompanyList />} />
+          <Route path='/companies/:id/:action' element={<Company />} />
 
           <Route path="/customers" element={<CustomerList />} />
           <Route path="/customers/create/:action" element={<AddCustomer />} />
-
+ 
           <Route path="/products" element={<ProducList />} />
           <Route path="/products/create" element={<ProductCreate />} />
           <Route path="/products/show/:id/:slug" element={<ProductDetail />} />
