@@ -229,6 +229,79 @@ const CreateUser: React.FC<CreateUserProps> = ({ type = "user" }) => {
                 </>
               )}
 
+              {roleIs("gerant") && (
+                <>
+                  <div className="flex justify-between items-start space-x-4 mb-4">
+                    <div className=" flex-col flex w-1/3">
+                      <label htmlFor="lastname">Rôle</label>
+
+                      <select
+                        required
+                        onChange={handleOnchange}
+                        name="role"
+                        value={user.role}
+                        className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
+                      >
+                        <option value="">--- Rôle de l'utilisateur ---</option>
+                        <option value="CAISSIER">caissier</option>
+                        <option value="USER">utilisateur</option>
+                      </select>
+                    </div>
+                    <div className=" flex-col flex w-1/3">
+                      <label htmlFor="firstname">Prénom</label>
+                      <input
+                        autoFocus
+                        required
+                        onChange={handleOnchange}
+                        name="firstname"
+                        value={user.firstname || ""}
+                        type="text"
+                        placeholder="Entrer le prénom de l'utilisateur"
+                        className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
+                      />
+                    </div>
+                    <div className=" flex-col flex w-1/3">
+                      <label htmlFor="lastname">Nom</label>
+                      <input
+                        required
+                        onChange={handleOnchange}
+                        name="lastname"
+                        value={user.lastname || ""}
+                        type="text"
+                        placeholder="Entrer le prénom de le nom"
+                        className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-start space-x-4 mb-4">
+                    <div className=" flex-col flex w-1/2">
+                      <label htmlFor="email">Email</label>
+                      <input
+                        required
+                        onChange={handleOnchange}
+                        name="email"
+                        value={user.email || ""}
+                        type="email"
+                        placeholder="Email de l'utilisateur"
+                        className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
+                      />
+                    </div>
+                    <div className=" flex-col flex w-1/2">
+                      <label htmlFor="tel">Téléphone</label>
+                      <input
+                        required
+                        onChange={handleOnchange}
+                        name="tel"
+                        value={user.tel || ""}
+                        type="tel"
+                        placeholder="Numéro de téléphone ..."
+                        className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+
               {roleIs("admin") && (
                 <>
                   <div className="flex justify-between items-start space-x-4 mb-4">

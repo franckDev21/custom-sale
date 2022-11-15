@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
 import { ImUserTie } from "react-icons/im";
-import { HiUserGroup } from "react-icons/hi";
+import { HiOutlineExclamationCircle, HiUserGroup } from "react-icons/hi";
 import { AiOutlineDropbox } from "react-icons/ai";
 import Loader from "../../atoms/Loader";
 import CompanyModel from "../../Model/Company";
@@ -8,12 +8,13 @@ import Storage from "../../service/Storage";
 import DashboardLayout from "../../templates/DashboardLayout";
 import { baseURL, http_client } from "../../utils/axios-custum";
 import { toast } from "react-toastify";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsPencilSquare, BsTrash } from "react-icons/bs";
 import { FaEye } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import User from "../../Model/User";
 import UserService from "../../service/UserService";
 import { roleIs, user } from "../../utils/function";
+import { Modal } from "flowbite-react";
 
 type TotalDashboardProps = {
   totalUser?: string | number;
@@ -31,12 +32,15 @@ const UPDATE_COMPANY_URL = "my/company";
 const CREATE_COMPANY_URL = "my/company";
 const API_STORAGE_URL = `${baseURL}/storage`;
 const DASHBOARD_URL = "/dashboard/company";
+const DELETE_COMPANY_URL = "my/company";
 
 const Company: FC<TypeCompany> = () => {
   const [company, setCompany] = useState<CompanyModel>({});
   const [loading, setLoading] = useState(true);
-  const [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(true);
   const [sending, setSending] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [urlImg, setUrlImg] = useState(
     "https://thumbs.dreamstime.com/z/realty-flat-apartment-modern-building-logo-design-graphic-style-realty-flat-apartment-modern-building-logo-design-graphic-style-158041756.jpg"
   );
@@ -53,6 +57,32 @@ const Company: FC<TypeCompany> = () => {
   const { action, id } = useParams();
 
   const navigate = useNavigate();
+
+  const onClick = () => {
+    setShowModal(!showModal);
+  };
+
+  const confirmDelete = () => {
+    setShowModal(false);
+
+    setDeleting(true);
+    // delete user company
+    http_client(Storage.getStorage("auth").token)
+      .delete(`${DELETE_COMPANY_URL}/${company.id}`)
+      .then((res) => {
+        setDeleting(false);
+        toast.success(res.data.message);
+        navigate("/companies");
+      })
+      .catch((err: any) => {
+        setDeleting(false);
+        console.log(err);
+      });
+  };
+
+  const onClose = () => {
+    setShowModal(false);
+  };
 
   const handleChangImageFile = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
@@ -153,7 +183,7 @@ const Company: FC<TypeCompany> = () => {
   };
 
   useEffect(() => {
-    if (!roleIs("admin")) {
+    if (!roleIs("admin") && !roleIs("gerant")) {
       navigate("/notfund");
     }
 
@@ -174,6 +204,10 @@ const Company: FC<TypeCompany> = () => {
           console.log(err);
         });
     } else {
+      if (roleIs("gerant")) {
+        navigate(`/companies/${user().company_id}/view`);
+      }
+
       setEditing(true);
       setLoading(false);
     }
@@ -238,6 +272,43 @@ const Company: FC<TypeCompany> = () => {
       }
     >
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <Modal
+          show={showModal || deleting}
+          size="md"
+          popup={true}
+          onClose={onClose}
+        >
+          <Modal.Header />
+          <Modal.Body>
+            <div className="text-center">
+              <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
+              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                Voulez-vous vraiment supprimer cette entreprise ?
+              </h3>
+              <div className="flex justify-center gap-4">
+                <button
+                  color="failure"
+                  className="bg-red-500 text-white rounded-md px-4 py-2"
+                  onClick={confirmDelete}
+                >
+                  {deleting ? (
+                    <Loader className="flex justify-center items-center" />
+                  ) : (
+                    "Oui confirmer"
+                  )}
+                </button>
+                <button
+                  color="gray"
+                  onClick={onClose}
+                  className="bg-gray-500 text-white rounded-md px-4 py-2"
+                >
+                  Non , Annuler
+                </button>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+
         {!loading ? (
           <form onSubmit={handleSubmit} className="px-4 py-6 sm:px-0">
             <div className="min-h-[24rem]  rounded-lg border-4 border-dashed border-gray-300 bg-white relative">
@@ -267,6 +338,7 @@ const Company: FC<TypeCompany> = () => {
                       "Sauvegarder les informations"
                     )}
                   </button>
+
                   <button
                     onClick={(_) => setEditing(!editing)}
                     title="Click here to edit the company"
@@ -274,6 +346,19 @@ const Company: FC<TypeCompany> = () => {
                   >
                     <FaEye />
                   </button>
+
+                  {roleIs("admin") && (
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onClick();
+                      }}
+                      title="Supprimer l'entreprise"
+                      className="bg-red-700 flex justify-center items-center text-white text-xl ml-1 p-3 rounded-md shadow-md"
+                    >
+                      <BsTrash />
+                    </button>
+                  )}
                 </div>
               )}
 

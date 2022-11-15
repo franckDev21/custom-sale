@@ -17,10 +17,7 @@ import { http_client } from "../../utils/axios-custum";
 import Storage from "../../service/Storage";
 import { formatCurrency, isContains, roleIs } from "../../utils/function";
 import { Alert } from "flowbite-react";
-import AdminUser from "../../Model/AdminUser";
-import Company from "../../Model/Company";
 import { RiAdminFill } from "react-icons/ri";
-import { MdAdminPanelSettings } from "react-icons/md";
 
 type TypeDashboard = {};
 
@@ -78,7 +75,6 @@ const Dashboard: React.FC<TypeDashboard> = () => {
           setUser(UserService.getUser());
           setDashboardInfo(res.data);
         }
-        console.log(res.data);
       })
       .catch((err) => {
         setLoading(false);

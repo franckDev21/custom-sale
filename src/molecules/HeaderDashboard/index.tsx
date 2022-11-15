@@ -9,7 +9,7 @@ import Storage from '../../service/Storage'
 import { useSelector } from 'react-redux'
 import UserService from '../../service/UserService'
 import { baseURL } from '../../utils/axios-custum'
-import { isContains } from '../../utils/function'
+import { isContains, roleIs, user } from '../../utils/function'
 
 const API_STORAGE_URL = `${baseURL}/storage`;
 
@@ -42,21 +42,23 @@ const HeaderDashboard = () => {
                 <div className="ml-10 flex items-baseline space-x-4">
                   <NavLink to="/dashboard" className="nav-link" aria-current="page">Tableau de bord</NavLink>
 
-                  {isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/admins" className="nav-link">Administrateurs</NavLink>}
+                  {roleIs('super') && <NavLink to="/admins" className="nav-link">Administrateurs</NavLink>}
                   
-                  {!isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/users" className="nav-link">Utilisateurs</NavLink>}
+                  {(roleIs('admin') || roleIs('gerant')) && <NavLink to="/users" className="nav-link">Utilisateurs</NavLink>}
 
-                  {!isContains(UserService.getAuth().roles || [''],'super') && <NavLink to="/companies" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Entreprises</NavLink>}
+                  {roleIs("admin") && <NavLink to="/companies" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Entreprises</NavLink>}
                   
-                  {!isContains(UserService.getAuth().roles || [''],'super') && !isContains(UserService.getAuth().roles || [''],'admin') && <NavLink to="/products" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Produits</NavLink>}
+                  {roleIs("gerant") && <NavLink to={`/companies/${user().company_id}/view`} className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Entreprises</NavLink>}
                   
-                  {!isContains(UserService.getAuth().roles || [''],'super') && !isContains(UserService.getAuth().roles || [''],'admin') && <NavLink to="/customers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Clients</NavLink>}
+                  {!roleIs('super') && !roleIs('admin') && <NavLink to="/products" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Produits</NavLink>}
                   
-                  {!isContains(UserService.getAuth().roles || [''],'super') &&  !isContains(UserService.getAuth().roles || [''],'admin') &&  <NavLink to="/orders" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Commandes</NavLink>}
+                  {!roleIs('super') && !roleIs('admin') && <NavLink to="/customers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Clients</NavLink>}
+                  
+                  {!roleIs('super') &&  !roleIs('admin') &&  <NavLink to="/orders" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Commandes</NavLink>}
 
-                  {!isContains(UserService.getAuth().roles || [''],'super') &&  !isContains(UserService.getAuth().roles || [''],'admin') &&  <NavLink to="/invoices" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Factures</NavLink>}
+                  {!roleIs('super') &&  !roleIs('admin') &&  <NavLink to="/invoices" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Factures</NavLink>}
                   
-                  {!isContains(UserService.getAuth().roles || [''],'super') &&  !isContains(UserService.getAuth().roles || [''],'admin') &&  <NavLink to="/cashiers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Caisse</NavLink>}
+                  {!roleIs('super') &&  !roleIs('admin') &&  <NavLink to="/cashiers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Caisse</NavLink>}
 
                 </div>
               </div>

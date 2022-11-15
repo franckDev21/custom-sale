@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { AiFillFolderOpen } from "react-icons/ai";
 import { BsBuilding, BsPlusLg } from "react-icons/bs";
 import { HiUserGroup } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AdminUser from "../../../Model/AdminUser";
 import Company from "../../../Model/Company";
 import CardCompany from "../../../molecules/CardCompany";
 import Storage from "../../../service/Storage";
 import DashboardLayout from "../../../templates/DashboardLayout";
 import { http_client } from "../../../utils/axios-custum";
+import { roleIs } from "../../../utils/function";
 
 type CompanyListProps = {};
 
@@ -21,7 +23,13 @@ const CompanyList: React.FC<CompanyListProps> = () => {
   }>({});
   const [companies, setCompanies] = useState<Company[]>([]);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+    if (!roleIs("admin")) {
+      navigate("/notFound");
+    }
+
     Promise.all([
       http_client(Storage.getStorage("auth").token).get(
         GET_COMPANIES_FORM_ADMIN_USER
@@ -71,18 +79,25 @@ const CompanyList: React.FC<CompanyListProps> = () => {
       }
     >
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-3 gap-3 p-4">
-          {companies.map((company) => (
-            <CardCompany
-              key={company.id}
-              companyId={company.id?.toString() || ""}
-              companyName={company.name || ""}
-              companyEmail={company.email || ""}
-              urlCompany={company.logo || ""}
-              companyActive={company.active || false}
-            />
-          ))}
-        </div>
+        {companies.length >= 1 ? (
+          <div className="grid grid-cols-3 gap-3 p-4">
+            {companies.map((company) => (
+              <CardCompany
+                key={company.id}
+                companyId={company.id?.toString() || ""}
+                companyName={company.name || ""}
+                companyEmail={company.email || ""}
+                urlCompany={company.logo || ""}
+                companyActive={company.active || false}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className=" flex justify-center items-center text-gray-500 min-h-[300px] flex-col text-5xl font-bold w-full text-center ">
+            <AiFillFolderOpen className=" text-8xl " />
+            Aucune Entreprise
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );

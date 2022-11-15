@@ -163,8 +163,7 @@ const AdminUser: React.FC<TypeAdminUser> = () => {
         <h1 className="flex flex-col min-w-[200px]">
           <span className="font-medium text-gray-900 inline-block pb-1">
             {row.companies?.length} Entreprise
-            {row.companies?.length || 0 > 1 ? "s" : ""} -{row.users?.length}{" "}
-            Utiliateur{row.users?.length || 0 > 1 ? "s" : ""}
+            {row.companies?.length || 0 > 1 ? "s" : ""}
           </span>
         </h1>
       ),

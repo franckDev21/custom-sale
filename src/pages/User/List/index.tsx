@@ -6,7 +6,7 @@ import { http_client } from "../../../utils/axios-custum";
 
 import DataTable, { TableColumn } from "react-data-table-component";
 import Loader from "../../../atoms/Loader";
-import { formatDate, roleIs } from "../../../utils/function";
+import { formatDate, roleIs, user } from "../../../utils/function";
 import { FaTrash } from "react-icons/fa";
 import { MdOutgoingMail } from "react-icons/md";
 import { BsBuilding, BsEye, BsPrinterFill } from "react-icons/bs";
@@ -103,12 +103,7 @@ const UserList: React.FC<TypeUserList> = () => {
   }, [filterText, resetPaginationToggle]);
 
   useEffect(() => {
-    if (
-      roleIs("user") ||
-      roleIs("gerant") ||
-      roleIs("caisse") ||
-      roleIs("super")
-    ) {
+    if (roleIs("user") || roleIs("caisse") || roleIs("super")) {
       navigate("/notfound");
     }
 
@@ -116,7 +111,7 @@ const UserList: React.FC<TypeUserList> = () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
         GET_USERS_URL
       );
-      setUsers(res.data.data);
+      setUsers(res.data);
       setLoading(false);
     };
     fetUsers();
@@ -289,13 +284,24 @@ const UserList: React.FC<TypeUserList> = () => {
           <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
             <span>| Liste</span>
             <div className="flex items-center justify-end">
-              <Link
-                to="/companies"
-                className={`flex   justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}
-              >
-                <BsEye className="mr-2" />
-                Voir mes entreprises
-              </Link>
+              {roleIs("admin") ? (
+                <Link
+                  to="/companies"
+                  className={`flex   justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}
+                >
+                  <BsEye className="mr-2" />
+                  Voir mes entreprises
+                </Link>
+              ) : (
+                // /companies/:id/:action
+                <Link
+                  to={`/companies/${user().company_id}/view`}
+                  className={`flex  justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}
+                >
+                  <BsEye className="mr-2" />
+                  Voir mon entreprise
+                </Link>
+              )}
               <Link
                 to="/users/create"
                 className={`flex ${
