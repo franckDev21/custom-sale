@@ -167,7 +167,7 @@ const UserList: React.FC<TypeUserList> = () => {
           Role
         </span>
       ),
-      selector: (row) => row.role || "",
+      selector: (row) => row.roles[0].name || "",
       sortable: true,
     },
     {

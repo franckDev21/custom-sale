@@ -48,6 +48,7 @@ const CardCompany: React.FC<CardCompanyProps> = ({
             <span className="w-5 h-5 bg-white shadow rounded-full"></span>
           </span>
         )}
+        {!editing && <span className={` absolute -top-2 text-xs px-1 py-0.5 right-0 ${companyActive ? ' text-green-500 bg-green-100':'text-red-400 bg-red-100'}`}>{companyActive ? 'Activé':'Non activé'}</span>}
         <div className="w-14 h-14 bg-gray-200 flex-none text-gray-500 overflow-hidden relative rounded-full font-bold flex items-center text-sm justify-center">
           {urlCompany ? (
             <img src={`${API_STORAGE_URL}/${urlCompany}`} className=' absolute w-full h-full object-cover' alt="logo" />

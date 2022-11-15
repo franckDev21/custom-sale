@@ -79,6 +79,7 @@ const CompanyList: React.FC<CompanyListProps> = () => {
               companyName={company.name || ""}
               companyEmail={company.email || ""}
               urlCompany={company.logo || ""}
+              companyActive={company.active || false}
             />
           ))}
         </div>

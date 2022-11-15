@@ -1,13 +1,21 @@
-import React, { useState, FormEvent, ChangeEvent, useRef } from "react";
+import React, {
+  useState,
+  FormEvent,
+  ChangeEvent,
+  useRef,
+  useEffect,
+} from "react";
 import { FaCheckCircle, FaEye, FaEyeSlash } from "react-icons/fa";
 import { HiOutlineArrowNarrowLeft } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../../../atoms/Loader";
+import Company from "../../../Model/Company";
 import User from "../../../Model/User";
 import Storage from "../../../service/Storage";
 import DashboardLayout from "../../../templates/DashboardLayout";
 import { http_client } from "../../../utils/axios-custum";
+import { roleIs } from "../../../utils/function";
 
 type CreateUserProps = {
   type?: string;
@@ -15,25 +23,31 @@ type CreateUserProps = {
 
 const CREATE_USER_URL = "/users/create";
 const CREATE_ADMIN_USER_URL = "/admin/user/create";
+const GET_COMPANIES_FORM_ADMIN_USER = "companies";
 
 const CreateUser: React.FC<CreateUserProps> = ({ type = "user" }) => {
   const [sending, setSending] = useState(false);
   const [errForm, setErrForm] = useState("");
   const [success, setSuccess] = useState(false);
-  const [user, setUser] = useState<User>({
-    active: true,
-  });
+  const [user, setUser] = useState<User>({ active: true });
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
+  const [companies, setCompanies] = useState<Company[]>([]);
 
   // ref
   const inputPassword = useRef(null);
   const inputPassword2 = useRef(null);
 
-  const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleOnchange = (e: ChangeEvent<HTMLInputElement | any>) => {
     if (errForm) setErrForm("");
 
     switch (e.target.name) {
+      case "role":
+        setUser({ ...user, role: e.target.value });
+        break;
+      case "company_id":
+        setUser({ ...user, company_id: e.target.value });
+        break;
       case "firstname":
         setUser({ ...user, firstname: e.target.value });
         break;
@@ -63,7 +77,10 @@ const CreateUser: React.FC<CreateUserProps> = ({ type = "user" }) => {
     setSending(true);
     setErrForm("");
     http_client(Storage.getStorage("auth").token)
-      .post(type === "admin" ? CREATE_ADMIN_USER_URL : CREATE_USER_URL, user)
+      .post(
+        type === "admin" ? CREATE_ADMIN_USER_URL : `${CREATE_USER_URL}`,
+        user
+      )
       .then((res) => {
         setSending(false);
         toast.success(res.data.message);
@@ -75,6 +92,19 @@ const CreateUser: React.FC<CreateUserProps> = ({ type = "user" }) => {
         console.log(err);
       });
   };
+
+  useEffect(() => {
+    if (roleIs("admin")) {
+      http_client(Storage.getStorage("auth").token)
+        .get(GET_COMPANIES_FORM_ADMIN_USER)
+        .then((res) => {
+          setCompanies(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, []);
 
   return (
     <DashboardLayout
@@ -141,60 +171,154 @@ const CreateUser: React.FC<CreateUserProps> = ({ type = "user" }) => {
                 </div>
               )}
 
-              <div className="flex justify-between items-start space-x-4 mb-4">
-                <div className=" flex-col flex w-1/2">
-                  <label htmlFor="firstname">Prénom</label>
-                  <input
-                    autoFocus
-                    required
-                    onChange={handleOnchange}
-                    name="firstname"
-                    value={user.firstname || ""}
-                    type="text"
-                    placeholder="Entrer le prénom de l'utilisateur"
-                    className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
-                  />
-                </div>
-                <div className=" flex-col flex w-1/2">
-                  <label htmlFor="lastname">Nom</label>
-                  <input
-                    required
-                    onChange={handleOnchange}
-                    name="lastname"
-                    value={user.lastname || ""}
-                    type="text"
-                    placeholder="Entrer le prénom de le nom"
-                    className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
-                  />
-                </div>
-              </div>
+              {roleIs("super") && (
+                <>
+                  <div className="flex justify-between items-start space-x-4 mb-4">
+                    <div className=" flex-col flex w-1/2">
+                      <label htmlFor="firstname">Prénom</label>
+                      <input
+                        autoFocus
+                        required
+                        onChange={handleOnchange}
+                        name="firstname"
+                        value={user.firstname || ""}
+                        type="text"
+                        placeholder="Entrer le prénom de l'utilisateur"
+                        className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
+                      />
+                    </div>
+                    <div className=" flex-col flex w-1/2">
+                      <label htmlFor="lastname">Nom</label>
+                      <input
+                        required
+                        onChange={handleOnchange}
+                        name="lastname"
+                        value={user.lastname || ""}
+                        type="text"
+                        placeholder="Entrer le prénom de le nom"
+                        className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-start space-x-4 mb-4">
+                    <div className=" flex-col flex w-1/2">
+                      <label htmlFor="email">Email</label>
+                      <input
+                        required
+                        onChange={handleOnchange}
+                        name="email"
+                        value={user.email || ""}
+                        type="email"
+                        placeholder="Email de l'utilisateur"
+                        className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
+                      />
+                    </div>
+                    <div className=" flex-col flex w-1/2">
+                      <label htmlFor="tel">Téléphone</label>
+                      <input
+                        required
+                        onChange={handleOnchange}
+                        name="tel"
+                        value={user.tel || ""}
+                        type="tel"
+                        placeholder="Numéro de téléphone ..."
+                        className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
 
-              <div className="flex justify-between items-start space-x-4 mb-4">
-                <div className=" flex-col flex w-1/2">
-                  <label htmlFor="email">Email</label>
-                  <input
-                    required
-                    onChange={handleOnchange}
-                    name="email"
-                    value={user.email || ""}
-                    type="email"
-                    placeholder="Email de l'utilisateur"
-                    className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
-                  />
-                </div>
-                <div className=" flex-col flex w-1/2">
-                  <label htmlFor="tel">Téléphone</label>
-                  <input
-                    required
-                    onChange={handleOnchange}
-                    name="tel"
-                    value={user.tel || ""}
-                    type="tel"
-                    placeholder="Numéro de téléphone ..."
-                    className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
-                  />
-                </div>
-              </div>
+              {roleIs("admin") && (
+                <>
+                  <div className="flex justify-between items-start space-x-4 mb-4">
+                    <div className=" flex-col flex w-1/3">
+                      <label htmlFor="lastname">Rôle</label>
+
+                      <select
+                        required
+                        onChange={handleOnchange}
+                        name="role"
+                        value={user.role}
+                        className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
+                      >
+                        <option value="">--- Rôle de l'utilisateur ---</option>
+                        <option value="GERANT">gérant</option>
+                        <option value="CAISSIER">caissier</option>
+                        <option value="USER">utilisateur</option>
+                      </select>
+                    </div>
+                    <div className=" flex-col flex w-1/3">
+                      <label htmlFor="firstname">Prénom</label>
+                      <input
+                        autoFocus
+                        required
+                        onChange={handleOnchange}
+                        name="firstname"
+                        value={user.firstname || ""}
+                        type="text"
+                        placeholder="Entrer le prénom de l'utilisateur"
+                        className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
+                      />
+                    </div>
+                    <div className=" flex-col flex w-1/3">
+                      <label htmlFor="lastname">Nom</label>
+                      <input
+                        required
+                        onChange={handleOnchange}
+                        name="lastname"
+                        value={user.lastname || ""}
+                        type="text"
+                        placeholder="Entrer le prénom de le nom"
+                        className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-start space-x-4 mb-4">
+                    <div className=" flex-col flex w-1/3">
+                      <label htmlFor="lastname">Entreprise</label>
+                      <select
+                        required
+                        onChange={handleOnchange}
+                        name="company_id"
+                        value={user.company_id}
+                        className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
+                      >
+                        <option value="">--Choisissez une entreprise--</option>
+                        {companies.map((company) => (
+                          <option key={company.id} value={company.id}>
+                            {company.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className=" flex-col flex w-1/3">
+                      <label htmlFor="email">Email</label>
+                      <input
+                        required
+                        onChange={handleOnchange}
+                        name="email"
+                        value={user.email || ""}
+                        type="email"
+                        placeholder="Email de l'utilisateur"
+                        className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
+                      />
+                    </div>
+                    <div className=" flex-col flex w-1/3">
+                      <label htmlFor="tel">Téléphone</label>
+                      <input
+                        required
+                        onChange={handleOnchange}
+                        name="tel"
+                        value={user.tel || ""}
+                        type="tel"
+                        placeholder="Numéro de téléphone ..."
+                        className="px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full"
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
 
               <div className="flex justify-between items-start space-x-4">
                 <div className=" flex-col flex w-1/2">
