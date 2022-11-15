@@ -13,7 +13,7 @@ import { FaEye } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import User from "../../Model/User";
 import UserService from "../../service/UserService";
-import { roleIs } from "../../utils/function";
+import { roleIs, user } from "../../utils/function";
 
 type TotalDashboardProps = {
   totalUser?: string | number;
@@ -127,7 +127,7 @@ const Company: FC<TypeCompany> = () => {
     setSending(true);
     if (action === "create") {
       http_client(Storage.getStorage("auth").token)
-        .post(`${CREATE_COMPANY_URL}/${UserService.getUser().id}`, company)
+        .post(`${CREATE_COMPANY_URL}/${user().id}`, company)
         .then((res) => {
           toast.success(res.data.message);
 
@@ -191,14 +191,16 @@ const Company: FC<TypeCompany> = () => {
   }, [action, navigate]);
 
   useEffect(() => {
-    http_client(Storage.getStorage("auth").token)
-      .get(`${DASHBOARD_URL}/${id}`)
-      .then((res) => {
-        setDashboardInfo(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (action !== "create") {
+      http_client(Storage.getStorage("auth").token)
+        .get(`${DASHBOARD_URL}/${id}`)
+        .then((res) => {
+          setDashboardInfo(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   return (
@@ -487,7 +489,7 @@ const Company: FC<TypeCompany> = () => {
                           Code Postal
                         </label>
                         <input
-                          required
+                          
                           disabled={!editing}
                           value={company.postal_code || ""}
                           onChange={handleOnchange}
