@@ -15,7 +15,10 @@ const GET_COMPANIES_FORM_ADMIN_USER = "companies";
 const DASHBOARD_ADMIN_USER_URL = "/dashboard/admin";
 
 const CompanyList: React.FC<CompanyListProps> = () => {
-  const [adminUser, setAdminUser] = useState<AdminUser>({});
+  const [adminUser, setAdminUser] = useState<{
+    totalCompany?: string;
+    totalUsers?: string;
+  }>({});
   const [companies, setCompanies] = useState<Company[]>([]);
 
   useEffect(() => {
@@ -46,14 +49,14 @@ const CompanyList: React.FC<CompanyListProps> = () => {
               <BsBuilding />{" "}
               <span className="pl-1">
                 {" "}
-                {adminUser.companies?.length} Entreprise(s)
+                {adminUser.totalCompany} Entreprise(s)
               </span>
             </button>
             <button className="flex text-lg cursor-default  justify-start border-4 items-center space-x-2 rounded px-2 py-1 text-gray-700 bg-gray-50 w-auto ml-3">
               <HiUserGroup />{" "}
               <span className="pl-1">
                 {" "}
-                {adminUser.users?.length} Utilisateur(s)
+                {adminUser.totalUsers} Utilisateur(s)
               </span>
             </button>
           </div>

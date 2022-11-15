@@ -130,20 +130,8 @@ const Company: FC<TypeCompany> = () => {
         .post(`${CREATE_COMPANY_URL}/${user().id}`, company)
         .then((res) => {
           toast.success(res.data.message);
-
-          let user: User = Storage.getStorage("auth").user;
-          let newUser: User = {
-            ...user,
-            as_company: true,
-            company_id: res.data.company_id,
-          };
-
-          Storage.setStorage("auth", {
-            token: Storage.getStorage("auth").token,
-            user: newUser,
-          });
-
           setSending(false);
+          navigate(`/companies/${res.data.company_id}/view`);
         })
         .catch((err) => {
           console.log(err);
@@ -151,9 +139,10 @@ const Company: FC<TypeCompany> = () => {
         });
     } else {
       http_client(Storage.getStorage("auth").token)
-        .post(`${UPDATE_COMPANY_URL}/${company.id}`, company)
+        .post(`${UPDATE_COMPANY_URL}/update/${company.id}`, company)
         .then((res) => {
           toast.success(res.data.message);
+          navigate(`/companies/${company.id}/view`);
           setSending(false);
         })
         .catch((err) => {
@@ -489,7 +478,6 @@ const Company: FC<TypeCompany> = () => {
                           Code Postal
                         </label>
                         <input
-                          
                           disabled={!editing}
                           value={company.postal_code || ""}
                           onChange={handleOnchange}
