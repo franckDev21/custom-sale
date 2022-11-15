@@ -9,7 +9,7 @@ import Loader from "../../../atoms/Loader";
 import { formatDate } from "../../../utils/function";
 import { FaTrash } from "react-icons/fa";
 import { MdOutgoingMail } from "react-icons/md";
-import { BsBuilding, BsPrinterFill } from 'react-icons/bs';
+import { BsBuilding, BsPrinterFill } from "react-icons/bs";
 
 import "./List.scss";
 import { Modal } from "flowbite-react";
@@ -39,7 +39,7 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
   const [deleting, setDeleting] = useState(false);
   const [activations, setActivations] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const filteredItems = users.filter(
     (item) =>
@@ -103,7 +103,7 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
   }, [filterText, resetPaginationToggle]);
 
   useEffect(() => {
-    if(UserService.getUser().role === 'USER'){
+    if (UserService.getUser().role === "USER") {
       navigate("/notfound");
     }
 
@@ -120,28 +120,48 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
   const columns: TableColumn<User>[] = [
     {
       name: (
-        <span className="  font-bold text-xs text-[#ac3265] uppercase">Photo</span>
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">
+          Photo
+        </span>
       ),
       cell: (row) => (
         <h1 className="py-4 w-10 h-10 bg-gray-100 relative overflow-hidden">
-          <img src="https://image.shutterstock.com/image-vector/default-avatar-profile-trendy-style-260nw-1759726295.jpg" className=" absolute object-cover w-full h-full top-0 " alt="" />
+          <img
+            src="https://image.shutterstock.com/image-vector/default-avatar-profile-trendy-style-260nw-1759726295.jpg"
+            className=" absolute object-cover w-full h-full top-0 "
+            alt=""
+          />
         </h1>
-      )
+      ),
     },
     {
-      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Nom</span>,
-      cell: (row) => <span className="font-bold">
-        {row.firstname} {row.lastname}
-      </span>,
+      name: (
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">
+          Nom
+        </span>
+      ),
+      cell: (row) => (
+        <span className="font-bold">
+          {row.firstname} {row.lastname}
+        </span>
+      ),
       sortable: true,
     },
     {
-      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Email</span>,
+      name: (
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">
+          Email
+        </span>
+      ),
       selector: (row) => row.email || "",
       sortable: true,
     },
     {
-      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Role</span>,
+      name: (
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">
+          Role
+        </span>
+      ),
       selector: (row) => row.role || "",
       sortable: true,
     },
@@ -262,12 +282,26 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
       headerContent={
         <>
           <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
-           <span>| Liste</span> 
+            <span>| Liste</span>
             <div className="flex items-center justify-end">
-              <Link to='/my/company/view' className={`flex ${(UserService.getUser().role === 'ENTREPRISE' && !UserService.getUser().as_company) && 'disabled'}  justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}><BsBuilding className="mr-2" />Voir mon entreprise</Link>
-              <Link to='/users/create' className={`flex ${(UserService.getUser().role === 'ENTREPRISE' && !UserService.getUser().as_company) && 'disabled'}  justify-start text-sm border-4 border-gray-700 items-center space-x-2 rounded px-2 py-1 text-white bg-gray-700 hover:bg-gray-800 transition w-auto ml-3`}>Créer un utilisateur <BiUserPlus className="ml-2 text-lg" /></Link>
+              <Link
+                to="/"
+                className={`flex  justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}
+              >
+                <BsBuilding className="mr-2" />
+                Voir mon entreprise
+              </Link>
+              <Link
+                to="/users/create"
+                className={`flex ${
+                  UserService.getUser().role === "ENTREPRISE" &&
+                  !UserService.getUser().as_company &&
+                  "disabled"
+                }  justify-start text-sm border-4 border-gray-700 items-center space-x-2 rounded px-2 py-1 text-white bg-gray-700 hover:bg-gray-800 transition w-auto ml-3`}
+              >
+                Créer un utilisateur <BiUserPlus className="ml-2 text-lg" />
+              </Link>
             </div>
-           
           </div>
         </>
       }
@@ -313,9 +347,15 @@ const MyUserList: React.FC<TypeMyUserList> = () => {
 
       <div className="mx-auto max-w-7xl py-4 sm:px-6 lg:px-8">
         <div className="flex font-bold items-center">
-          <PDFDownloadLink document={<UserPrint users={users} />} fileName="liste-des-utilisateurs.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
+          <PDFDownloadLink
+            document={<UserPrint users={users} />}
+            fileName="liste-des-utilisateurs.pdf"
+            className="text-sm text-white px-4 rounded-md bg-gray-700 py-2"
+          >
+            {" "}
+            <BsPrinterFill size={16} className="inline-block mr-1" />
             Imprimer la liste des utilisateurs
-          </PDFDownloadLink >
+          </PDFDownloadLink>
         </div>
       </div>
 

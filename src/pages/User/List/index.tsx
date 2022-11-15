@@ -6,27 +6,26 @@ import { http_client } from "../../../utils/axios-custum";
 
 import DataTable, { TableColumn } from "react-data-table-component";
 import Loader from "../../../atoms/Loader";
-import { extraiText, formatDate } from "../../../utils/function";
+import { formatDate, roleIs } from "../../../utils/function";
 import { FaTrash } from "react-icons/fa";
 import { MdOutgoingMail } from "react-icons/md";
-import { BsBuilding, BsPrinterFill } from "react-icons/bs";
+import { BsBuilding, BsEye, BsPrinterFill } from "react-icons/bs";
 
 import "./List.scss";
 import { Modal } from "flowbite-react";
-import { HiEye, HiOutlineExclamationCircle } from "react-icons/hi";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import UserService from "../../../service/UserService";
+import { BiUserPlus } from "react-icons/bi";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import UserPrint from "../../../templates/Userprint";
-import { TbArrowsRightLeft } from "react-icons/tb";
-import { BiUserPlus } from "react-icons/bi";
 
 type TypeUserList = {};
 
-const GET_USERS_URL = "users/companies";
+const GET_USERS_URL = "users";
 const DELETE_USERS_COMPANY_URL = "users/companies";
-const TOGGLE_ACTIVE_USERS_COMPANY_URL = "users/companies/toggle-active";
+const TOGGLE_ACTIVE_USER_URL = "user/toggle-active";
 
 const UserList: React.FC<TypeUserList> = () => {
   const [loading, setLoading] = useState(true);
@@ -92,7 +91,7 @@ const UserList: React.FC<TypeUserList> = () => {
             onChange={(e) => setFilterText(e.target.value)}
             type="text"
             id="table-search"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focuslue-500 block w-80 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focuslue-500"
+            className="bg-gray-100 border border-none focus:ring-2 text-gray-900 text-xs rounded-lg focus:ring-gray-700 focuslue-500 block w-80 pl-10 p-3 focus:bg-white  dark:bg-gray-700 dark:border-gray-600 ring-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-700 "
             placeholder="Search htmlFor items"
           />
           <span className=" absolute" onClick={handleClear}>
@@ -104,13 +103,15 @@ const UserList: React.FC<TypeUserList> = () => {
   }, [filterText, resetPaginationToggle]);
 
   useEffect(() => {
-    if (UserService.getUser().role !== "SUPER") {
-      if(UserService.getUser().role === 'ENTREPRISE'){
-        navigate("/users/company");
-      }else{
-        navigate("/notfound");
-      }
+    if (
+      roleIs("user") ||
+      roleIs("gerant") ||
+      roleIs("caisse") ||
+      roleIs("super")
+    ) {
+      navigate("/notfound");
     }
+
     const fetUsers = async () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
         GET_USERS_URL
@@ -125,10 +126,30 @@ const UserList: React.FC<TypeUserList> = () => {
     {
       name: (
         <span className="  font-bold text-xs text-[#ac3265] uppercase">
+          Photo
+        </span>
+      ),
+      cell: (row) => (
+        <h1 className="py-4 w-10 h-10 bg-gray-100 relative overflow-hidden">
+          <img
+            src="https://image.shutterstock.com/image-vector/default-avatar-profile-trendy-style-260nw-1759726295.jpg"
+            className=" absolute object-cover w-full h-full top-0 "
+            alt=""
+          />
+        </h1>
+      ),
+    },
+    {
+      name: (
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">
           Nom
         </span>
       ),
-      selector: (row) => row.company?.name || "Pas encore crée",
+      cell: (row) => (
+        <span className="font-bold">
+          {row.firstname} {row.lastname}
+        </span>
+      ),
       sortable: true,
     },
     {
@@ -143,33 +164,11 @@ const UserList: React.FC<TypeUserList> = () => {
     {
       name: (
         <span className="  font-bold text-xs text-[#ac3265] uppercase">
-          Pays, ville
+          Role
         </span>
       ),
-      cell: (row) => (
-        <h1 className="py-4">
-          <span className="font-semibold inline-block pb-1">
-            {row.company?.country || "Pas encore crée"}
-          </span>{" "}
-          <br /> {row.company?.city || ""}
-        </h1>
-      ),
+      selector: (row) => row.role || "",
       sortable: true,
-    },
-    {
-      name: (
-        <span className="  font-bold text-xs text-[#ac3265] uppercase">
-          User{" "}
-        </span>
-      ),
-      cell: (row) => (
-        <h1 className="flex flex-col min-w-[200px]">
-          <span className="font-medium text-gray-900 inline-block pb-1">
-            {row.firstname} {row.lastname}
-          </span>
-          <span>{extraiText(row.email || "")}</span>
-        </h1>
-      ),
     },
     {
       name: (
@@ -178,7 +177,7 @@ const UserList: React.FC<TypeUserList> = () => {
         </span>
       ),
       cell: (row) => (
-        <h1 className="pl-3 translate-x-4">
+        <h1 className="pl-3">
           <span
             onClick={(_) => toggleActive(row.id || "1")}
             className={`w-14 ${
@@ -196,7 +195,7 @@ const UserList: React.FC<TypeUserList> = () => {
     },
     {
       name: (
-        <span className=" font-bold text-xs text-[#ac3265] uppercase">
+        <span className=" font-bold text-xs text-[#ac3265] uppercase ">
           Date de création
         </span>
       ),
@@ -265,7 +264,7 @@ const UserList: React.FC<TypeUserList> = () => {
   const toggleActive = (id: string) => {
     setActivations(true);
     http_client(Storage.getStorage("auth").token)
-      .post(`${TOGGLE_ACTIVE_USERS_COMPANY_URL}/${id}`)
+      .post(`${TOGGLE_ACTIVE_USER_URL}/${id}`)
       .then((res) => {
         setActivations(false);
         updateActive(id || "1");
@@ -283,25 +282,30 @@ const UserList: React.FC<TypeUserList> = () => {
 
   return (
     <DashboardLayout
-      titleClass="w-[29.4%]"
+      titleClass="w-[29%]"
       title="Gestion des utilisateurs"
       headerContent={
         <>
           <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
-            <span>| Liste</span>{" "}
+            <span>| Liste</span>
             <div className="flex items-center justify-end">
-              <BsBuilding />{" "}
               <Link
-                to="/my/company/view"
-                className={`flex ${
-                  UserService.getUser().role === "ENTREPRISE"
-                    ? !UserService.getUser().as_company && "disabled"
-                    : "disabled"
-                } justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}
+                to="/companies"
+                className={`flex   justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}
               >
-                Voir mon entreprise <HiEye className="ml-2" />
+                <BsEye className="mr-2" />
+                Voir mes entreprises
               </Link>
-              <Link to='/users/create' className={`flex ${(UserService.getUser().role === 'ENTREPRISE' && !UserService.getUser().as_company) && 'disabled'}  justify-start text-sm border-4 border-gray-700 items-center space-x-2 rounded px-2 py-1 text-white bg-gray-700 hover:bg-gray-800 transition w-auto ml-3`}>Créer un utilisateur <BiUserPlus className="ml-2 text-lg" /></Link>
+              <Link
+                to="/users/create"
+                className={`flex ${
+                  UserService.getUser().role === "ENTREPRISE" &&
+                  !UserService.getUser().as_company &&
+                  "disabled"
+                }  justify-start text-sm border-4 border-gray-700 items-center space-x-2 rounded px-2 py-1 text-white bg-gray-700 hover:bg-gray-800 transition w-auto ml-3`}
+              >
+                Créer un utilisateur <BiUserPlus className="ml-2 text-lg" />
+              </Link>
             </div>
           </div>
         </>
@@ -319,7 +323,7 @@ const UserList: React.FC<TypeUserList> = () => {
             <div className="text-center">
               <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Voulez-vous vraiment supprimer cette entreprise ?
+                Voulez-vous vraiment supprimer cette Utilisateur ?
               </h3>
               <div className="flex justify-center gap-4">
                 <button
@@ -330,7 +334,7 @@ const UserList: React.FC<TypeUserList> = () => {
                   {deleting ? (
                     <Loader className="flex justify-center items-center" />
                   ) : (
-                    "Oui confirmer"
+                    "Oui, supprimer"
                   )}
                 </button>
                 <button
@@ -338,7 +342,7 @@ const UserList: React.FC<TypeUserList> = () => {
                   onClick={onClose}
                   className="bg-gray-500 text-white rounded-md px-4 py-2"
                 >
-                  Non , Annuler
+                  Non, Annuler
                 </button>
               </div>
             </div>
@@ -346,21 +350,26 @@ const UserList: React.FC<TypeUserList> = () => {
         </Modal>
       </React.Fragment>
 
-      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        <div className="flex space-x-4 font-bold items-center">
-          {UserService.getUser().role !=='SUPER' && <Link to='/products/history/all' className='text-sm text-white px-4 rounded-md bg-yellow-400 py-2'> <TbArrowsRightLeft size={16} className='inline-block  mr-1' /> Historiques des entrés sorties produit</Link>}
-          <PDFDownloadLink document={<UserPrint users={filteredItems} />} fileName="liste-des-utilisateurs.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
-            Imprimer le liste des utilisateurs
-          </PDFDownloadLink >
+      <div className="mx-auto max-w-7xl py-4 sm:px-6 lg:px-8">
+        <div className="flex font-bold items-center">
+          <PDFDownloadLink
+            document={<UserPrint users={users} />}
+            fileName="liste-des-utilisateurs.pdf"
+            className="text-sm text-white px-4 rounded-md bg-gray-700 py-2"
+          >
+            {" "}
+            <BsPrinterFill size={16} className="inline-block mr-1" />
+            Imprimer la liste des utilisateurs
+          </PDFDownloadLink>
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl pb-6 pt-4 sm:px-6 lg:px-8">
         {!loading ? (
           <>
             <DataTable
               className=" rounded-md overflow-hidden"
-              title="Entreprises"
+              title="Utilisateurs"
               pagination
               columns={columns}
               data={filteredItems}

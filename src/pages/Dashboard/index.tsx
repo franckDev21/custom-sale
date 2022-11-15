@@ -38,9 +38,14 @@ const DASHBOARD_SUPER_USER_URL = "/dashboard/super";
 
 const Dashboard: React.FC<TypeDashboard> = () => {
   const [user, setUser] = useState<User>({});
-  const [adminUser, setAdminUser] = useState<AdminUser>({});
-  const [usersFromAdmin, setUsersFromAdmin] = useState<User[]>([]);
-  const [companiesFromAdmin, setcompaniesFromAdmin] = useState<Company[]>([]);
+  const [adminUser, setAdminUser] = useState<{
+    totalCompany?: string;
+    totalUsers?: string;
+    firstname?: string;
+    lastname?: string;
+  }>({});
+  const [usersFromAdmin, setUsersFromAdmin] = useState<number>(0);
+  const [companiesFromAdmin, setcompaniesFromAdmin] = useState<number>(0);
   const [totalAdmin, setTotalAdmin] = useState(0);
   const [loading, setLoading] = useState(true);
 
@@ -65,8 +70,8 @@ const Dashboard: React.FC<TypeDashboard> = () => {
         setLoading(false);
         if (roleIs("admin")) {
           setAdminUser(res.data);
-          setUsersFromAdmin(res.data.users);
-          setcompaniesFromAdmin(res.data.companies);
+          setUsersFromAdmin(res.data.totalUsers);
+          setcompaniesFromAdmin(res.data.totalCompany);
         } else if (roleIs("super")) {
           setTotalAdmin(res.data);
         } else {
@@ -104,27 +109,25 @@ const Dashboard: React.FC<TypeDashboard> = () => {
           {isContains(UserService.getAuth().roles || [""], "admin") && (
             <>
               <Link
-              to="/companies"
-              className={`flex ${
-                UserService.getUser().role === "ENTREPRISE" &&
-                !UserService.getUser().as_company &&
-                "disabled"
-              }  justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}
-            >
-              <FaEye className="mr-2" />
-              Voir mes différentes boutiques
-            </Link>
-            <Link
-              to="/admins/create/new"
-              className={`flex justify-start text-sm border-4 border-gray-700 items-center space-x-2 rounded px-2 py-1 text-white bg-gray-700 hover:bg-gray-800 transition w-auto ml-3`}
-            >
-              <BsBuilding className="mr-2" />
-              Créer une entreprise{" "}
-              <BsPlusLg />
-            </Link>
+                to="/companies"
+                className={`flex ${
+                  UserService.getUser().role === "ENTREPRISE" &&
+                  !UserService.getUser().as_company &&
+                  "disabled"
+                }  justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}
+              >
+                <FaEye className="mr-2" />
+                Voir mes différentes boutiques
+              </Link>
+              <Link
+                to="/admins/create/new"
+                className={`flex justify-start text-sm border-4 border-gray-700 items-center space-x-2 rounded px-2 py-1 text-white bg-gray-700 hover:bg-gray-800 transition w-auto ml-3`}
+              >
+                <BsBuilding className="mr-2" />
+                Créer une entreprise <BsPlusLg />
+              </Link>
             </>
           )}
-
         </>
       }
     >
@@ -132,7 +135,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
         isContains(UserService.getAuth().roles || [""], "admin") &&
         !loading && (
           <div className="">
-            {!(companiesFromAdmin.length >= 1) && (
+            {!(companiesFromAdmin >= 1) && (
               <Alert
                 color="info"
                 additionalContent={
@@ -239,7 +242,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
                   <div className="ml-3">
                     <h1 className="text-2xl font-bold text-gray-600 pb-1 border-b-2">
                       {roleIs("admin")
-                        ? usersFromAdmin.length
+                        ? usersFromAdmin
                         : dashboardInfo.totalUser}{" "}
                       Utilisateur(s)
                     </h1>
@@ -265,7 +268,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
                     </span>
                     <div className="ml-3">
                       <h1 className="text-2xl font-bold text-gray-600 pb-1 border-b-2">
-                        {`${companiesFromAdmin.length} Entreprise(s)`}
+                        {`${companiesFromAdmin} Entreprise(s)`}
                       </h1>
                       <h2 className="text-sm font-bold text-[#603d57]">
                         Gestion de entreprises
