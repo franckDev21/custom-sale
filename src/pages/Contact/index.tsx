@@ -56,7 +56,7 @@ const Contact: React.FC<TypeContact> = () => {
   }
 
   return (
-    <section className="relative z-10 overflow-hidden bg-white pb-20 pt-14 lg:pb-10 lg:pt-10">
+    <section className="relative z-10 overflow-hidden bg-white pb-20 px-10 pt-14 lg:pb-10 lg:pt-10">
       <div className="container mx-auto">
       <ToastContainer />
         <div className="-mx-4 flex flex-wrap lg:justify-between">
