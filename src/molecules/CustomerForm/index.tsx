@@ -86,7 +86,7 @@ const CustomerForm: React.FC<TypeCustomerForm> = ({ onClickBack = () => {}, addN
       </div>
       <div className="text-center mt-6 flex justify-center">
         <span onClick={_ => onClickBack(false)} className="px-6 mr-3 inline-block rounded-md font-bold py-2 cursor-pointer bg-secondary text-white">Retour</span>
-        <button type='submit' className="px-6 cursor-pointer inline-flex justify-center items-center rounded-md font-bold py-2 bg-primary text-white">{sending ? <Loader className='text-xl' /> :'Enregistrer'}</button>
+        <button type='submit' className="px-6 cursor-pointer inline-flex justify-center items-center rounded-md font-bold py-2 bg-[#ac3265] text-white">{sending ? <Loader className='text-xl' /> :'Enregistrer'}</button>
       </div>
     </form>
   )
