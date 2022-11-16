@@ -1,64 +1,66 @@
-import React,{ ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import axiosCustum from "../../utils/axios-custum";
-import LOGO from '../../assets/img/logo/logo3.png'
+import LOGO from "../../assets/img/logo/logo3.png";
 import { Link } from "react-router-dom";
 import Loader from "../../atoms/Loader";
 import { toast, ToastContainer } from "react-toastify";
 
 type TypeContact = {};
 
-const CONTACT_URL = 'contact'
+const CONTACT_URL = "contact";
 
 type ContactFormProps = {
-  name ?: string,
-  email ?: string,
-  tel ?: string,
-  content ?: string
-}
+  name?: string;
+  email?: string;
+  tel?: string;
+  content?: string;
+};
 
 const Contact: React.FC<TypeContact> = () => {
+  const [contactForm, setContactForm] = useState<ContactFormProps>();
+  const [loading, setLoading] = useState(false);
 
-  const [contactForm,setContactForm] = useState<ContactFormProps>()
-  const [loading,setLoading] = useState(false)
-
-  const handleOnchange = (e: ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
+  const handleOnchange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     switch (e.target.name) {
-      case 'name':
-        setContactForm({...contactForm,name : e.target.value})
+      case "name":
+        setContactForm({ ...contactForm, name: e.target.value });
         break;
-      case 'email':
-        setContactForm({...contactForm,email : e.target.value})
+      case "email":
+        setContactForm({ ...contactForm, email: e.target.value });
         break;
-      case 'tel':
-        setContactForm({...contactForm,tel : e.target.value})
+      case "tel":
+        setContactForm({ ...contactForm, tel: e.target.value });
         break;
-      case 'content':
-        setContactForm({...contactForm,content : e.target.value})
+      case "content":
+        setContactForm({ ...contactForm, content: e.target.value });
         break;
     }
-  }
+  };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    
-    setLoading(true)
-    axiosCustum.post(CONTACT_URL,contactForm)
-      .then(res => {
-        setLoading(false)
-        setContactForm({})
-        console.log(res.data)
-        toast.success(res.data.message)
+    e.preventDefault();
+
+    setLoading(true);
+    axiosCustum
+      .post(CONTACT_URL, contactForm)
+      .then((res) => {
+        setLoading(false);
+        setContactForm({});
+        console.log(res.data);
+        toast.success(res.data.message);
       })
       .catch((err: any) => {
-        setLoading(false)
-        console.log(err)
-      })
-  }
+        setLoading(false);
+        console.log(err);
+      });
+  };
 
   return (
     <section className="relative z-10 overflow-hidden bg-white pb-20 px-10 pt-14 lg:pb-10 lg:pt-10">
       <div className="container mx-auto">
-      <ToastContainer />
+        <ToastContainer />
         <div className="-mx-4 flex flex-wrap lg:justify-between">
           <div className="w-full px-4 lg:w-1/2 xl:w-6/12">
             <div className="mb-12 max-w-[570px] lg:mb-0">
@@ -66,16 +68,26 @@ const Contact: React.FC<TypeContact> = () => {
                 Contact
               </span>
               <h2 className="text-dark mb-6 text-[32px] font-bold uppercase sm:text-[40px] lg:text-[36px] xl:text-[40px]">
-                Nous contacter 
+                Nous contacter
               </h2>
               <p className="text-body-color mb-9  leading-relaxed text-sm">
-              Gm smart est une application révolutionnaire de gestion commerciale qui pour objectif d'aider les petites, moyennes et grandes entreprise à mieux suivre leurs activités finacières. Elle est simple, pratique et surtout facile à utiliser. <br /> <br />
-
-              Nous nous démarquons par le fait de produire des solution adptées pour vos besoins. Nous ne vous proposons pas seulement de gérer vos finances, nous vous permettons de aussi de gérer vos client en toutes simplicité et donc, chaque jours, nous travaillons a vous rendre toujours plus proches de vos clients dans le but de le fidéliser et de faire d'eux des embassadeurs pour votre marque. <br /> <br />
-
-              Faites nous confiance, Nous sommes là pour vous aider à vous développer et surtout pour vous permettre d'atteindre vos objectifs. <br /> <br />
-
-              Le client est l'élément le plus important pour la santé de votre business, pensez y.
+                Gm smart est une application révolutionnaire de gestion
+                commerciale qui pour objectif d'aider les petites, moyennes et
+                grandes entreprise à mieux suivre leurs activités finacières.
+                Elle est simple, pratique et surtout facile à utiliser. <br />{" "}
+                <br />
+                Nous nous démarquons par le fait de produire des solution
+                adptées pour vos besoins. Nous ne vous proposons pas seulement
+                de gérer vos finances, nous vous permettons de aussi de gérer
+                vos client en toutes simplicité et donc, chaque jours, nous
+                travaillons a vous rendre toujours plus proches de vos clients
+                dans le but de le fidéliser et de faire d'eux des embassadeurs
+                pour votre marque. <br /> <br />
+                Faites nous confiance, Nous sommes là pour vous aider à vous
+                développer et surtout pour vous permettre d'atteindre vos
+                objectifs. <br /> <br />
+                Le client est l'élément le plus important pour la santé de votre
+                business, pensez y.
               </p>
               <div className="mb-8 flex w-full max-w-[370px]">
                 <div className="bg-[#FBF5F7] text-primary mr-6 flex h-[60px] w-full max-w-[60px] items-center justify-center overflow-hidden rounded  sm:h-[70px] sm:max-w-[70px]">
@@ -95,9 +107,7 @@ Numéro de téléphone: 656015981 | Adresse Mail: contact@allhcorp.com)
                   <h4 className="text-dark mb-1 text-xl font-bold">
                     Localisation
                   </h4>
-                  <p className="text-body-color text-base">
-                    Akwa,Douala
-                  </p>
+                  <p className="text-body-color text-base">Akwa,Douala</p>
                 </div>
               </div>
               <div className="mb-8 flex w-full max-w-[370px]">
@@ -147,27 +157,28 @@ Numéro de téléphone: 656015981 | Adresse Mail: contact@allhcorp.com)
           <div className="w-full px-4 lg:w-1/2 xl:w-5/12">
             <div className="relative rounded-lg bg-white p-8 shadow-lg sm:p-12">
               <form onSubmit={handleSubmit}>
-                <Link to='/' className="text-xl top-0 absolute flex justify-center items-center font-bold text-center cursor-pointer">
+                <Link
+                  to="/"
+                  className="text-xl top-0 absolute flex justify-center items-center font-bold text-center cursor-pointer"
+                >
                   {/* Create An Account */}
                   <img src={LOGO} width={80} alt="" />
                 </Link>
                 <div className="mb-6">
-
                   <input
                     name="name"
-                    value={contactForm?.name || ''}
+                    value={contactForm?.name || ""}
                     required
                     onChange={handleOnchange}
                     type="text"
                     placeholder="Votre nom"
                     className="text-body-color border-[f0f0f0] focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none focus-visible:shadow-none"
                   />
-
                 </div>
                 <div className="mb-6">
                   <input
                     name="email"
-                    value={contactForm?.email || ''}
+                    value={contactForm?.email || ""}
                     required
                     onChange={handleOnchange}
                     type="email"
@@ -178,7 +189,7 @@ Numéro de téléphone: 656015981 | Adresse Mail: contact@allhcorp.com)
                 <div className="mb-6">
                   <input
                     name="tel"
-                    value={contactForm?.tel || ''}
+                    value={contactForm?.tel || ""}
                     required
                     onChange={handleOnchange}
                     type="tel"
@@ -189,7 +200,7 @@ Numéro de téléphone: 656015981 | Adresse Mail: contact@allhcorp.com)
                 <div className="mb-6">
                   <textarea
                     name="content"
-                    value={contactForm?.content || ''}
+                    value={contactForm?.content || ""}
                     required
                     onChange={handleOnchange}
                     rows={6}
@@ -200,9 +211,15 @@ Numéro de téléphone: 656015981 | Adresse Mail: contact@allhcorp.com)
                 <div>
                   <button
                     type="submit"
-                    className={`bg-primary ${loading && 'disabled'} border-primary w-full flex justify-center items-center rounded border p-3 text-white transition hover:bg-opacity-90`}
+                    className={`bg-[#ac3265] ${
+                      loading && "disabled"
+                    } border-primary w-full flex justify-center items-center rounded border p-3 text-white transition hover:bg-opacity-90`}
                   >
-                    {loading ? <Loader className="text-3xl" />:'Envoyer votre message'}
+                    {loading ? (
+                      <Loader className="text-3xl" />
+                    ) : (
+                      "Envoyer votre message"
+                    )}
                   </button>
                 </div>
               </form>
