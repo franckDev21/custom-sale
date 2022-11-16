@@ -1,23 +1,23 @@
-body{
-  font-family: 'Poppins', sans-serif;
-  &::-webkit-scrollbar{
+body {
+  font-family: "Poppins", sans-serif;
+  &::-webkit-scrollbar {
     width: 10px;
   }
-  &::-webkit-scrollbar-track{
-    background-color: #3333 ;
+  &::-webkit-scrollbar-track {
+    background-color: #3333;
   }
-  &::-webkit-scrollbar-thumb{
+  &::-webkit-scrollbar-thumb {
     background-color: #164e63a3;
     border-radius: 5px;
   }
 }
 
-.disabled{
-  opacity: .7;
+.disabled {
+  opacity: 0.7;
   pointer-events: none;
 }
 
-.container-custom{
+.container-custom {
   margin-left: auto;
   margin-right: auto;
   max-width: 1200px;
@@ -28,9 +28,17 @@ body{
 @tailwind components;
 @tailwind utilities;
 
-.nav-link{
+.nav-link {
   @apply text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium;
-  &.active{
+  &.active {
     @apply bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium;
   }
+}
+
+.bg-primary {
+  background-color: #ac3265;
+}
+
+.text-primary {
+  color: #ac3265 ;
 }

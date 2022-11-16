@@ -78,7 +78,7 @@ const Contact: React.FC<TypeContact> = () => {
               Le client est l'élément le plus important pour la santé de votre business, pensez y.
               </p>
               <div className="mb-8 flex w-full max-w-[370px]">
-                <div className="bg-primary text-primary mr-6 flex h-[60px] w-full max-w-[60px] items-center justify-center overflow-hidden rounded bg-opacity-5 sm:h-[70px] sm:max-w-[70px]">
+                <div className="bg-[#FBF5F7] text-primary mr-6 flex h-[60px] w-full max-w-[60px] items-center justify-center overflow-hidden rounded  sm:h-[70px] sm:max-w-[70px]">
                   <svg
                     width="24"
                     height="24"
@@ -101,7 +101,7 @@ Numéro de téléphone: 656015981 | Adresse Mail: contact@allhcorp.com)
                 </div>
               </div>
               <div className="mb-8 flex w-full max-w-[370px]">
-                <div className="bg-primary text-primary mr-6 flex h-[60px] w-full max-w-[60px] items-center justify-center overflow-hidden rounded bg-opacity-5 sm:h-[70px] sm:max-w-[70px]">
+                <div className="bg-[#FBF5F7] text-primary mr-6 flex h-[60px] w-full max-w-[60px] items-center justify-center overflow-hidden rounded  sm:h-[70px] sm:max-w-[70px]">
                   <svg
                     width="24"
                     height="26"
@@ -123,7 +123,7 @@ Numéro de téléphone: 656015981 | Adresse Mail: contact@allhcorp.com)
                 </div>
               </div>
               <div className="mb-8 flex w-full max-w-[370px]">
-                <div className="bg-primary text-primary mr-6 flex h-[60px] w-full max-w-[60px] items-center justify-center overflow-hidden rounded bg-opacity-5 sm:h-[70px] sm:max-w-[70px]">
+                <div className="bg-[#FBF5F7] text-primary mr-6 flex h-[60px] w-full max-w-[60px] items-center justify-center overflow-hidden rounded  sm:h-[70px] sm:max-w-[70px]">
                   <svg
                     width="28"
                     height="19"
