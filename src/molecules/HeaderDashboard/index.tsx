@@ -50,11 +50,11 @@ const HeaderDashboard = () => {
                   
                   {roleIs("gerant") && <NavLink to={`/companies/${user().company_id}/view`} className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Entreprises</NavLink>}
                   
-                  {!roleIs('super') && !roleIs('admin') && <NavLink to="/products" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Produits</NavLink>}
+                  {!roleIs('super') && !roleIs('admin') && !roleIs('caissier') && <NavLink to="/products" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Produits</NavLink>}
                   
-                  {!roleIs('super') && !roleIs('admin') && <NavLink to="/customers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Clients</NavLink>}
+                  {!roleIs('super') && !roleIs('admin') && !roleIs('caissier') && <NavLink to="/customers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Clients</NavLink>}
                   
-                  {!roleIs('super') &&  !roleIs('admin') &&  <NavLink to="/orders" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Commandes</NavLink>}
+                  {!roleIs('super') &&  !roleIs('admin') && !roleIs('caissier') &&  <NavLink to="/orders" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Commandes</NavLink>}
 
                   {!roleIs('super') &&  !roleIs('admin') &&  <NavLink to="/invoices" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Factures</NavLink>}
                   

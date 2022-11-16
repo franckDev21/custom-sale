@@ -20,7 +20,7 @@ const Home: React.FC<typeHome> = () => {
           <div className='ml-4 text-lg mt-10'>
             <Link to='/star' className='px-4 py-2 bg-white text-primary active:scale-[96%] inline-block hover:bg-primary hover:text-white transition  rounded-full font-bold' >Demander mon accès</Link>
             {/* <Link to='/contact' className='px-4 py-2 font-bold active:scale-[96%] inline-block bg-[#203A62] border-2 border-transparent rounded-full ml-2 transition' > contactez nous </Link> */}
-            <Link to='/contact' className='px-4 py-2 font-bold active:scale-[96%] inline-block bg-[#203A62] border-2 border-transparent rounded-full ml-2 transition' > contactez nous </Link>
+            <Link to='/login' className='px-4 py-2 font-bold active:scale-[96%] inline-block bg-[#203A62] border-2 border-transparent rounded-full ml-2 transition' > Se conncecter </Link>
           </div>
         </div>
         <img className='inline-block top-10 -right-14 absolute' width={600} src={DashImage} alt="" />

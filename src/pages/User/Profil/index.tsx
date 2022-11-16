@@ -99,12 +99,16 @@ const Profil: FC<TypeProfil> = () => {
         setSending(false);
         setUser(res.data);
 
+        let oltAuth = Storage.getStorage('auth');
+
         Storage.setStorage('auth',{
           'token': Storage.getStorage("auth").token,
-          'user' : res.data
+          'user' : res.data,
+          'prermissions' : oltAuth.prermissions,
+          'roles' : oltAuth.roles,
         });
 
-        toast.success("Your information has been successfully updated !");
+        toast.success("Vos informations ont été mises à jour avec succès !");
         setEditing(false);
       })
       .catch((err) => {

@@ -98,7 +98,7 @@ const Login: FC<LoginType> = () => {
               {/* Login to your account */}
               Page de connexion
             </h1>
-            <p className="w-80 text-center text-sm mb-8 font-semibold text-gray-700 tracking-wide cursor-pointer">
+            <p className="w-80 mx-auto text-center text-sm mb-8 font-semibold text-gray-700 tracking-wide cursor-pointer">
               {/* Create an account to enjoy all the services without any ads for
               free! */}
               {/* Log in to enjoy all the services for free without any advertising! */}

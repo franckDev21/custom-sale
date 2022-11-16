@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 50,
     fontWeight: "extrabold",
+    paddingRight: 7,
   },
   text: {
     fontSize: 12,

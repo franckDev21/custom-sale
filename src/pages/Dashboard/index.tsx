@@ -170,7 +170,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
             isContains(UserService.getAuth().roles || [""], "user") ||
             isContains(UserService.getAuth().roles || [""], "caissier")
         ) && (
-          <div className="flex space-x-4 font-bold items-center">
+          <div className={`flex space-x-4 font-bold items-center ${roleIs('caissier') && 'disabled'}`}>
             {UserService.getUser().role !== "SUPER" && (
               <Link
                 to="/products/history/all"
@@ -279,7 +279,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
                     to="/cashiers"
                     className={`bg-white ${
                       UserService.getUser().role === "SUPER" && "disabled"
-                    } cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start`}
+                    } ${roleIs('user') && 'disabled'} cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start`}
                   >
                     <span className="inline-block overflow-hidden">
                       <HiCurrencyDollar className="text-5xl text-[#603d57]" />
@@ -307,7 +307,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
                     to="/products"
                     className={`bg-white ${
                       UserService.getUser().role === "SUPER" && "disabled"
-                    } cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start`}
+                    } cursor-pointer ${roleIs('caissier') && 'disabled'} hover:shadow-lg transition p-4 rounded-md flex justify-start items-start`}
                   >
                     <span className="inline-block overflow-hidden">
                       <FaBoxOpen className="text-5xl text-[#603d57]" />
@@ -329,7 +329,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
                     to="/customers"
                     className={`bg-white ${
                       UserService.getUser().role === "SUPER" && "disabled"
-                    } cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start`}
+                    } cursor-pointer hover:shadow-lg ${roleIs('caissier') && 'disabled'} transition p-4 rounded-md flex justify-start items-start`}
                   >
                     <span className="inline-block overflow-hidden">
                       <FaUsers className="text-5xl text-[#603d57]" />
@@ -351,7 +351,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
                     to="/orders"
                     className={`bg-white ${
                       UserService.getUser().role === "SUPER" && "disabled"
-                    } cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start`}
+                    } cursor-pointer hover:shadow-lg transition p-4 ${roleIs('caissier') && 'disabled'} rounded-md flex justify-start items-start`}
                   >
                     <span className="inline-block overflow-hidden">
                       <BsShop className="text-5xl text-[#603d57]" />
