@@ -18,6 +18,7 @@ import { useDispatch } from "react-redux";
 import { setAuth } from "../../../store/features/auth/authSlice";
 import { BsBuilding } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { roleIs } from "../../../utils/function";
 
 type TypeProfil = {};
 
@@ -31,6 +32,7 @@ const GET_INFO_USER_URL = "auth/user/info";
 const UPDATE_INFO_USER_URL = "auth/user";
 const UPDATE_USER_PASSWORD_URL = "auth/user/password";
 const UPDATE_PICTURE_USER_URL = "auth/user/picture";
+const DASHBOARD_ADMIN_USER_URL = "/dashboard/admin";
 
 const API_STORAGE_URL = `${baseURL}/storage`;
 
@@ -43,13 +45,14 @@ const Profil: FC<TypeProfil> = () => {
   const [sending2, setSending2] = useState(false);
   const [errorUpdateInfo, setErrorUpdateInfo] = useState("");
   const [errorUpdatePass, setErrorUpdatePass] = useState("");
+  const [companiesFromAdmin, setcompaniesFromAdmin] = useState<number>(0);
   const [urlImg, setUrlImg] = useState(
     "https://ernglobal.org/wp-content/uploads/2017/10/default-user-image.png"
   );
   const [imgSending, setImgSending] = useState(false);
 
   const dispatch = useDispatch();
-  
+
   // method
   const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
     if (errorUpdateInfo) setErrorUpdateInfo("");
@@ -99,13 +102,13 @@ const Profil: FC<TypeProfil> = () => {
         setSending(false);
         setUser(res.data);
 
-        let oltAuth = Storage.getStorage('auth');
+        let oltAuth = Storage.getStorage("auth");
 
-        Storage.setStorage('auth',{
-          'token': Storage.getStorage("auth").token,
-          'user' : res.data,
-          'prermissions' : oltAuth.prermissions,
-          'roles' : oltAuth.roles,
+        Storage.setStorage("auth", {
+          token: Storage.getStorage("auth").token,
+          user: res.data,
+          prermissions: oltAuth.prermissions,
+          roles: oltAuth.roles,
         });
 
         toast.success("Vos informations ont été mises à jour avec succès !");
@@ -164,17 +167,16 @@ const Profil: FC<TypeProfil> = () => {
           let url = URL.createObjectURL(file);
           setUrlImg(url);
 
-          let {user, token} = Storage.getStorage('auth')
+          let { user, token } = Storage.getStorage("auth");
 
           let auth = {
-            user : {...user,photo: res.data.path},
-            token : token
-          }
+            user: { ...user, photo: res.data.path },
+            token: token,
+          };
 
-          Storage.setStorage('auth',auth)
+          Storage.setStorage("auth", auth);
 
-          dispatch(setAuth(Storage.getStorage('auth')))      
-              
+          dispatch(setAuth(Storage.getStorage("auth")));
         } else {
           setErrorUpdatePass(res.data);
         }
@@ -187,15 +189,22 @@ const Profil: FC<TypeProfil> = () => {
   };
 
   useEffect(() => {
-    http_client(Storage.getStorage("auth").token)
-      .post(GET_INFO_USER_URL)
-      .then((res) => {
-        setUser(res.data);
-        if (res.data.photo) {
-          setUrlImg(`${API_STORAGE_URL}/${res.data.photo}`);
-        }
-        setLoading(false);
-      });
+    // DASHBOARD_ADMIN_USER_URL
+    Promise.all([
+      http_client(Storage.getStorage("auth").token).post(GET_INFO_USER_URL),
+      http_client(Storage.getStorage("auth").token).get(
+        DASHBOARD_ADMIN_USER_URL
+      ),
+    ]).then((res) => {
+      setUser(res[0].data);
+      if (roleIs("admin")) {
+        setcompaniesFromAdmin(res[1].data.totalCompany);
+      }
+      if (res[0].data.photo) {
+        setUrlImg(`${API_STORAGE_URL}/${res[0].data.photo}`);
+      }
+      setLoading(false);
+    });
   }, []);
 
   return (
@@ -213,9 +222,20 @@ const Profil: FC<TypeProfil> = () => {
                 </>
               )}
             </span>
-            
 
-            <div className="flex items-center justify-end"><BsBuilding /> <Link to='/my/company/view' className={`flex ${user.role === 'ENTREPRISE' ? (!user.as_company && 'disabled') : 'disabled'} justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}>Voir mon entreprise <HiEye className="ml-2" /></Link></div>
+            <div className="flex items-center justify-end">
+              <BsBuilding />{" "}
+              <Link
+                to="/my/company/view"
+                className={`flex ${
+                  user.role === "ENTREPRISE"
+                    ? !user.as_company && "disabled"
+                    : "disabled"
+                } justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}
+              >
+                Voir mon entreprise <HiEye className="ml-2" />
+              </Link>
+            </div>
           </div>
         </>
       }
@@ -223,36 +243,40 @@ const Profil: FC<TypeProfil> = () => {
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         {!loading ? (
           <>
-            {(user.role !== 'SUPER' && !user.as_company && !user.company_id) && <div className="">
-              <Alert
-                color="info"
-                additionalContent={
-                  <React.Fragment>
-                    <div className="mt-2 mb-4 text-sm text-blue-700 dark:text-blue-800">
-                      Bonjour, vous devez créer votre entreprise afin d'utiliser
-                      l'application sinon votre compte sera suspendu
-                      dans les 5 jours. cliquez sur le bouton suivant pour ajouter les
-                      informations de votre entreprise
-                    </div>
-                    <div className="flex">
-                      <Link 
-                        to={`/my/company/create`}
-                        type="button"
-                        className="mr-2 inline-flex items-center rounded-lg bg-blue-700 px-3 py-1.5 text-center text-xs font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-800 dark:hover:bg-blue-900"
-                      >
-                        Créer votre entreprise {" "}
-                        <FaBuilding className="-mr-0.5 ml-2" />
-                      </Link>
-                    </div>
-                  </React.Fragment>
-                }
-                icon={HiInformationCircle}
-              >
-                <h3 className="text-lg font-medium text-blue-700 dark:text-blue-800">
-                  Inscription incomplète
-                </h3>
-              </Alert>
-            </div>}
+            {user.role !== "SUPER" && !user.as_company && !user.company_id && (
+              <div className="">
+                {!(companiesFromAdmin >= 1) && (
+                  <Alert
+                    color="info"
+                    additionalContent={
+                      <React.Fragment>
+                        <div className="mt-2 mb-4 text-sm text-blue-700 dark:text-blue-800">
+                          Bonjour, vous devez créer au moins une entreprise afin
+                          d'utiliser l'application sinon votre compte sera
+                          suspendu après les 5 prochains jours. cliquez sur le
+                          bouton suivant pour ajouter une nouvelle entreprise
+                        </div>
+                        <div className="flex">
+                          <Link
+                            to={`/my/company/create`}
+                            type="button"
+                            className="mr-2 inline-flex items-center rounded-lg bg-blue-700 px-3 py-1.5 text-center text-xs font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-800 dark:hover:bg-blue-900"
+                          >
+                            Créer votre prèmiere entreprise{" "}
+                            <FaBuilding className="-mr-0.5 ml-2" />
+                          </Link>
+                        </div>
+                      </React.Fragment>
+                    }
+                    icon={HiInformationCircle}
+                  >
+                    <h3 className="text-lg font-medium text-blue-700 dark:text-blue-800">
+                      Inscription incomplète
+                    </h3>
+                  </Alert>
+                )}
+              </div>
+            )}
             <div className="px-4 py-6 sm:px-0">
               <div className="flex justify-start space-x-4">
                 <label htmlFor="image" className=" cursor-pointer ">
