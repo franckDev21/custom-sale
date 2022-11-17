@@ -13,6 +13,6 @@ export const http_client = (token: string) =>
       Authorization: `Bearer ${token}`,
     },
   });
-
+ 
 // export const baseURL = `http://localhost:8000`;
 export const baseURL = `https://gm-smart-api.gbionik.com`
