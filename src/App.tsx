@@ -60,6 +60,7 @@ function App() {
           <Route path="/my/company/:action" element={<Company />} />
 
           <Route path="/admins" element={<AdminUser />} />
+          <Route path="/admins/:adminId/edit" element={<EditUser />} />
           <Route path="/admins/:id/show" element={<AdminUserDetail />} />
           <Route path="/admins/create/new" element={<CreateUser type='admin' />} />
 

@@ -20,6 +20,7 @@ import Loader from "../../atoms/Loader";
 import UserPrint from "../../templates/Userprint";
 import AdminUserModel from "../../Model/AdminUser";
 import { BsPrinterFill } from "react-icons/bs";
+import { BiPencil } from "react-icons/bi";
 
 type TypeAdminUser = {};
 
@@ -209,6 +210,14 @@ const AdminUser: React.FC<TypeAdminUser> = () => {
           >
             <FaEye />
           </Link>
+          
+          <Link
+            to={`/admins/${row.id}/edit`}
+            className="font-medium ml-2 text-base text-gray-500 p-2 bg-gray-100 rounded-full inline-block dark:text-gray-500 hover:underline"
+          >
+            <BiPencil />
+          </Link>
+
           <button
             onClick={(_) => onClick(row.id || "1")}
             className="font-medium ml-2 text-red-500 w-8 h-8 justify-center items-center  bg-red-100 rounded-full inline-flex dark:text-red-500 hover:underline"

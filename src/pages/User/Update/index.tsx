@@ -23,8 +23,10 @@ type EditUserProps = {
 
 const CREATE_USER_URL = "/users/create";
 const GET_USER_INFO = "/users";
+const GET_ADMIN_INFO = "/admins";
 const UPDATE_USER_URL = "/users";
 const CREATE_ADMIN_USER_URL = "/admin/user/create";
+const UPDATE_ADMIN_URL = "/admins";
 const GET_COMPANIES_FORM_ADMIN_USER = "companies";
 
 const EditUser: React.FC<EditUserProps> = ({ type = "user" }) => {
@@ -36,7 +38,7 @@ const EditUser: React.FC<EditUserProps> = ({ type = "user" }) => {
   const [showPassword2, setShowPassword2] = useState(false);
   const [companies, setCompanies] = useState<Company[]>([]);
 
-  const { id } = useParams();
+  const { id, adminId } = useParams();
 
   // ref
   const inputPassword = useRef(null);
@@ -80,52 +82,81 @@ const EditUser: React.FC<EditUserProps> = ({ type = "user" }) => {
     e.preventDefault();
     setSending(true);
     setErrForm("");
-    if(id){
+    if (id) {
       http_client(Storage.getStorage("auth").token)
-      .post(
-        type === "admin" ? CREATE_ADMIN_USER_URL : `${UPDATE_USER_URL}/${id}/update`,
-        user
-      )
-      .then((res) => {
-        setSending(false);
-        toast.success(res.data.message);
-        setSuccess(true);
-      })
-      .catch((err) => {
-        setSending(false);
-        setErrForm(err.response.data.message);
-        console.log(err);
-      });
-    }else{
+        .post(
+          type === "admin"
+            ? CREATE_ADMIN_USER_URL
+            : `${UPDATE_USER_URL}/${id}/update`,
+          user
+        )
+        .then((res) => {
+          setSending(false);
+          toast.success(res.data.message);
+          setSuccess(true);
+        })
+        .catch((err) => {
+          setSending(false);
+          setErrForm(err.response.data.message);
+          console.log(err);
+        });
+    } else if (adminId) {
       http_client(Storage.getStorage("auth").token)
-      .post(
-        type === "admin" ? CREATE_ADMIN_USER_URL : `${CREATE_USER_URL}`,
-        user
-      )
-      .then((res) => {
-        setSending(false);
-        toast.success(res.data.message);
-        setSuccess(true);
-      })
-      .catch((err) => {
-        setSending(false);
-        setErrForm(err.response.data.message);
-        console.log(err);
-      });
+        .post(`${UPDATE_ADMIN_URL}/${adminId}/update`, user)
+        .then((res) => {
+          setSending(false);
+          toast.success(res.data.message);
+          setSuccess(true);
+        })
+        .catch((err) => {
+          setSending(false);
+          setErrForm(err.response.data.message);
+          console.log(err);
+        });
+    } else {
+      http_client(Storage.getStorage("auth").token)
+        .post(
+          type === "admin" ? CREATE_ADMIN_USER_URL : `${CREATE_USER_URL}`,
+          user
+        )
+        .then((res) => {
+          setSending(false);
+          toast.success(res.data.message);
+          setSuccess(true);
+        })
+        .catch((err) => {
+          setSending(false);
+          setErrForm(err.response.data.message);
+          console.log(err);
+        });
     }
   };
 
   useEffect(() => {
-    if(roleIs('gerant') || roleIs('admin')){      
-      http_client(Storage.getStorage('auth').token).get(`${GET_USER_INFO}/${id}`)
-        .then(res => {
-          setUser(res.data.data)
+    if (roleIs("gerant") || roleIs("admin")) {
+      http_client(Storage.getStorage("auth").token)
+        .get(`${GET_USER_INFO}/${id}`)
+        .then((res) => {
+          setUser(res.data.data);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
-        })
+        });
     }
-  },[id])
+  }, [id]);
+
+  useEffect(() => {
+    if (roleIs("super")) {
+      http_client(Storage.getStorage("auth").token)
+        .get(`${GET_ADMIN_INFO}/${adminId}`)
+        .then((res) => {
+          setUser(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [adminId]);
 
   useEffect(() => {
     if (roleIs("admin")) {
@@ -138,9 +169,7 @@ const EditUser: React.FC<EditUserProps> = ({ type = "user" }) => {
           console.log(err);
         });
     }
-    
   }, []);
-
 
   return (
     <DashboardLayout
@@ -161,7 +190,11 @@ const EditUser: React.FC<EditUserProps> = ({ type = "user" }) => {
               | Ajouter un{" "}
               {type === "admin"
                 ? "nouveau administrateur"
-                : id ? `Mise à jour de l’utilisateur ${user.firstname} ${user.lastname}`:"nouvelle utilisateur"}{" "}
+                : id
+                ? `Mise à jour de l’utilisateur ${user.firstname} ${user.lastname}`
+                : adminId
+                ? `Mise à jour de l’administrateur ${user.firstname} ${user.lastname}`
+                : "nouvelle utilisateur"}{" "}
             </span>
           </div>
         </>
@@ -174,7 +207,13 @@ const EditUser: React.FC<EditUserProps> = ({ type = "user" }) => {
               <span className="flex items-start justify-start flex-col">
                 <span className="flex items-start justify-start">
                   <FaCheckCircle className="mr-2" />{" "}
-                  <span>{id ? "Votre utilisateur a été mis à jour avec succès ":'Votre utilisateur a été crée avec succès !'}</span>
+                  <span>
+                    {id
+                      ? "Votre utilisateur a été mis à jour avec succès "
+                      : adminId
+                      ? "Votre administrateur a été crée avec succès !"
+                      : "Votre utilisateur a été crée avec succès !"}
+                  </span>
                 </span>
                 <span className="text-sm italic text-gray-500 ">
                   Un courriel contenant ses informations de connexion a été
@@ -182,7 +221,9 @@ const EditUser: React.FC<EditUserProps> = ({ type = "user" }) => {
                 </span>
               </span>
               <Link
-                to={`${type === "admin" ? "/admins" : "/users"}`}
+                to={`${
+                  type === "admin" ? "/admins" : adminId ? "/admins" : "/users"
+                }`}
                 className="px-4 items-center justify-center py-2 bg-[#ac3265] transition hover:bg-[#8a2a52] active:scale-[96%] text-white rounded-md text-base inline-block ml-4"
               >
                 Liste
@@ -528,8 +569,12 @@ const EditUser: React.FC<EditUserProps> = ({ type = "user" }) => {
                     <Loader className=" inline-block text-xl" />
                   ) : type === "admin" ? (
                     "Enregister l'administrateur"
+                  ) : id ? (
+                    "Mettre à jour l’utilisateur"
+                  ) : adminId ? (
+                    "Mettre à jour l’administrateur"
                   ) : (
-                    id ? "Mettre à jour l’utilisateur":"Enregister l'utilisateur"
+                    "Enregister l'utilisateur"
                   )}
                 </button>
               </div>
