@@ -15,6 +15,8 @@ import User from "../../Model/User";
 import UserService from "../../service/UserService";
 import { roleIs, user } from "../../utils/function";
 import { Modal } from "flowbite-react";
+import { useDispatch } from "react-redux";
+import { setAuth } from "../../store/features/auth/authSlice";
 
 type TotalDashboardProps = {
   totalUser?: string | number;
@@ -55,6 +57,8 @@ const Company: FC<TypeCompany> = () => {
   const [imgSending, setImgSending] = useState(false);
 
   const { action, id } = useParams();
+
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -161,6 +165,21 @@ const Company: FC<TypeCompany> = () => {
         .then((res) => {
           toast.success(res.data.message);
           setSending(false);
+          console.log(res.data);
+
+          let { user, token } = Storage.getStorage("auth");
+
+          let auth = {
+            user: { ...user, list_compamie_ids: res.data.list_compamie_ids },
+            token: token,
+            roles: res.data.roles,
+            prermissions: res.data.prermissions,
+          };
+
+          Storage.setStorage("auth", auth);
+
+          dispatch(setAuth(Storage.getStorage("auth")));
+
           navigate(`/companies/${res.data.company_id}/view`);
         })
         .catch((err) => {

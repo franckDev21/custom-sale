@@ -151,8 +151,8 @@ const AddCustomer:FC<TypeAddCustomer> = () => {
                 <input onChange={handleOnchange} name='email' value={customer.email || ''} type="email" placeholder="Adresse email du client" className='px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full' />
               </div>
               <div className=' flex-col flex w-1/2'>
-                <label htmlFor="tel">Téléphone<span className='text-sm italic text-gray-400'>( optionnel  )</span></label>
-                <input onChange={handleOnchange} name='tel' value={customer.tel || ''} type="tel" placeholder='Numéro de téléphone du client' className='px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full' />
+                <label htmlFor="tel">Téléphone<span className='text-sm italic text-gray-400'></span></label>
+                <input required onChange={handleOnchange} name='tel' value={customer.tel || ''} type="tel" placeholder='Numéro de téléphone du client' className='px-3 mt-2 rounded-md border-none focus:ring-2 ring-gray-700 focus:ring-gray-700 py-2 bg-gray-100 w-full' />
               </div>
             </div>
 
@@ -166,7 +166,7 @@ const AddCustomer:FC<TypeAddCustomer> = () => {
             <div className="flex items-center justify-end">
               <button type='submit' className={`px-4 ${sending && 'disabled'} flex justify-center items-center py-[0.48rem] bg-[#ac3265] hover:bg-[#951f50] transition min-w-[200px] text-white text-sm font-semibold rounded-md`}>
                 {sending ? <Loader className=' inline-block text-xl' /> : <>
-                  {editing ? "Mettre à jour le client":"'Enregistrer le nouveau client'"}
+                  {editing ? "Mettre à jour le client":"Enregistrer le nouveau client"}
                 </>}
               </button>
             </div>

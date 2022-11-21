@@ -151,15 +151,6 @@ const CustomerList: FC<TypeCustomerList> = () => {
     {
       name: (
         <span className="  font-bold text-xs text-[#ac3265] uppercase">
-          Email
-        </span>
-      ),
-      selector: (row) => row.email || "Aucun",
-      sortable: true,
-    },
-    {
-      name: (
-        <span className="  font-bold text-xs text-[#ac3265] uppercase">
           Total commande
         </span>
       ),
@@ -177,16 +168,22 @@ const CustomerList: FC<TypeCustomerList> = () => {
     {
       name: "",
       cell: (row) => (
-        <h1 className=" flex items-center justify-center">
+        <h1 className=" flex -translate-x-3 items-center justify-center">
           <Link
             to={`/customers/create/${row.id}`}
-            className="font-medium ml-2 text-base text-blue-500 p-2 bg-blue-100 rounded-full inline-block dark:text-blue-500 hover:underline"
+            className="font-medium disabled text-xs ml-1 flex-none  text-green-500 p-1 bg-green-100 rounded-full inline-block dark:text-green-500 hover:underline"
+          >
+            Liste des commandes
+          </Link>
+          <Link
+            to={`/customers/create/${row.id}`}
+            className="font-medium ml-2 text-base flex-none text-blue-500 p-2 bg-blue-100 rounded-full inline-block dark:text-blue-500 hover:underline"
           >
             <FaEye />
           </Link>
           <button
             onClick={(_) => onClick(row.id || "1")}
-            className="font-medium ml-2 text-red-500 w-8 h-8 justify-center items-center  bg-red-100 rounded-full inline-flex dark:text-red-500 hover:underline"
+            className="font-medium ml-2 text-red-500 flex-none w-8 h-8 justify-center items-center  bg-red-100 rounded-full inline-flex dark:text-red-500 hover:underline"
           >
             <FaTrash />
           </button>

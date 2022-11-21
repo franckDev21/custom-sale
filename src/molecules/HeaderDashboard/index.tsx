@@ -21,6 +21,8 @@ const HeaderDashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
 
+  const companiesStore = useSelector((state: any) => state.companies);
+
   const logoutUser = () => {
     dispatch(logout())
     Auth.logout()
@@ -51,7 +53,7 @@ const HeaderDashboard = () => {
                   
                   {roleIs("gerant") && <NavLink to={`/companies/${user().company_id}/view`} className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Entreprises</NavLink>}
                   
-                  {!roleIs('super') && !roleIs('admin') && !roleIs('caissier') && 
+                  {((!roleIs('super') && !roleIs('admin') && !roleIs('caissier')) || (roleIs('admin') && companiesStore.currentCompany)) && 
                     <DropDownLink
                       label='Gestions produits'
                       className='nav-link'
@@ -61,7 +63,7 @@ const HeaderDashboard = () => {
                     </DropDownLink>
                   }
                   
-                  {!roleIs('super') && !roleIs('admin') && !roleIs('caissier') && 
+                  {((!roleIs('super') && !roleIs('admin') && !roleIs('caissier')) || (roleIs('admin') && companiesStore.currentCompany)) && 
                     <DropDownLink
                     label='Clients'
                       className='nav-link'
@@ -72,11 +74,11 @@ const HeaderDashboard = () => {
                     
                   }
                   
-                  {!roleIs('super') &&  !roleIs('admin') && !roleIs('caissier') &&  <NavLink to="/orders" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Commandes</NavLink>}
+                  {((!roleIs('super') &&  !roleIs('admin') && !roleIs('caissier')) || (roleIs('admin') && companiesStore.currentCompany)) && <NavLink to="/orders" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Commandes</NavLink>}
 
-                  {!roleIs('super') &&  !roleIs('admin') &&  <NavLink to="/invoices" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Factures</NavLink>}
+                  {((!roleIs('super') &&  !roleIs('admin')) || (roleIs('admin') && companiesStore.currentCompany)) &&  <NavLink to="/invoices" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Factures</NavLink>}
                   
-                  {!roleIs('super') &&  !roleIs('admin') && !roleIs('user') &&  <NavLink to="/cashiers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Caisse</NavLink>}
+                  {((!roleIs('super') &&  !roleIs('admin')) || (roleIs('admin') && companiesStore.currentCompany)) && !roleIs('user') &&  <NavLink to="/cashiers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Caisse</NavLink>}
 
                 </div>
               </div>
@@ -105,7 +107,7 @@ const HeaderDashboard = () => {
                     {/* <!-- Active: "bg-gray-100", Not Active: "" --> */}
                     <Link to="/profil" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabIndex={-1} id="user-menu-item-0">Votre profil</Link>
                     
-                    {!roleIs('admin') && <Link to="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabIndex={-1} id="user-menu-item-1">paramètre</Link>}
+                    {!roleIs('admin') && !roleIs('super') && <Link to="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabIndex={-1} id="user-menu-item-1">paramètre</Link>}
 
                     <button onClick={logoutUser} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabIndex={-1} id="user-menu-item-2">Se déconnecter</button>
                   </div>

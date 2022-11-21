@@ -15,5 +15,6 @@ export default interface AdminUser {
   updated_at ?: string,
   companies ?: Company[],
   users ?: User[],
-  active ?: boolean
+  active ?: boolean,
+  list_compamie_ids ?: any
 }
