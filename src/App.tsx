@@ -34,6 +34,7 @@ import CompanyList from './pages/Company/List';
 import AdminUser from './pages/Admin';
 import AdminUserDetail from './pages/Admin/Detail';
 import DashbordCompany from './pages/Dashboard/DashbordCompany';
+import EditUser from './pages/User/Update';
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
 
           <Route path="/users" element={<UserList />} />
           <Route path="/users/create" element={<CreateUser />} />
+          <Route path="/users/:id/edit" element={<EditUser />} />
           <Route path="/users/company" element={<MyUserList />} />
           <Route path="/my/company/:action" element={<Company />} />
 

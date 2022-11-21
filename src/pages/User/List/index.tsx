@@ -202,10 +202,16 @@ const UserList: React.FC<TypeUserList> = () => {
         <h1 className=" flex items-center justify-center">
           <a
             href="/"
-            className="font-medium ml-2 text-base text-blue-500 p-2 bg-blue-100 rounded-full inline-block dark:text-blue-500 hover:underline"
+            className="font-medium ml-2 text-base text-green-500 p-2 bg-green-100 rounded-full inline-block dark:text-green-500 hover:underline"
           >
             <MdOutgoingMail />
           </a>
+          <Link
+            to={`/users/${row.id}/edit`}
+            className="font-medium ml-2 text-base text-blue-500 p-2 bg-blue-100 rounded-full inline-block dark:text-blue-500 hover:underline"
+          >
+            <BsEye />
+          </Link>
           <button
             onClick={(_) => onClick(row.id || "1")}
             className="font-medium ml-2 text-red-500 w-8 h-8 justify-center items-center  bg-red-100 rounded-full inline-flex dark:text-red-500 hover:underline"

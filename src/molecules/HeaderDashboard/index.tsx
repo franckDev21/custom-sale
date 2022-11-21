@@ -53,7 +53,7 @@ const HeaderDashboard = () => {
                   
                   {!roleIs('super') && !roleIs('admin') && !roleIs('caissier') && 
                     <DropDownLink
-                      label='Gestions des produits'
+                      label='Gestions produits'
                       className='nav-link'
                     >
                       <NavLink to="/products" className={` bg-gray-100 hover:bg-gray-200 transition mb-2 p-2 w-full inline-block ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Produits</NavLink>
@@ -61,7 +61,16 @@ const HeaderDashboard = () => {
                     </DropDownLink>
                   }
                   
-                  {!roleIs('super') && !roleIs('admin') && !roleIs('caissier') && <NavLink to="/customers" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Clients</NavLink>}
+                  {!roleIs('super') && !roleIs('admin') && !roleIs('caissier') && 
+                    <DropDownLink
+                    label='Clients'
+                      className='nav-link'
+                    >
+                    <NavLink to="/customers" className={`bg-gray-100 hover:bg-gray-200 transition mb-2 p-2 w-full inline-block ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Clients</NavLink>
+                    <NavLink to="/customers" className={`bg-gray-100 disabled hover:bg-gray-200 transition mb-2 p-2 w-full inline-block ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Message ciblés</NavLink>
+                  </DropDownLink>
+                    
+                  }
                   
                   {!roleIs('super') &&  !roleIs('admin') && !roleIs('caissier') &&  <NavLink to="/orders" className={`nav-link ${UserService.getUser().role === 'SUPER' && 'disabled'}`}>Commandes</NavLink>}
 
