@@ -221,6 +221,11 @@ const Dashboard: React.FC<TypeDashboard> = () => {
         </div>
       )}
       <div className="mx-auto max-w-7xl pt-4 sm:px-6 lg:px-8">
+        {roleIs('admin') && companiesStore.currentCompany && 
+          <>
+            <div className=" text-3xl font-bold">Vous êtes connecté a l’entreprise : <span className=" text-primary">{companiesStore.currentCompany.name}</span> </div>
+          </>
+        }
         {isContains(
           UserService.getAuth().roles || [""],
           "gerant" ||
