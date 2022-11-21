@@ -47,7 +47,7 @@ const Profil: FC<TypeProfil> = () => {
   const [errorUpdatePass, setErrorUpdatePass] = useState("");
   const [companiesFromAdmin, setcompaniesFromAdmin] = useState<number>(0);
   const [urlImg, setUrlImg] = useState(
-    "https://ernglobal.org/wp-content/uploads/2017/10/default-user-image.png"
+    "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI3MWRlZWE4LWUyOGMtNDFhMy1hYWY1LTI5MTNmNWY0OGJlNlwvZGU3ODM0cy02NTE1YmQ0MC04YjJjLTRkYzYtYTg0My01YWMxYTk1YThiNTUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BopkDn1ptIwbmcKHdAOlYHyAOOACXW0Zfgbs0-6BY-E"
   );
   const [imgSending, setImgSending] = useState(false);
 
@@ -172,6 +172,8 @@ const Profil: FC<TypeProfil> = () => {
           let auth = {
             user: { ...user, photo: res.data.path },
             token: token,
+            roles: res.data.roles,
+            prermissions: res.data.prermissions,
           };
 
           Storage.setStorage("auth", auth);
@@ -190,21 +192,38 @@ const Profil: FC<TypeProfil> = () => {
 
   useEffect(() => {
     // DASHBOARD_ADMIN_USER_URL
-    Promise.all([
-      http_client(Storage.getStorage("auth").token).post(GET_INFO_USER_URL),
-      http_client(Storage.getStorage("auth").token).get(
-        DASHBOARD_ADMIN_USER_URL
-      ),
-    ]).then((res) => {
-      setUser(res[0].data);
-      if (roleIs("admin")) {
-        setcompaniesFromAdmin(res[1].data.totalCompany);
-      }
-      if (res[0].data.photo) {
-        setUrlImg(`${API_STORAGE_URL}/${res[0].data.photo}`);
-      }
-      setLoading(false);
-    });
+    if(roleIs('admin')){
+      Promise.all([
+        http_client(Storage.getStorage("auth").token).post(GET_INFO_USER_URL),
+        http_client(Storage.getStorage("auth").token).get(
+          DASHBOARD_ADMIN_USER_URL
+        ),
+      ]).then((res) => {
+        setUser(res[0].data);
+        if (roleIs("admin")) {
+          setcompaniesFromAdmin(res[1].data.totalCompany);
+        }
+        if (res[0].data.photo) {
+          setUrlImg(`${API_STORAGE_URL}/${res[0].data.photo}`);
+        }
+        setLoading(false);
+      });
+    }else{
+      Promise.all([
+        http_client(Storage.getStorage("auth").token).post(GET_INFO_USER_URL),
+        // http_client(Storage.getStorage("auth").token).get(
+        //   DASHBOARD_ADMIN_USER_URL
+        // ),
+      ]).then((res) => {
+        setUser(res[0].data);
+        
+        if (res[0].data.photo) {
+          setUrlImg(`${API_STORAGE_URL}/${res[0].data.photo}`);
+        }
+        setLoading(false);
+      });
+    }
+    
   }, []);
 
   return (
@@ -224,17 +243,19 @@ const Profil: FC<TypeProfil> = () => {
             </span>
 
             <div className="flex items-center justify-end">
-              <BsBuilding />{" "}
-              <Link
-                to="/my/company/view"
-                className={`flex ${
-                  user.role === "ENTREPRISE"
-                    ? !user.as_company && "disabled"
-                    : "disabled"
-                } justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}
-              >
-                Voir mon entreprise <HiEye className="ml-2" />
-              </Link>
+              {roleIs("admin") && (
+                <>
+                  <BsBuilding />{" "}
+                  <Link
+                    to="/companies"
+                    className={`flex ${
+                      !(companiesFromAdmin >= 1) && "disabled"
+                    } justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}
+                  >
+                    Voir mes entreprise <HiEye className="ml-2" />
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </>
@@ -243,7 +264,7 @@ const Profil: FC<TypeProfil> = () => {
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         {!loading ? (
           <>
-            {user.role !== "SUPER" && !user.as_company && !user.company_id && (
+            {!roleIs("super") && roleIs("admin") && (
               <div className="">
                 {!(companiesFromAdmin >= 1) && (
                   <Alert

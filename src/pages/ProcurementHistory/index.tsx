@@ -1,44 +1,50 @@
-import React, { useState, useEffect } from 'react'
-import DataTable, { TableColumn } from 'react-data-table-component'
-import { BsPrinterFill } from 'react-icons/bs'
-import { HiRefresh } from 'react-icons/hi'
-import { Link } from 'react-router-dom'
-import Storage from '../../service/Storage'
-import DashboardLayout from '../../templates/DashboardLayout'
-import { baseURL, http_client } from '../../utils/axios-custum'
-import DefautProductImage from '../../assets/img/default-product.png';
-import { formatCurrency, formatDate } from '../../utils/function'
-import Loader from '../../atoms/Loader'
-import Procurement from '../../Model/Procurement'
-import { PDFDownloadLink } from '@react-pdf/renderer'
-import ProcurementPrint from '../../templates/ProcurementProduct'
+import React, { useState, useEffect } from "react";
+import DataTable, { TableColumn } from "react-data-table-component";
+import { BsPrinterFill } from "react-icons/bs";
+import { HiRefresh } from "react-icons/hi";
+import { Link } from "react-router-dom";
+import Storage from "../../service/Storage";
+import DashboardLayout from "../../templates/DashboardLayout";
+import { baseURL, http_client } from "../../utils/axios-custum";
+import DefautProductImage from "../../assets/img/default-product.png";
+import { formatCurrency, formatDate } from "../../utils/function";
+import Loader from "../../atoms/Loader";
+import Procurement from "../../Model/Procurement";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import ProcurementPrint from "../../templates/ProcurementProduct";
 
-type TypeProcurementHistory = {}
+type TypeProcurementHistory = {};
 
-const GET_PROCUREMENT = 'history/procurement'
+const GET_PROCUREMENT = "history/procurement";
 const API_STORAGE_URL = `${baseURL}/storage`;
 
-const ProcurementHistory:React.FC<TypeProcurementHistory> = () => {
-
+const ProcurementHistory: React.FC<TypeProcurementHistory> = () => {
   const [loading, setLoading] = useState(true);
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
-  const [procurements,setProcurements] = useState<Procurement[]>([]);
+  const [procurements, setProcurements] = useState<Procurement[]>([]);
 
   const filteredItems = procurements.filter(
     (item) =>
       (item.product?.name &&
         item.product.name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item?.created_at &&
-        item.created_at.toLowerCase().includes(filterText.toLowerCase())) || 
+        item.created_at.toLowerCase().includes(filterText.toLowerCase())) ||
       (item?.quantite &&
-        item.quantite.toString().toLowerCase().includes(filterText.toLowerCase())) || 
+        item.quantite
+          .toString()
+          .toLowerCase()
+          .includes(filterText.toLowerCase())) ||
       (item?.product_id &&
-        item.prix_achat?.toString().toLowerCase().includes(filterText.toLowerCase())) ||
+        item.prix_achat
+          ?.toString()
+          .toLowerCase()
+          .includes(filterText.toLowerCase())) ||
       (item?.product?.type_approvisionnement &&
-        item.product.type_approvisionnement.toLowerCase().includes(filterText.toLowerCase()))
+        item.product.type_approvisionnement
+          .toLowerCase()
+          .includes(filterText.toLowerCase()))
   );
-
 
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
@@ -81,35 +87,73 @@ const ProcurementHistory:React.FC<TypeProcurementHistory> = () => {
     );
   }, [filterText, resetPaginationToggle]);
 
-
   const columns: TableColumn<Procurement>[] = [
     {
-      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Name</span>,
-      cell: (row) => <div className="font-bold flex space-y-1 flex-col justify-start items-start">
-        <div className=' relative flex justify-center items-center'>
-          {row.product?.image ? <img width={70} height={70} src={`${API_STORAGE_URL}/${row.product.image}`} alt='productimage' />:<img width={70} height={70} src={DefautProductImage} className='opacity-50' alt='default-product' />}
+      name: (
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">
+          Nom du produit
+        </span>
+      ),
+      cell: (row) => (
+        <div className="font-bold flex space-y-1 flex-col justify-start items-start">
+          <div className=" relative flex justify-center items-center">
+            {row.product?.image ? (
+              <img
+                width={70}
+                height={70}
+                src={`${API_STORAGE_URL}/${row.product.image}`}
+                alt="productimage"
+              />
+            ) : (
+              <img
+                width={70}
+                height={70}
+                src={DefautProductImage}
+                className="opacity-50"
+                alt="default-product"
+              />
+            )}
+          </div>
+          <span>{row.product?.name} </span>
         </div>
-        <span>{row.product?.name} </span>
-      </div>,
+      ),
       sortable: true,
     },
     {
-      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">DATE DE L'APPROVIONNEMENT</span>,
-      cell: (row) => <span className="">
-        {formatDate(row.created_at || "")|| "Aucun"}
-      </span>,
+      name: (
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">
+          DATE DE L'APPROVIONNEMENT
+        </span>
+      ),
+      cell: (row) => (
+        <span className="">{formatDate(row.created_at || "") || "Aucun"}</span>
+      ),
       sortable: true,
     },
     {
-      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Quantité (E/S)</span>,
-      cell: (row) => <span>
-          {row.quantite} {row.is_unite && 'Unité'}{!row.is_unite && (row.product?.type_approvisionnement)}{(row.quantite || 0) > 0 && 's'}
-      </span>,
+      name: (
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">
+          Quantité (E/S)
+        </span>
+      ),
+      cell: (row) => (
+        <span>
+          {row.quantite} {row.is_unite && "Unité"}
+          {!row.is_unite && row.product?.type_approvisionnement}
+          {(row.quantite || 0) > 0 && "s"}
+        </span>
+      ),
       sortable: true,
     },
     {
-      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">AUTEUR DE LATRANSACTION</span>,
-      cell: (row) => <div>{row.user?.lastname || row.user?.firstname || ''}</div>,
+      name: (
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">
+          AUTEUR DE LATRANSACTION
+        </span>
+      ),
+      cell: (row) => (
+        <div>{row.user?.lastname || row.user?.firstname || ""}</div>
+      ),
       sortable: true,
     },
     {
@@ -118,8 +162,15 @@ const ProcurementHistory:React.FC<TypeProcurementHistory> = () => {
           Prix d'âchat
         </span>
       ),
-      cell: (row) =>  <span className='text-gray-600 font-bold'>{formatCurrency(parseInt(row.prix_achat?.toString() || '0',10) || 0,'XAF')}</span>,
-    }
+      cell: (row) => (
+        <span className="text-gray-600 font-bold">
+          {formatCurrency(
+            parseInt(row.prix_achat?.toString() || "0", 10) || 0,
+            "XAF"
+          )}
+        </span>
+      ),
+    },
   ];
 
   useEffect(() => {
@@ -134,15 +185,25 @@ const ProcurementHistory:React.FC<TypeProcurementHistory> = () => {
   }, []);
 
   return (
-    <DashboardLayout
-      title='Procurement history'
-    >
+    <DashboardLayout title="Historique d'approvisionnement">
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center">
-          <PDFDownloadLink document={<ProcurementPrint histories={procurements} />} fileName="liste-approvisionnement.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
-            Print the list of supplies
-          </PDFDownloadLink >
-          <Link to='/approvisionnement' className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></Link>
+          <PDFDownloadLink
+            document={<ProcurementPrint histories={procurements} />}
+            fileName="liste-approvisionnement.pdf"
+            className="text-sm text-white px-4 rounded-md bg-gray-700 py-2"
+          >
+            {" "}
+            <BsPrinterFill size={16} className="inline-block mr-1" />
+            Imprimer l'historique d'approvisionnement
+          </PDFDownloadLink>
+          <Link
+            to="/approvisionnement"
+            className="text-sm text-[#ac3265] px-4 rounded-md bg-white py-2"
+          >
+            {" "}
+            <HiRefresh size={20} />
+          </Link>
         </div>
       </div>
 
@@ -152,7 +213,7 @@ const ProcurementHistory:React.FC<TypeProcurementHistory> = () => {
           <>
             <DataTable
               className=" rounded-md overflow-hidden"
-              title="Histoy"
+              title="Historiques"
               pagination
               columns={columns}
               data={filteredItems}
@@ -169,9 +230,8 @@ const ProcurementHistory:React.FC<TypeProcurementHistory> = () => {
           </div>
         )}
       </div>
-
     </DashboardLayout>
-  )
-}
+  );
+};
 
-export default ProcurementHistory
+export default ProcurementHistory;

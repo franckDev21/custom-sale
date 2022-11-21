@@ -3,7 +3,7 @@ import React, { useState, useEffect, FormEvent, ChangeEvent } from "react";
 import { BiPencil } from "react-icons/bi";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { RiArrowLeftRightFill } from "react-icons/ri";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../../../atoms/Loader";
 import Product from "../../../Model/Product";
@@ -45,6 +45,8 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
 
   const { id } = useParams();
 
+  const navigate = useNavigate()
+
   const confirmAddInput = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setSending(true)
@@ -56,6 +58,8 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
         setDataInputForm({quantite:'',prix_achat: ''})
         toast.success(res.data.message)
         setProduct(res.data.product)
+        
+        navigate('/products')
       })
       .catch(err => {
         setSending(false)
@@ -343,6 +347,13 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
                   <label htmlFor="desc" className="mb-1 inline-block">Fournisseur : </label>
                   <div className="p-2 rounded-md text-[#ac3265]">{product.product_supplier?.name}</div>
                 </div>
+              </div>
+
+              <div className="flex">
+              <button onClick={_ => {
+                    onClick('INPUT')
+                    setModalType('INPUT')
+                  }} className='text-sm text-white px-4 rounded-md bg-primary py-2'>Ajouter un nouvelle approvisionnement</button>
               </div>
             </div>
           </div>

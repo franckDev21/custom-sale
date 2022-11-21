@@ -153,7 +153,7 @@ const Login: FC<LoginType> = () => {
             <p className="mt-4 text-sm">
               {/* You don't have an account yet?{" "} */}
               Vous n’avez pas encore de compte  ?
-              <Link to='/register' className="underline cursor-pointer"> Créer un compte</Link>
+              <Link to='/star' className="underline cursor-pointer"> Créer un compte</Link>
             </p>
           </div>
         </div>

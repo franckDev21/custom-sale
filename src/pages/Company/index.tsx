@@ -165,6 +165,7 @@ const Company: FC<TypeCompany> = () => {
         })
         .catch((err) => {
           console.log(err);
+          toast.error(err.response?.data?.message || err.message);
           setSending(false);
         });
     } else {
@@ -347,7 +348,7 @@ const Company: FC<TypeCompany> = () => {
                     <FaEye />
                   </button>
 
-                  {roleIs("admin") && (
+                  {roleIs("admin") && action !== "create" && (
                     <button
                       onClick={(e) => {
                         e.preventDefault();

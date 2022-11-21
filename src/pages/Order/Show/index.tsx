@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { FaFileInvoiceDollar } from "react-icons/fa";
-import { Link, useParams } from "react-router-dom";
+import { FaFileInvoiceDollar, FaMoneyBillWave } from "react-icons/fa";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Loader from "../../../atoms/Loader";
 import Order from "../../../Model/Order";
 import Storage from "../../../service/Storage";
@@ -13,10 +13,12 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import FactureDocument from "../../../templates/FactureDocument";
 import { BsPrinterFill } from "react-icons/bs";
 import Invoice from "../../../Model/Invoice";
+import { toast } from "react-toastify";
 
 const GET_ORDER_URL = "orders";
 const API_STORAGE_URL = `${baseURL}/storage`;
 const CREATE_INVOICE_URL = "invoices";
+const BAY_ORDER_URL = "/orders/pay";
 // orders/{order}/facture
 
 const OrderShow = () => {
@@ -24,14 +26,37 @@ const OrderShow = () => {
   const [order, setOrder] = useState<Order>({});
   const [orderProducts, setOrderProducts] = useState<OrderProduct[]>([]);
   const [invoice, setInvoice] = useState<Invoice>({});
+  const [sending, setSending] = useState(false);
 
   const { reference, id } = useParams();
+  const navigate = useNavigate();
 
   const invoices = async () => {
     const res = await http_client(Storage.getStorage("auth").token).post(
       `${CREATE_INVOICE_URL}/${id}`
     );
     console.log(res.data);
+  };
+
+  const confirmPay = () => {
+    setSending(true);
+    // delete order
+    http_client(Storage.getStorage("auth").token)
+      .post(`${BAY_ORDER_URL}/${id}`)
+      .then((res) => {
+        setSending(false);
+        if (res.data.message) {
+          setLoading(true);
+          navigate(`/orders`);
+          toast.success(res.data.message);
+        } else {
+          toast.error(res.data.error);
+        }
+      })
+      .catch((err: any) => {
+        setSending(false);
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -114,13 +139,29 @@ const OrderShow = () => {
                       />
                     }
                     fileName="facture.pdf"
-                    className="px-4 py-2 bg-green-500 hover:bg-green-600 font-bold transition text-white rounded-md"
+                    className={`px-4 ${
+                      order.etat !== "PAYER" && "disabled select-none"
+                    } py-2 bg-green-500 hover:bg-green-600 font-bold transition text-white rounded-md`}
                   >
                     {" "}
                     <BsPrinterFill size={16} className="inline-block mr-1" />
                     Imprimer la facture du client
                   </PDFDownloadLink>
-                  {/* <button className='px-4 py-2 bg-primary opacity-80 hover:opacity-100 transition font-bold text-white rounded-md' >INVOICE THE CUSTOMER</button> */}
+                  <button
+                    onClick={confirmPay}
+                    className={`px-4 ${
+                      order.etat === "PAYER" && "disabled select-none"
+                    } py-2 flex items-center bg-primary opacity-90 hover:opacity-100 transition font-bold text-white rounded-md`}
+                  >
+                    {sending ? (
+                      <Loader className=" inline-block text-lg" />
+                    ) : (
+                      <>
+                        {" "}
+                        <FaMoneyBillWave className="mr-2" /> Payer la commande
+                      </>
+                    )}
+                  </button>
                 </div>
               </header>
 

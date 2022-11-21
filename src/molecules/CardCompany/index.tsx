@@ -63,12 +63,19 @@ const CardCompany: React.FC<CardCompanyProps> = ({
       </div>
 
       {!editing && (
-        <div className="mt-3">
+        <div className="mt-3 space-x-2">
           <Link
             to={`${companyId}/view`}
             className="px-2 uppercase py-1.5 rounded-md bg-primary text-white text-xs"
           >
             voir la boutique
+          </Link>
+
+          <Link
+            to={`/companies/${companyId}/dashoard`}
+            className="px-2 uppercase py-1.5 rounded-md bg-gray-700 text-white text-xs"
+          >
+            Dashboard
           </Link>
         </div>
       )}

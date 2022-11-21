@@ -515,7 +515,7 @@ const Setting:React.FC<TypeSetting> = () => {
         <div className="flex space-x-4 font-bold items-center mb-4 mt-10">
           <h1 className='text-3xl text-primary font-bold'>Liste des fournisseurs |</h1>
           <div className="flex space-x-4 font-bold items-center">
-            <button onClick={() => setShowFormSupplier(!showFormSupplier)} className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <BsPlusLg size={16} className='inline-block  mr-1' />Ajouter un nouveau fournisseurr</button>
+            <button onClick={() => setShowFormSupplier(!showFormSupplier)} className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <BsPlusLg size={16} className='inline-block  mr-1' />Ajouter un nouveau fournisseur</button>
             <button  className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block  mr-1' />Imprimer la liste des fournisseurs</button>
             <button  className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></button>
           </div>
@@ -535,7 +535,7 @@ const Setting:React.FC<TypeSetting> = () => {
               </div>
               <span onClick={() => setShowFormSupplier(false)} title='Close' className=' absolute -top-4 right-0 bg-red-100 p-2 rounded-md transition text-red-500 cursor-pointer hover:bg-red-500 hover:text-white'><FaTimes /></span>
 
-              <button type='submit' className={`bg-green-400 ${(!supplierForm.name) && 'disabled select-none'} self-start hover:bg-green-600 transition text-white px-4 py-2 uppercase font-bold rounded-md flex items-center`}>{sendingTwo ? <Loader className='text-lg inline-block' />:'Save'}</button>
+              <button type='submit' className={`bg-green-400 ${(!supplierForm.name) && 'disabled select-none'} self-start hover:bg-green-600 transition text-white px-4 py-2 uppercase font-bold rounded-md flex items-center`}>{sendingTwo ? <Loader className='text-lg inline-block' />:'Sauvegarder'}</button>
             </label>
           </form>
 
@@ -545,7 +545,7 @@ const Setting:React.FC<TypeSetting> = () => {
           <>
             <DataTable
               className=" rounded-md overflow-hidden"
-              title="Suppliers"
+              title="Fournisseurs"
               pagination
               columns={columnsTwo}
               data={filteredItemsTwo}

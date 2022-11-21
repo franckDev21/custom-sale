@@ -21,7 +21,7 @@ import { RiAdminFill } from "react-icons/ri";
 
 type TypeDashboard = {};
 
-type TotalDashboardProps = {
+export type TotalDashboardProps = {
   totalUser?: string | number;
   totalCash?: string | number;
   totalProduct?: string | number;

@@ -1,29 +1,28 @@
-import { PDFDownloadLink } from '@react-pdf/renderer'
-import { Modal } from 'flowbite-react'
-import React, { useState, useEffect } from 'react'
-import DataTable, { TableColumn } from 'react-data-table-component'
-import { BsPrinterFill } from 'react-icons/bs'
-import { FaEye, FaShoppingCart, FaTrash } from 'react-icons/fa'
-import { HiOutlineExclamationCircle, HiRefresh } from 'react-icons/hi'
-import { Link } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import Loader from '../../atoms/Loader'
-import Invoice from '../../Model/Invoice'
-import Storage from '../../service/Storage'
-import UserService from '../../service/UserService'
-import DashboardLayout from '../../templates/DashboardLayout'
-import InvoicePrint from '../../templates/InvoicePrint'
-import { http_client } from '../../utils/axios-custum'
-import { formatDate } from '../../utils/function'
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { Modal } from "flowbite-react";
+import React, { useState, useEffect } from "react";
+import DataTable, { TableColumn } from "react-data-table-component";
+import { BsPrinterFill } from "react-icons/bs";
+import { FaEye, FaShoppingCart, FaTrash } from "react-icons/fa";
+import { HiOutlineExclamationCircle, HiRefresh } from "react-icons/hi";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import Loader from "../../atoms/Loader";
+import Invoice from "../../Model/Invoice";
+import Storage from "../../service/Storage";
+import UserService from "../../service/UserService";
+import DashboardLayout from "../../templates/DashboardLayout";
+import InvoicePrint from "../../templates/InvoicePrint";
+import { http_client } from "../../utils/axios-custum";
+import { formatDate } from "../../utils/function";
 
-type TypeInvoiceList = {}
+type TypeInvoiceList = {};
 
-const GET_INVOICES = 'invoices'
+const GET_INVOICES = "invoices";
 
 const InvoiceList: React.FC<TypeInvoiceList> = () => {
-
   const [loading, setLoading] = useState(true);
-  const [invoices,setInvoices] = useState<Invoice[]>([]);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
   const [currentIdInvoice, setCurrentIdInvoice] = useState<string | null>(null);
@@ -33,11 +32,17 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
   const filteredItems = invoices.filter(
     (item) =>
       (item.customer?.firstname &&
-        item.customer.firstname.toString().toLowerCase().includes(filterText.toLowerCase())) ||
+        item.customer.firstname
+          .toString()
+          .toLowerCase()
+          .includes(filterText.toLowerCase())) ||
       (item.customer?.lastname &&
-        item.customer.lastname.toString().toLowerCase().includes(filterText.toLowerCase())) ||
+        item.customer.lastname
+          .toString()
+          .toLowerCase()
+          .includes(filterText.toLowerCase())) ||
       (item?.created_at &&
-        item.created_at.toLowerCase().includes(filterText.toLowerCase())) 
+        item.created_at.toLowerCase().includes(filterText.toLowerCase()))
   );
 
   const confirmDelete = () => {
@@ -50,9 +55,9 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
       .then((res) => {
         setDeleting(false);
         deleteInvoice(currentIdInvoice || "1");
-        if(res.data.message){
+        if (res.data.message) {
           toast.success(res.data.message);
-        }else{
+        } else {
           toast.error(res.data.error);
         }
       })
@@ -60,7 +65,7 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
         setDeleting(false);
         console.log(err);
       });
-  }
+  };
 
   const deleteInvoice = (id: string) => {
     let invoicesFilter = invoices.filter((invcoice) => invcoice.id !== id);
@@ -118,28 +123,47 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
   }, [filterText, resetPaginationToggle]);
 
   const columns: TableColumn<Invoice>[] = [
-
     {
-      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">NUMÉRO</span>,
-      cell: (row) => <div className="font-bold flex space-y-1 flex-col justify-start items-start">N⁰{row.reference}</div>,
+      name: (
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">
+          NUMÉRO
+        </span>
+      ),
+      cell: (row) => (
+        <div className="font-bold flex space-y-1 flex-col justify-start items-start">
+          N⁰{row.reference}
+        </div>
+      ),
       sortable: true,
     },
     {
-      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Date de création</span>,
-      cell: (row) => <span className="">
-        {formatDate(row.created_at || "")|| "Aucun"}
-      </span>,
+      name: (
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">
+          Date de création
+        </span>
+      ),
+      cell: (row) => (
+        <span className="">{formatDate(row.created_at || "") || "Aucun"}</span>
+      ),
       sortable: true,
     },
     {
-      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">COMMANDE</span>,
-      cell: (row) => <div className='flex justify-start items-start flex-col py-3'>
-        <Link className=' underline font-semibold' to='/'>Voir la commande</Link>
-        <p>
-          {row.order?.quantite} Produit(s) commandé(s) <br />
-          par {row.customer?.firstname} {row.customer?.lastname}
-        </p>
-      </div>,
+      name: (
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">
+          COMMANDE
+        </span>
+      ),
+      cell: (row) => (
+        <div className="flex justify-start items-start flex-col py-3">
+          <Link className=" underline font-semibold" to="/">
+            Voir la commande
+          </Link>
+          <p>
+            {row.order?.quantite} Produit(s) commandé(s) <br />
+            par {row.customer?.firstname} {row.customer?.lastname}
+          </p>
+        </div>
+      ),
       sortable: true,
     },
     {
@@ -148,26 +172,30 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
           Client
         </span>
       ),
-      selector: (row) => `${row.customer?.firstname} ${row.customer?.lastname}` || '',
+      selector: (row) =>
+        `${row.customer?.firstname} ${row.customer?.lastname}` || "",
     },
     {
       name: "",
       cell: (row) => (
         <h1 className=" flex items-center justify-center">
-
           <Link
-            to={`/orders/show/${row.order?.id}/${row.order?.reference?.toString().split(' ').join('-').toLowerCase()}`}
+            to={`/orders/show/${row.order?.id}/${row.order?.reference
+              ?.toString()
+              .split(" ")
+              .join("-")
+              .toLowerCase()}`}
             className="font-medium ml-1 text-base text-blue-500 p-2 bg-blue-100 rounded-md inline-block dark:text-blue-500 hover:underline"
           >
             <FaEye />
           </Link>
-          
-          <button
+
+          {/* <button
             onClick={(_) => onClick(row.id || "1")}
             className="font-medium ml-1 text-red-500 w-8 h-8 justify-center items-center  bg-red-100 rounded-md inline-flex dark:text-red-500 hover:underline"
           >
             <FaTrash />
-          </button>
+          </button> */}
         </h1>
       ),
     },
@@ -175,27 +203,40 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
 
   useEffect(() => {
     const fetchInvoices = async () => {
-      const res = await http_client(Storage.getStorage("auth").token).get(GET_INVOICES);
+      const res = await http_client(Storage.getStorage("auth").token).get(
+        GET_INVOICES
+      );
       setInvoices(res.data.data);
       setLoading(false);
     };
     fetchInvoices();
-  },[])
+  }, []);
 
   return (
     <DashboardLayout
-      title='Liste des factures'
+      title="Liste des factures"
       headerContent={
         <>
           <div className="ml-4 w-[74%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
-            <div className='flex justify-between space-x-2 '>
-            {UserService.getUser().company_id && <Link to='/orders/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaShoppingCart size={16} className='inline-block mr-1' />  Ajouter une nouvelle commander</Link>}
-            </div> 
+            <div className="flex justify-between space-x-2 ">
+              {UserService.getUser().company_id && (
+                <Link
+                  to="/orders/create"
+                  className="text-sm text-white px-4 rounded-md bg-green-700 py-2"
+                >
+                  {" "}
+                  <FaShoppingCart
+                    size={16}
+                    className="inline-block mr-1"
+                  />{" "}
+                  Ajouter une nouvelle commander
+                </Link>
+              )}
+            </div>
           </div>
         </>
       }
     >
-
       <React.Fragment>
         <Modal
           show={showModal || deleting}
@@ -203,7 +244,7 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
           popup={true}
           onClose={onClose}
         >
-        <Modal.Header />
+          <Modal.Header />
           <Modal.Body>
             <div className="text-center">
               <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
@@ -237,10 +278,22 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
 
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center">
-          <PDFDownloadLink document={<InvoicePrint invoices={invoices} />} fileName="liste-des-factures.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
+          <PDFDownloadLink
+            document={<InvoicePrint invoices={invoices} />}
+            fileName="liste-des-factures.pdf"
+            className="text-sm text-white px-4 rounded-md bg-gray-700 py-2"
+          >
+            {" "}
+            <BsPrinterFill size={16} className="inline-block mr-1" />
             Imprimer la liste des factures
-          </PDFDownloadLink >
-          <Link to='/approvisionnement' className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></Link>
+          </PDFDownloadLink>
+          <Link
+            to="/approvisionnement"
+            className="text-sm text-[#ac3265] px-4 rounded-md bg-white py-2"
+          >
+            {" "}
+            <HiRefresh size={20} />
+          </Link>
         </div>
       </div>
 
@@ -267,9 +320,8 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
           </div>
         )}
       </div>
-
     </DashboardLayout>
-  )
-}
+  );
+};
 
-export default InvoiceList
+export default InvoiceList;

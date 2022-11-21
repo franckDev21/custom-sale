@@ -58,7 +58,7 @@ const ProductCreate: FC<TypeProductCreate> = () => {
         toast.success(res.data.message)
         setLoading(true)
         let id = window.setTimeout(() => {
-          navigate('/products')
+          navigate(`/products/show/${res.data.product_id}/${res.data.product_name?.split(' ').join('-').toLowerCase()}`)
           window.clearTimeout(id)
         },6000)
         

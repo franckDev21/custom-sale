@@ -33,6 +33,7 @@ import Contact from './pages/Contact';
 import CompanyList from './pages/Company/List';
 import AdminUser from './pages/Admin';
 import AdminUserDetail from './pages/Admin/Detail';
+import DashbordCompany from './pages/Dashboard/DashbordCompany';
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
           <Route path="/admins/create/new" element={<CreateUser type='admin' />} />
 
           <Route path='/companies' element={<CompanyList />} />
+          <Route path='/companies/:id/dashoard' element={<DashbordCompany />} />
           <Route path='/companies/:id/:action' element={<Company />} />
 
           <Route path="/customers" element={<CustomerList />} />
