@@ -12,6 +12,7 @@ import Loader from "../../atoms/Loader";
 import Procurement from "../../Model/Procurement";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import ProcurementPrint from "../../templates/ProcurementProduct";
+import { useSelector } from "react-redux";
 
 type TypeProcurementHistory = {};
 
@@ -23,6 +24,8 @@ const ProcurementHistory: React.FC<TypeProcurementHistory> = () => {
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
   const [procurements, setProcurements] = useState<Procurement[]>([]);
+
+  const companiesStore = useSelector((state: any) => state.companies);
 
   const filteredItems = procurements.filter(
     (item) =>
@@ -176,7 +179,7 @@ const ProcurementHistory: React.FC<TypeProcurementHistory> = () => {
   useEffect(() => {
     const fetUsers = async () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
-        GET_PROCUREMENT
+        companiesStore.currentCompany ? `${GET_PROCUREMENT}?id=${companiesStore.currentCompany.id}`:GET_PROCUREMENT
       );
       setProcurements(res.data);
       setLoading(false);

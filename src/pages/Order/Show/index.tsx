@@ -14,6 +14,7 @@ import FactureDocument from "../../../templates/FactureDocument";
 import { BsPrinterFill } from "react-icons/bs";
 import Invoice from "../../../Model/Invoice";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const GET_ORDER_URL = "orders";
 const API_STORAGE_URL = `${baseURL}/storage`;
@@ -31,6 +32,8 @@ const OrderShow = () => {
   const { reference, id } = useParams();
   const navigate = useNavigate();
 
+  const companiesStore = useSelector((state: any) => state.companies); 
+
   const invoices = async () => {
     const res = await http_client(Storage.getStorage("auth").token).post(
       `${CREATE_INVOICE_URL}/${id}`
@@ -42,7 +45,7 @@ const OrderShow = () => {
     setSending(true);
     // delete order
     http_client(Storage.getStorage("auth").token)
-      .post(`${BAY_ORDER_URL}/${id}`)
+      .post(companiesStore.currentCompany? `${BAY_ORDER_URL}/${id}?id=${companiesStore.currentCompany.id}`:`${BAY_ORDER_URL}/${id}`)
       .then((res) => {
         setSending(false);
         if (res.data.message) {

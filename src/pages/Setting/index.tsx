@@ -4,6 +4,7 @@ import DataTable, { TableColumn } from 'react-data-table-component'
 import { BsPlusLg, BsPrinterFill } from 'react-icons/bs'
 import { FaTimes, FaTrash } from 'react-icons/fa'
 import { HiOutlineExclamationCircle, HiRefresh } from 'react-icons/hi'
+import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import Loader from '../../atoms/Loader'
 import Category from '../../Model/Category'
@@ -47,6 +48,8 @@ const Setting:React.FC<TypeSetting> = () => {
   const [deleting, setDeleting] = useState(false);
   const [showModalTwo, setShowModalTwo] = useState(false);
   const [deletingTwo, setDeletingTwo] = useState(false);
+
+  const companiesStore = useSelector((state: any) => state.companies);
 
   const filteredItems = categories.filter(
     (item) =>
@@ -317,7 +320,7 @@ const Setting:React.FC<TypeSetting> = () => {
   const handleSubmitOne = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setSendingOne(true)
-    http_client(Storage.getStorage("auth").token).post(GET_CATEGORIES_URL,{name: categorieInput})
+    http_client(Storage.getStorage("auth").token).post(companiesStore.currentCompany ? `${GET_CATEGORIES_URL}?id=${companiesStore.currentCompany.id}`:GET_CATEGORIES_URL,{name: categorieInput})
       .then(res => {
         setSendingOne(false)
         toast.success(res.data.message)
@@ -333,7 +336,7 @@ const Setting:React.FC<TypeSetting> = () => {
   const handleSubmitTwo = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setSendingTwo(true)
-    http_client(Storage.getStorage("auth").token).post(CREATE_SUPPLIERS_URL,supplierForm)
+    http_client(Storage.getStorage("auth").token).post(companiesStore.currentCompany ? `${CREATE_SUPPLIERS_URL}?id=${companiesStore.currentCompany.id}`:CREATE_SUPPLIERS_URL,supplierForm)
       .then(res => {
         setSendingTwo(false)
         toast.success(res.data.message)
@@ -365,8 +368,8 @@ const Setting:React.FC<TypeSetting> = () => {
 
   const reload = () => {
     Promise.all([
-      http_client(Storage.getStorage("auth").token).get(GET_CATEGORIES_URL),
-      http_client(Storage.getStorage("auth").token).get(GET_PRODUCT_SUPPLIER_URL),
+      http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_CATEGORIES_URL}?id=${companiesStore.currentCompany.id}`:GET_CATEGORIES_URL),
+      http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_PRODUCT_SUPPLIER_URL}?id=${companiesStore.currentCompany.id}`:GET_PRODUCT_SUPPLIER_URL),
     ]).then((res: any) => {
       setLoading(false)
 

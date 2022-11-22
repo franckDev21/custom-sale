@@ -18,6 +18,7 @@ import Loader from "../../../atoms/Loader";
 import Product from "../../../Model/Product";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 type TypeProductEdit = {};
 
@@ -43,6 +44,8 @@ const ProductEdit: FC<TypeProductEdit> = () => {
 
   const { id } = useParams();
 
+  const companiesStore = useSelector((state: any) => state.companies); 
+
   const formRef = useRef(null);
 
   const navigate = useNavigate();
@@ -64,7 +67,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
     let formData = new FormData(formRef?.current || undefined);
 
     setSending(true);
-    http_client(Storage.getStorage("auth").token)
+    http_client(Storage.getStorage("auth").token) 
       .post(`${EDIT_PRODUCT_URL}/${id}`, formData)
       .then((res) => {
         setSending(false);
@@ -137,11 +140,11 @@ const ProductEdit: FC<TypeProductEdit> = () => {
   };
 
   useEffect(() => {
-    Promise.all([
-      http_client(Storage.getStorage("auth").token).get(GET_CATEGORIES_URL),
+    Promise.all([ 
+      http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_CATEGORIES_URL}?id=${companiesStore.currentCompany.id}`:GET_CATEGORIES_URL),
       http_client(Storage.getStorage("auth").token).get(GET_PRODUCT_TYPE_URL),
       http_client(Storage.getStorage("auth").token).get(
-        GET_PRODUCT_SUPPLIER_URL
+        companiesStore.currentCompany ?  `${GET_PRODUCT_SUPPLIER_URL}?id=${companiesStore.currentCompany.id}`:GET_PRODUCT_SUPPLIER_URL
       ),
       http_client(Storage.getStorage("auth").token).get(`${GET_PRODUIT_URL}/${id}`)
     ])

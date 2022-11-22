@@ -3,6 +3,7 @@ import { BsCheckLg } from "react-icons/bs";
 import { FaShoppingCart } from "react-icons/fa";
 import { HiOutlineSearch } from "react-icons/hi";
 import { TiTimes } from 'react-icons/ti';
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../../../atoms/Loader";
@@ -32,11 +33,13 @@ const OrderCreate = () => {
   const [sending,setSending] = useState(false)
   const [success,setSuccess] = useState(false)
   const [orderId,setOrderId] = useState(0)
-
+  
   const [taxe,setTaxe] = useState('')
 
   const API_STORAGE_URL = `${baseURL}/storage`;
   const CREATE_ORDER_URL = "orders";
+
+  const companiesStore = useSelector((state: any) => state.companies); 
 
   const commander = (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -53,7 +56,7 @@ const OrderCreate = () => {
       total_ht : isValid().prix_ht
     }
     
-    http_client(Storage.getStorage("auth").token).post(CREATE_ORDER_URL,data)
+    http_client(Storage.getStorage("auth").token).post(companiesStore.currentCompany ? `${CREATE_ORDER_URL}?id=${companiesStore.currentCompany.id}`:CREATE_ORDER_URL,data)
       .then(res => {
         setSending(false)
 
@@ -243,8 +246,8 @@ const OrderCreate = () => {
   useEffect(() => {
     const fetUsers = async () => {
       const res = await Promise.all([
-        http_client(Storage.getStorage("auth").token).get(GET_MY_CUSTOMERS),
-        http_client(Storage.getStorage("auth").token).get(GET_PRODUCTS),
+        http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_MY_CUSTOMERS}?id=${companiesStore.currentCompany.id}`:GET_MY_CUSTOMERS),
+        http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_PRODUCTS}?id=${companiesStore.currentCompany.id}`:GET_PRODUCTS),
       ]);
 
       setCustomers(res[0].data.data);
@@ -252,7 +255,7 @@ const OrderCreate = () => {
       setLoading(false);
     };
     fetUsers();
-  }, []);
+  }, [companiesStore.currentCompany]);
 
   return (
     <DashboardLayout

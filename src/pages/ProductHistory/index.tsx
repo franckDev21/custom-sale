@@ -13,6 +13,7 @@ import { FaEye } from 'react-icons/fa'
 import Loader from '../../atoms/Loader'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import HistoriesPrint from '../../templates/HistoryPrint'
+import { useSelector } from 'react-redux'
 
 type TypeProductHistory = {}
 
@@ -25,6 +26,8 @@ const ProductHistory:React.FC<TypeProductHistory> = () => {
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
   const [histories,setHistories] = useState<ProductHistoryModel[]>([]);
+
+  const companiesStore = useSelector((state: any) => state.companies);
 
   const filteredItems = histories.filter(
     (item) =>
@@ -144,7 +147,7 @@ const ProductHistory:React.FC<TypeProductHistory> = () => {
   useEffect(() => {
     const fetUsers = async () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
-        GET_HISTORY
+        companiesStore.currentCompany ? `${GET_HISTORY}?id=${companiesStore.currentCompany.id}`:GET_HISTORY
       );
       setHistories(res.data);
       setLoading(false);

@@ -18,6 +18,7 @@ import { resolve } from 'path'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import CashierPrint from '../../templates/CashierPrint'
 import UserService from '../../service/UserService'
+import { useSelector } from 'react-redux'
 
 type TypeCashier = {}
 
@@ -48,6 +49,7 @@ const Cashier: React.FC<TypeCashier> = () => {
   const [dataOutputForm,setDataOutputForm] = useState<TypeForm>({})
   const [errorMessage,setErrorMessage] = useState('')
 
+  const companiesStore = useSelector((state: any) => state.companies); 
 
   const filteredItems = cashiers.filter(
     (item) =>
@@ -202,7 +204,7 @@ const Cashier: React.FC<TypeCashier> = () => {
     e.preventDefault()
     setSending2(true)
     
-    http_client(Storage.getStorage("auth").token).post(`${CREATE_OUTPUT_URL}`,dataOutputForm)
+    http_client(Storage.getStorage("auth").token).post(companiesStore.currentCompany ? `${CREATE_OUTPUT_URL}?id=${companiesStore.currentCompany.id}`:`${CREATE_OUTPUT_URL}`,dataOutputForm)
       .then(res => {
         setSending2(false)
         if(res.data.message){
@@ -228,7 +230,7 @@ const Cashier: React.FC<TypeCashier> = () => {
     setErrorMessage('')
 
     setSending(true)
-    http_client(Storage.getStorage("auth").token).post(`${CREATE_INTPUT_URL}`,dataInputForm)
+    http_client(Storage.getStorage("auth").token).post(companiesStore.currentCompany? `${CREATE_INTPUT_URL}?id=${companiesStore.currentCompany.id}`:`${CREATE_INTPUT_URL}`,dataInputForm)
       .then(res => {
         reloadData().then((res2:any) => {
           setSending(false)
@@ -247,8 +249,8 @@ const Cashier: React.FC<TypeCashier> = () => {
   const reloadData = async () => {
     return new Promise((resolve,reject) => {
       Promise.all([
-          http_client(Storage.getStorage("auth").token).get(`${GET_CASHIERS_URL}`),
-          http_client(Storage.getStorage("auth").token).get(`${GET_TOTALCASH_URL}`)
+        http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_CASHIERS_URL}?id=${companiesStore.currentCompany.id}`:`${GET_CASHIERS_URL}`),
+        http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_TOTALCASH_URL}?id=${companiesStore.currentCompany.id}`:`${GET_TOTALCASH_URL}`)
         ]).then(res => {
             setCashiers(res[0].data);
             setTotalCash(res[1].data)
@@ -265,8 +267,8 @@ const Cashier: React.FC<TypeCashier> = () => {
 
   useEffect(() => { 
     Promise.all([
-      http_client(Storage.getStorage("auth").token).get(`${GET_CASHIERS_URL}`),
-      http_client(Storage.getStorage("auth").token).get(`${GET_TOTALCASH_URL}`)
+      http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_CASHIERS_URL}?id=${companiesStore.currentCompany.id}`:`${GET_CASHIERS_URL}`),
+      http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_TOTALCASH_URL}?id=${companiesStore.currentCompany.id}`:`${GET_TOTALCASH_URL}`)
     ]).then(res => {
         setCashiers(res[0].data);
         setTotalCash(res[1].data)
@@ -283,7 +285,7 @@ const Cashier: React.FC<TypeCashier> = () => {
       headerContent={
         <>
           <div className="ml-4 w-[90%] font-bold text-2xl text-[#ac3265] flex items-center justify-end">
-          {UserService.getUser().company_id && 
+          {(UserService.getUser().company_id || companiesStore.currentCompany)&& 
             <div className='flex justify-between space-x-2 '>
               <PDFDownloadLink document={<CashierPrint cashiers={cashiers} total={totalCash.montant} />} fileName="caisse.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
                 Imprimer l'état de la caisse
@@ -314,36 +316,36 @@ const Cashier: React.FC<TypeCashier> = () => {
             <Modal.Body>
               <form onSubmit={confirmAddOutput} className="text-left">
                 <h3 className="mb-5 font-bold text-lg pb-3 border-b text-[#ac3265] dark:text-gray-400">
-                  Add a checkout <AiOutlineToTop className=' inline-block ml-2 text-3xl' />
+                  Ajouter une sortie en caisse <AiOutlineToTop className=' inline-block ml-2 text-3xl' />
                 </h3>
                 <div className="flex flex-col space-y-4 mt-4 mb-6">
                   <div>
-                    <label htmlFor="quantite" className="inline-block mb-2 font-semibold text-gray-700">Your montant</label>
-                    <input name="montant" onChange={handleOnchange} value={dataOutputForm.montant || ''} required autoFocus type="number" id="quantite" placeholder="Quantity of supply" min={0} className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600' />
+                    <label htmlFor="quantite" className="inline-block mb-2 font-semibold text-gray-700">Votre montant</label>
+                    <input name="montant" onChange={handleOnchange} value={dataOutputForm.montant || ''} required autoFocus type="number" id="quantite" placeholder="Entrer montant du retrait " min={0} className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600' />
                   </div>
                   
                   <div>
                     <label htmlFor="motif" className="inline-block mb-2 font-semibold text-gray-700">Your reason</label>
-                    <textarea name="motif" onChange={handleOnchange} value={dataOutputForm.motif || ''} required id="quantite" placeholder="Enter your reason" className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600' rows={6}></textarea>
+                    <textarea name="motif" onChange={handleOnchange} value={dataOutputForm.motif || ''} required id="quantite" placeholder="Entrer la raison de votre retrait" className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600' rows={6}></textarea>
                   </div>
                 </div>
                 <div className="flex justify-center space-x-3">
                   <button
                     color="failure"
-                    className={`bg-green-500 ${sending2 && 'disabled'} hover:bg-green-700 transition text-white rounded-md px-3 font-semibold uppercase py-2 w-1/2 inline-block`}
+                    className={`bg-green-500 text-sm ${sending2 && 'disabled'} hover:bg-green-700 transition text-white rounded-md px-3 font-semibold uppercase py-2 w-1/2 inline-block`}
                   >
                     {sending2 ? (
                       <Loader className="flex justify-center text-lg items-center" />
                     ) : (
-                      "Confirm output"
+                      "Confirmer la sortie"
                     )}
                   </button>
                   <button
                     color="gray"
                     onClick={onClose}
-                    className="bg-gray-500 hover:bg-gray-700 transition text-white rounded-md px-3 font-semibold uppercase py-2 w-1/2 inline-block"
+                    className="bg-gray-500 text-sm  hover:bg-gray-700 transition text-white rounded-md px-3 font-semibold uppercase py-2 w-1/2 inline-block"
                   >
-                    No, cancel
+                    Non, annuler
                   </button>
                 </div>
               </form>
@@ -363,36 +365,36 @@ const Cashier: React.FC<TypeCashier> = () => {
             <Modal.Body>
               <form onSubmit={confirmAddInput} className="text-left">
                 <h3 className="mb-5 font-bold text-lg pb-3 border-b text-[#ac3265] dark:text-gray-400">
-                  Add a cash receipt <AiOutlineVerticalAlignBottom className=' inline-block ml-2 text-3xl' />
+                Ajouter une entrée en caisse <AiOutlineVerticalAlignBottom className=' inline-block ml-2 text-3xl' />
                 </h3>
                 <div className="flex flex-col space-y-4 mt-4 mb-6">
                   <div>
-                    <label htmlFor="quantite" className="inline-block mb-2 font-semibold text-gray-700">Your montant <span className=" italic text-sm font-light "></span></label>
-                    <input name="montant" onChange={handleOnchange} value={dataInputForm.montant || ''} required autoFocus type="number" id="quantite" placeholder="amount" min={0} className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600' />
+                    <label htmlFor="quantite" className="inline-block mb-2 font-semibold text-gray-700">Votre montant <span className=" italic text-sm font-light "></span></label>
+                    <input name="montant" onChange={handleOnchange} value={dataInputForm.montant || ''} required autoFocus type="number" id="quantite" placeholder="montant" min={0} className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600' />
                   </div>
 
                   <div>
-                    <label htmlFor="motif" className="inline-block mb-2 font-semibold text-gray-700">Your reason</label>
-                    <textarea name="motif" onChange={handleOnchange} value={dataInputForm.motif || ''} required id="reason" placeholder="Enter your reason" className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600' rows={6}></textarea>
+                    <label htmlFor="motif" className="inline-block mb-2 font-semibold text-gray-700">votre raison</label>
+                    <textarea name="motif" onChange={handleOnchange} value={dataInputForm.motif || ''} required id="reason" placeholder="Entrer la raison de l’ajout" className='w-full px-3 placeholder:italic py-2 bg-slate-100 rounded-md outline-none border-none ring-0 focus:ring-2 focus:ring-gray-600' rows={6}></textarea>
                   </div>
                 </div>
                 <div className="flex justify-center space-x-3">
                   <button
                     color="failure"
-                    className={`bg-green-500 ${sending && 'disabled'} hover:bg-green-700 transition text-white rounded-md px-3 font-semibold uppercase py-2 w-1/2 inline-block`}
+                    className={`bg-green-500 text-sm ${sending && 'disabled'} hover:bg-green-700 transition text-white rounded-md px-3 font-semibold uppercase py-2 w-1/2 inline-block`}
                   >
                     {sending ? (
                       <Loader className="flex justify-center text-lg items-center" />
                     ) : (
-                      "Confirm registration"
+                      "Confirmer l'enregistrement "
                     )}
                   </button>
                   <button
                     color="gray"
                     onClick={onClose}
-                    className="bg-gray-500 hover:bg-gray-700 transition text-white rounded-md px-3 font-semibold uppercase py-2 w-1/2 inline-block"
+                    className="bg-gray-500 text-sm hover:bg-gray-700 transition text-white rounded-md px-3 font-semibold uppercase py-2 w-1/2 inline-block"
                   >
-                    No, cancel
+                    Non, annuler
                   </button>
                 </div>
               </form>

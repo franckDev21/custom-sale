@@ -5,6 +5,7 @@ import DataTable, { TableColumn } from "react-data-table-component";
 import { BsPrinterFill } from "react-icons/bs";
 import { FaEye, FaShoppingCart, FaTrash } from "react-icons/fa";
 import { HiOutlineExclamationCircle, HiRefresh } from "react-icons/hi";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../../atoms/Loader";
@@ -28,6 +29,8 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
   const [currentIdInvoice, setCurrentIdInvoice] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
+
+  const companiesStore = useSelector((state: any) => state.companies); 
 
   const filteredItems = invoices.filter(
     (item) =>
@@ -204,7 +207,7 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
   useEffect(() => {
     const fetchInvoices = async () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
-        GET_INVOICES
+        companiesStore.currentCompany? `${GET_INVOICES}?id=${companiesStore.currentCompany.id}`:GET_INVOICES
       );
       setInvoices(res.data.data);
       setLoading(false);
@@ -303,7 +306,7 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
           <>
             <DataTable
               className=" rounded-md overflow-hidden"
-              title="Invoice"
+              title="Factures"
               pagination
               columns={columns}
               data={filteredItems}

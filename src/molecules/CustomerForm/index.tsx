@@ -1,5 +1,6 @@
 import { Spinner } from 'flowbite-react'
 import React, { ChangeEvent, FormEvent, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import Loader from '../../atoms/Loader'
 import Customer from '../../Model/Customer'
@@ -17,6 +18,8 @@ const CustomerForm: React.FC<TypeCustomerForm> = ({ onClickBack = () => {}, addN
   const [customer,setCustomer] = useState<Customer>({})
   const [errForm, setErrForm] = useState('');
   const [sending,setSending] = useState(false)
+
+  const companiesStore = useSelector((state: any) => state.companies); 
 
   const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
     if(errForm) setErrForm('');
@@ -46,7 +49,7 @@ const CustomerForm: React.FC<TypeCustomerForm> = ({ onClickBack = () => {}, addN
 
     setSending(true)
 
-    http_client(Storage.getStorage('auth').token).post(CREATE_CUSTOMERS_URL,customer)
+    http_client(Storage.getStorage('auth').token).post(companiesStore.currentCompany ? `${CREATE_CUSTOMERS_URL}?id=${companiesStore.currentCompany.id}`:CREATE_CUSTOMERS_URL,customer)
       .then(res => {
         setSending(false);
         addNewClient(true)

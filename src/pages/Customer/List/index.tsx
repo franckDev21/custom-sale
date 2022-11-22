@@ -7,6 +7,7 @@ import { BsBuilding, BsPrinterFill } from "react-icons/bs";
 import { FaEye, FaTrash } from "react-icons/fa";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { TbArrowsRightLeft } from "react-icons/tb";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../../../atoms/Loader";
@@ -33,6 +34,8 @@ const CustomerList: FC<TypeCustomerList> = () => {
     null
   );
   const [deleting, setDeleting] = useState(false);
+
+  const companiesStore = useSelector((state: any) => state.companies);
 
   const navigate = useNavigate();
 
@@ -194,9 +197,7 @@ const CustomerList: FC<TypeCustomerList> = () => {
 
   useEffect(() => {
     const fetUsers = async () => {
-      const res = await http_client(Storage.getStorage("auth").token).get(
-        GET_CUSTOMER_URL
-      );
+      const res = await http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_CUSTOMER_URL}?id=${companiesStore.currentCompany.id}`:GET_CUSTOMER_URL);
       setUsers(res.data.data);
       setLoading(false);
     };
@@ -262,7 +263,7 @@ const CustomerList: FC<TypeCustomerList> = () => {
                   {deleting ? (
                     <Loader className="flex justify-center items-center" />
                   ) : (
-                    "Yes, I'm sure"
+                    "Oui, supprimer"
                   )}
                 </button>
                 <button
@@ -270,7 +271,7 @@ const CustomerList: FC<TypeCustomerList> = () => {
                   onClick={onClose}
                   className="bg-gray-500 text-white rounded-md px-4 py-2"
                 >
-                  No, cancel
+                  Non, annuler
                 </button>
               </div>
             </div>

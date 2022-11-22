@@ -6,6 +6,7 @@ import { BsPrinterFill } from 'react-icons/bs'
 import { FaEye, FaMoneyBillWave, FaShoppingCart, FaTrash } from 'react-icons/fa'
 import { HiOutlineExclamationCircle, HiRefresh } from 'react-icons/hi'
 import { ImSearch } from 'react-icons/im'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Loader from '../../../atoms/Loader'
@@ -16,7 +17,7 @@ import UserService from '../../../service/UserService'
 import DashboardLayout from '../../../templates/DashboardLayout'
 import OrderPrint from '../../../templates/OrderPrint'
 import { http_client } from '../../../utils/axios-custum'
-import { formatCurrency, formatDate } from '../../../utils/function'
+import { formatCurrency, formatDate, roleIs } from '../../../utils/function'
 
 const GET_ORDER_URL = '/orders'
 const GET_PRODUCT_URL = '/products'
@@ -40,6 +41,8 @@ const OrderList = () => {
   );
   const [sending, setSending] = useState(false);
   const [deleting, setDeleting] = useState(false);
+
+  const companiesStore = useSelector((state: any) => state.companies); 
 
   const filteredItems = orders.filter(
     (item) =>
@@ -91,7 +94,7 @@ const OrderList = () => {
     setSending(true);
     // delete order
     http_client(Storage.getStorage("auth").token)
-      .post(`${BAY_ORDER_URL}/${currentIdPay}`)
+      .post(companiesStore.currentCompany ? `${BAY_ORDER_URL}/${currentIdPay}?id=${companiesStore.currentCompany.id}`:`${BAY_ORDER_URL}/${currentIdPay}`)
       .then((res) => {
         setSending(false);
         if(res.data.message){
@@ -263,9 +266,9 @@ const OrderList = () => {
   ];
 
   useEffect(() => {
-    const fetOrders = async () => {
+    const fetOrders = async () => { 
       const res = await http_client(Storage.getStorage("auth").token).get(
-        GET_ORDER_URL
+        companiesStore.currentCompany ? `${GET_ORDER_URL}?id=${companiesStore.currentCompany.id}`:GET_ORDER_URL
       );
       const res2 = await http_client(Storage.getStorage("auth").token).get(
         GET_PRODUCT_URL
@@ -381,7 +384,7 @@ const OrderList = () => {
           <PDFDownloadLink  document={<OrderPrint products={products} orders={orders} />} fileName="liste-des-commandes.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
             Imprimer la liste des commandes
           </PDFDownloadLink >
-          {UserService.getUser().company_id && <Link to='/orders/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaShoppingCart size={16} className='inline-block mr-1' />Ajouter une nouvelle commande</Link>}
+          {(UserService.getUser().company_id || (roleIs('admin') && companiesStore.currentCompany)) && <Link to='/orders/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaShoppingCart size={16} className='inline-block mr-1' />Ajouter une nouvelle commande</Link>}
           <Link to='/orders' className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></Link>
         </div>
       </div>

@@ -22,6 +22,7 @@ import ProductPrint from '../../../templates/ProductPrint'
 import { AiOutlineVerticalAlignBottom } from 'react-icons/ai'
 import UserService from '../../../service/UserService'
 import { RiFileExcel2Fill } from 'react-icons/ri'
+import { useSelector } from 'react-redux'
 
 type TypeProducList = {}
 
@@ -44,6 +45,8 @@ const ProducList:FC<TypeProducList> = () => {
   const [deleting, setDeleting] = useState(false);
   const [exporting,setExporting] = useState(false);
   const navigate = useNavigate()
+
+  const companiesStore = useSelector((state: any) => state.companies);
 
   const formExcelRef = useRef(null)
 
@@ -257,7 +260,7 @@ const ProducList:FC<TypeProducList> = () => {
     return new Promise((resolve,reject) => {
       const fetUsers = async () => {
         const res = await http_client(Storage.getStorage("auth").token).get(
-          GET_PRODUCT_URL
+          companiesStore.currentCompany ? `${GET_PRODUCT_URL}?id=${companiesStore.currentCompany.id}`:GET_PRODUCT_URL
         );
         resolve(true)
         setProducts(res.data);
@@ -269,7 +272,7 @@ const ProducList:FC<TypeProducList> = () => {
   useEffect(() => {
     const fetUsers = async () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
-        GET_PRODUCT_URL
+        companiesStore.currentCompany ? `${GET_PRODUCT_URL}?id=${companiesStore.currentCompany.id}`:GET_PRODUCT_URL
       );
       setProducts(res.data);
       setLoading(false);
@@ -301,7 +304,7 @@ const ProducList:FC<TypeProducList> = () => {
           <PDFDownloadLink onClick={download} document={<ProductPrint products={products} />} fileName="liste-des-produits.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
             Imprimer la liste des produits
           </PDFDownloadLink >
-          {UserService.getUser().company_id && <Link to='/products/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaBoxOpen size={16} className='inline-block mr-1' /> Ajouter un nouveau produit</Link>}
+          {(UserService.getUser().company_id || companiesStore.currentCompany) && <Link to='/products/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaBoxOpen size={16} className='inline-block mr-1' /> Ajouter un nouveau produit</Link>}
           <label htmlFor='image' className={`${exporting && 'disabled'} flex items-center text-sm cursor-pointer text-white px-4 rounded-md bg-blue-700 py-2`}>
             
             {exporting ? <Loader className='inline-block text-2xl' />:

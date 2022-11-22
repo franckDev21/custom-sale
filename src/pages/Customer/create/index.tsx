@@ -1,6 +1,7 @@
 import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react'
 import { FaCheckCircle } from 'react-icons/fa';
 import { HiOutlineArrowNarrowLeft } from 'react-icons/hi';
+import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loader from '../../../atoms/Loader';
@@ -22,6 +23,8 @@ const AddCustomer:FC<TypeAddCustomer> = () => {
   const [editing, setEditiong] = useState(false);
   const [success,setSuccess]  = useState(false)
   const [customer,setCustomer] = useState<Customer>({});
+
+  const companiesStore = useSelector((state: any) => state.companies);
 
   const { action } = useParams()
 
@@ -55,8 +58,8 @@ const AddCustomer:FC<TypeAddCustomer> = () => {
     e.preventDefault();
     setSending(true);
     setErrForm('')
-    if(editing){
-      http_client(Storage.getStorage('auth').token).post(`${GET_CUSTOMER_URL}/${parseInt(action || '0',10)}`,customer)
+    if(editing){ 
+      http_client(Storage.getStorage('auth').token).post(companiesStore.currentCompany ? `${GET_CUSTOMER_URL}/${parseInt(action || '0',10)}?id=${companiesStore.currentCompany.id}`:`${GET_CUSTOMER_URL}/${parseInt(action || '0',10)}`,customer)
         .then(res => {
           setSending(false);
           toast.success(res.data.message)
@@ -70,7 +73,7 @@ const AddCustomer:FC<TypeAddCustomer> = () => {
           console.log(err);
         });
     }else{
-      http_client(Storage.getStorage('auth').token).post(CREATE_CUSTOMERS_URL,customer)
+      http_client(Storage.getStorage('auth').token).post(companiesStore.currentCompany ? `${CREATE_CUSTOMERS_URL}?id=${companiesStore.currentCompany.id}`:CREATE_CUSTOMERS_URL,customer)
         .then(res => {
           setSending(false);
           toast.success(res.data.message)
@@ -89,8 +92,8 @@ const AddCustomer:FC<TypeAddCustomer> = () => {
 
   useEffect(() => {
     if(action && Number.isInteger(parseInt(action,10))){
-      setEditiong(true)
-      http_client(Storage.getStorage('auth').token).get(`${GET_CUSTOMER_URL}/${parseInt(action,10)}`)
+      setEditiong(true) 
+      http_client(Storage.getStorage('auth').token).get(companiesStore.currentCompany ? `${GET_CUSTOMER_URL}/${parseInt(action,10)}?id=${companiesStore.currentCompany.id}`:`${GET_CUSTOMER_URL}/${parseInt(action,10)}`)
       .then(res => {
           setCustomer(res.data)
         })

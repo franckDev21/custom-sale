@@ -1,4 +1,10 @@
-import React, { ChangeEvent, useContext, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import DashboardLayout from "../../templates/DashboardLayout";
 import {
   HiCurrencyDollar,
@@ -66,6 +72,8 @@ const Dashboard: React.FC<TypeDashboard> = () => {
   const companiesStore = useSelector((state: any) => state.companies);
   const dispatch = useDispatch();
 
+  const selectCompanyRef = useRef(null);
+
   const [dashboardInfo, setDashboardInfo] = useState<TotalDashboardProps>({
     totalCash: 0,
     totalCustomer: 0,
@@ -84,11 +92,14 @@ const Dashboard: React.FC<TypeDashboard> = () => {
 
   useEffect(() => {
     setLoading(true);
-    let url = roleIs("admin")
-      ? DASHBOARD_ADMIN_USER_URL
-      : roleIs("super")
-      ? DASHBOARD_SUPER_USER_URL
-      : DASHBOARD_URL;
+    let url =
+      roleIs("admin") && !companiesStore.currentCompany
+        ? DASHBOARD_ADMIN_USER_URL
+        : roleIs("super")
+        ? DASHBOARD_SUPER_USER_URL
+        : companiesStore.currentCompany
+        ? `${DASHBOARD_URL}?id=${companiesStore.currentCompany.id}`
+        : DASHBOARD_URL;
     http_client(Storage.getStorage("auth").token)
       .get(url)
       .then((res) => {
@@ -122,12 +133,54 @@ const Dashboard: React.FC<TypeDashboard> = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (roleIs("admin") && companiesStore.currentCompany) {
+      console.log("change");
+
+      let url = `${DASHBOARD_URL}?id=${companiesStore.currentCompany.id}`;
+      http_client(Storage.getStorage("auth").token)
+        .get(url)
+        .then((res) => {
+          setLoading(false);
+          setDashboardInfo(res.data);
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.log(err);
+        });
+    }
+
+    if (roleIs("admin") && !companiesStore.currentCompany) {
+      console.log("change");
+
+      let url = DASHBOARD_ADMIN_USER_URL;
+      http_client(Storage.getStorage("auth").token)
+        .get(url)
+        .then((res) => {
+          setLoading(false);
+          setAdminUser(res.data);
+          setUsersFromAdmin(res.data.totalUsers);
+          setcompaniesFromAdmin(res.data.totalCompany);
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.log(err);
+        });
+    }
+  }, [companiesStore]);
+
   const changeCompany = (e: ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value !== "empty") {
       dispatch(setCurrentCompany(JSON.parse(e.target.value)));
     } else {
       dispatch(switchToAdmin());
     }
+
+    if (selectCompanyRef.current) {
+      (selectCompanyRef.current as HTMLSelectElement).value = "empty";
+    }
+
+    setShowModal(false);
   };
 
   return (
@@ -172,7 +225,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
                 Créer une entreprise <BsPlusLg />
               </Link>
 
-              {companiesFromAdmin >= 1 && (
+              {(companiesFromAdmin >= 1 || companiesStore.currentCompany) && (
                 <button
                   onClick={() => onClick()}
                   className={`flex justify-start text-sm border-4 border-cyan-700 items-center space-x-2 rounded px-2 py-1 text-white bg-cyan-700 hover:bg-cyan-800 transition w-auto ml-3`}
@@ -188,7 +241,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
     >
       {!roleIs("super") && roleIs("admin") && !loading && (
         <div className="">
-          {!(companiesFromAdmin >= 1) && (
+          {!(companiesFromAdmin >= 1) && !companiesStore.currentCompany && (
             <Alert
               color="info"
               additionalContent={
@@ -221,11 +274,16 @@ const Dashboard: React.FC<TypeDashboard> = () => {
         </div>
       )}
       <div className="mx-auto max-w-7xl pt-4 sm:px-6 lg:px-8">
-        {roleIs('admin') && companiesStore.currentCompany && 
+        {roleIs("admin") && companiesStore.currentCompany && (
           <>
-            <div className=" text-3xl font-bold">Vous êtes connecté a l’entreprise : <span className=" text-primary">{companiesStore.currentCompany.name}</span> </div>
+            <div className=" text-3xl font-bold">
+              Vous êtes connecté a l’entreprise :{" "}
+              <span className=" text-primary">
+                {companiesStore.currentCompany.name}
+              </span>{" "}
+            </div>
           </>
-        }
+        )}
         {isContains(
           UserService.getAuth().roles || [""],
           "gerant" ||
@@ -280,6 +338,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
               <select
                 className="px-4 py-2 w-full mb-3 text-center bg-gray-200 text-base rounded-md"
                 onChange={changeCompany}
+                ref={selectCompanyRef}
               >
                 <option value="empty">
                   {" "}
@@ -345,7 +404,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
                   </span>
                   <div className="ml-3">
                     <h1 className="text-2xl font-bold text-gray-600 pb-1 border-b-2">
-                      {roleIs("admin")
+                      {roleIs("admin") && !companiesStore.currentCompany
                         ? usersFromAdmin
                         : dashboardInfo.totalUser}{" "}
                       Utilisateur(s)
@@ -359,28 +418,31 @@ const Dashboard: React.FC<TypeDashboard> = () => {
                 </Link>
               )}
 
-              {roleIs("admin") && !roleIs("super") && !companiesStore.currentCompany && (
-                <Link
-                  to="/companies"
-                  className={`bg-white ${
-                    UserService.getUser().role === "SUPER" && "disabled"
-                  } cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start`}
-                >
-                  <span className="inline-block overflow-hidden">
-                    <BsBuilding className="text-5xl text-[#603d57]" />
-                  </span>
-                  <div className="ml-3">
-                    <h1 className="text-2xl font-bold text-gray-600 pb-1 border-b-2">
-                      {`${companiesFromAdmin} Entreprise(s)`}
-                    </h1>
-                    <h2 className="text-sm font-bold text-[#603d57]">
-                      Gestion de entreprises
-                    </h2>
-                  </div>
-                </Link>
-              )}
+              {roleIs("admin") &&
+                !roleIs("super") &&
+                !companiesStore.currentCompany && (
+                  <Link
+                    to="/companies"
+                    className={`bg-white ${
+                      UserService.getUser().role === "SUPER" && "disabled"
+                    } cursor-pointer hover:shadow-lg transition p-4 rounded-md flex justify-start items-start`}
+                  >
+                    <span className="inline-block overflow-hidden">
+                      <BsBuilding className="text-5xl text-[#603d57]" />
+                    </span>
+                    <div className="ml-3">
+                      <h1 className="text-2xl font-bold text-gray-600 pb-1 border-b-2">
+                        {`${companiesFromAdmin} Entreprise(s)`}
+                      </h1>
+                      <h2 className="text-sm font-bold text-[#603d57]">
+                        Gestion de entreprises
+                      </h2>
+                    </div>
+                  </Link>
+                )}
 
-              {((!roleIs("admin") && !roleIs("super")) || companiesStore.currentCompany) && (
+              {((!roleIs("admin") && !roleIs("super")) ||
+                companiesStore.currentCompany) && (
                 <Link
                   to="/cashiers"
                   className={`bg-white ${
@@ -409,7 +471,8 @@ const Dashboard: React.FC<TypeDashboard> = () => {
                 </Link>
               )}
 
-              {((!roleIs("admin") && !roleIs("super")) || companiesStore.currentCompany) && (
+              {((!roleIs("admin") && !roleIs("super")) ||
+                companiesStore.currentCompany) && (
                 <Link
                   to="/products"
                   className={`bg-white ${
@@ -432,7 +495,8 @@ const Dashboard: React.FC<TypeDashboard> = () => {
                 </Link>
               )}
 
-              {((!roleIs("admin") && !roleIs("super")) || companiesStore.currentCompany) && (
+              {((!roleIs("admin") && !roleIs("super")) ||
+                companiesStore.currentCompany) && (
                 <Link
                   to="/customers"
                   className={`bg-white ${
@@ -455,7 +519,8 @@ const Dashboard: React.FC<TypeDashboard> = () => {
                 </Link>
               )}
 
-              {((!roleIs("admin") && !roleIs("super")) || companiesStore.currentCompany) && (
+              {((!roleIs("admin") && !roleIs("super")) ||
+                companiesStore.currentCompany) && (
                 <Link
                   to="/orders"
                   className={`bg-white ${
