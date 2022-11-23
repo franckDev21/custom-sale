@@ -367,9 +367,9 @@ const UserList: React.FC<TypeUserList> = () => {
 
       <div className="mx-auto max-w-7xl py-4 sm:px-6 lg:px-8">
         <div className="flex font-bold items-center">
- 
+  
           <PDFDownloadLink
-            document={<UserPrint companyId={companiesStore.currentCompany.id || undefined} users={users} />}
+            document={<UserPrint companyId={companiesStore?.currentCompany?.id || undefined} users={users} />}
             fileName="liste-des-utilisateurs.pdf"
             className="text-sm text-white px-4 rounded-md bg-gray-700 py-2"
           >
