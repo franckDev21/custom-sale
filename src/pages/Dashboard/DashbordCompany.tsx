@@ -2,18 +2,25 @@ import React, { useState, useEffect } from "react";
 import { BsShop } from "react-icons/bs";
 import { FaBoxOpen, FaUserAlt, FaUsers } from "react-icons/fa";
 import { HiCurrencyDollar } from "react-icons/hi";
-import { Link, useParams } from "react-router-dom";
+import { MdAdminPanelSettings } from "react-icons/md";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { TotalDashboardProps } from ".";
+import Company from "../../Model/Company";
 import Storage from "../../service/Storage";
+import { setCurrentCompany } from "../../store/features/companies/CompanySlice";
 import DashboardLayout from "../../templates/DashboardLayout";
 import { http_client } from "../../utils/axios-custum";
-import { formatCurrency } from "../../utils/function";
+import { formatCurrency, roleIs } from "../../utils/function";
 
 type DashbordCompanyProps = {};
 
 const DASHBOARD_URL = "/dashboard";
 const DashbordCompany: React.FC<DashbordCompanyProps> = () => {
   const [loading, setLoading] = useState(true);
+  const [company,setCompany] = useState<Company>({})
+
   const [dashboardInfo, setDashboardInfo] = useState<TotalDashboardProps>({
     totalCash: 0,
     totalCustomer: 0,
@@ -22,10 +29,20 @@ const DashbordCompany: React.FC<DashbordCompanyProps> = () => {
     totalOrder: 0,
   });
 
+  // const companiesStore = useSelector((state: any) => state.companies);
+
+  const navigate = useNavigate()
   const { id } = useParams();
+  const dispatch = useDispatch()
 
   useEffect(() => {
+
+    if(!roleIs('admin')){
+      navigate('/dashbord')
+    }
+
     setLoading(true);
+
     http_client(Storage.getStorage("auth").token)
       .get(`${DASHBOARD_URL}?id=${id}`)
       .then((res) => {
@@ -36,17 +53,38 @@ const DashbordCompany: React.FC<DashbordCompanyProps> = () => {
         setLoading(false);
         console.log(err);
       });
+
+      http_client(Storage.getStorage("auth").token)
+        .get(`/company/${id}`)
+        .then(res => {
+          setCompany(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+
   }, []);
 
   return (
-    <DashboardLayout title="page d'administration">
+    <DashboardLayout
+      title="page d'administration"
+      headerContent={
+        <>
+          <button
+            onClick={() => dispatch(setCurrentCompany(company))}
+            className={`flex justify-start text-sm border-4 border-cyan-700 items-center space-x-2 rounded px-2 py-1 text-white bg-cyan-700 hover:bg-cyan-800 transition w-auto ml-3`}
+          >
+            <MdAdminPanelSettings className=" text-2xl mr-2" /> gérer ma
+            boutique
+          </button>
+        </>
+      }
+    >
       <div className="mx-auto max-w-7xl pb-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="min-h-[24rem]  rounded-lg border-4 border-dashed border-gray-300">
             <div className="grid grid-cols-3 gap-3 p-4">
-              <button
-                className="bg-white  transition cursor-default p-4 rounded-md flex justify-start items-start"
-              >
+              <button className="bg-white  transition cursor-default p-4 rounded-md flex justify-start items-start">
                 <span className="inline-block overflow-hidden">
                   <FaUserAlt className="text-4xl text-[#603d57]" />
                 </span>
