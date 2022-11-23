@@ -156,8 +156,8 @@ const ProductHistory:React.FC<TypeProductHistory> = () => {
   }, []);
 
   return (
-    <DashboardLayout
-      title='Historiques E/S'
+    <DashboardLayout 
+      title='Historiques E/S'  
     >
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center">

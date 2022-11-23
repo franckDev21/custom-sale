@@ -32,8 +32,9 @@ import Setting from './pages/Setting';
 import Contact from './pages/Contact';
 import CompanyList from './pages/Company/List';
 import AdminUser from './pages/Admin';
-import AdminUserDetail from './pages/Admin/Detail';
+// import AdminUserDetail from './pages/Admin/Detail';
 import DashbordCompany from './pages/Dashboard/DashbordCompany';
+import AdminUserDetail from './pages/Admin/Detail';
 import EditUser from './pages/User/Update';
 
 function App() {
