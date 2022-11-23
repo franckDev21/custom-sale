@@ -380,8 +380,8 @@ const OrderList = () => {
       </React.Fragment>
 
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        <div className="flex space-x-4 font-bold items-center">
-          <PDFDownloadLink  document={<OrderPrint products={products} orders={orders} />} fileName="liste-des-commandes.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
+        <div className="flex space-x-4 font-bold items-center"> 
+          <PDFDownloadLink  document={<OrderPrint companyId={companiesStore.currentCompany.id || undefined} products={products} orders={orders} />} fileName="liste-des-commandes.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
             Imprimer la liste des commandes
           </PDFDownloadLink >
           {(UserService.getUser().company_id || (roleIs('admin') && companiesStore.currentCompany)) && <Link to='/orders/create' className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <FaShoppingCart size={16} className='inline-block mr-1' />Ajouter une nouvelle commande</Link>}

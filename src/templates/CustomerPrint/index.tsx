@@ -1,12 +1,13 @@
 import React, { FC } from "react";
 import { Page, Text, View, Document, StyleSheet, Image } from "@react-pdf/renderer";
-import { formatDate } from "../../utils/function";
+import { formatDate, user } from "../../utils/function";
 
 import DefaultImage from '../../assets/img/default-product.png'
 import { baseURL } from "../../utils/axios-custum";
 import moment from "moment";
 import Customer from "../../Model/Customer";
 import HeaderInvoice from "../../molecules/HeaderInvoice";
+import NewHeaderInvoice from "../../molecules/NewHeaderInvoice";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -148,6 +149,7 @@ const styles = StyleSheet.create({
 type CustomerPrintProps = {
   className ?:  string,
   customers ?: Customer[],
+  companyId ?: string 
 };
 
 const API_STORAGE_URL = `${baseURL}/storage`;
@@ -155,12 +157,14 @@ const API_STORAGE_URL = `${baseURL}/storage`;
 const CustomerPrint: FC<CustomerPrintProps> = ({
   className='',
   customers = [],
+  companyId 
 }) => {
   return (
     <Document>
       <Page wrap size="A4" style={styles.page}>
 
-        <HeaderInvoice />
+        {/* <HeaderInvoice /> */}
+        <NewHeaderInvoice companyId={companyId ? companyId : user().company_id} />
         
         <View style={styles.tableTile}><Text style={{ padding: 5 }}>Liste des clients | {moment().format('MMMM Do YYYY')}</Text></View>
         <View style={styles.table}>

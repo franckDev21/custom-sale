@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Page, Text, View, Document, StyleSheet, Image } from "@react-pdf/renderer";
-import { formatCurrency, formatDate } from "../../utils/function";
+import { formatCurrency, formatDate, user } from "../../utils/function";
 
 import DefaultImage from '../../assets/img/default-product.png'
 import { baseURL } from "../../utils/axios-custum";
@@ -9,6 +9,7 @@ import Customer from "../../Model/Customer";
 import ProductHistory from "../../Model/ProductHistory";
 import Procurement from "../../Model/Procurement";
 import HeaderInvoice from "../../molecules/HeaderInvoice";
+import NewHeaderInvoice from "../../molecules/NewHeaderInvoice";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -150,18 +151,21 @@ const styles = StyleSheet.create({
 type ProcurementPrintProps = {
   className ?:  string,
   histories ?: Procurement[],
+  companyId ?: string
 };
 
 
 const ProcurementPrint: FC<ProcurementPrintProps> = ({
   className='',
   histories = [],
+  companyId
 }) => {
   return (
     <Document>
       <Page wrap size="A4" style={styles.page}>
 
-        <HeaderInvoice />
+        {/* <HeaderInvoice /> */}
+        <NewHeaderInvoice companyId={companyId ? companyId : user().company_id} />
 
         <View style={styles.tableTile}><Text style={{ padding: 5 }}>Liste d'approvisionnement | {moment().format('MMMM Do YYYY')}</Text></View>
         

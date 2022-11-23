@@ -32,7 +32,7 @@ const OrderShow = () => {
   const { reference, id } = useParams();
   const navigate = useNavigate();
 
-  const companiesStore = useSelector((state: any) => state.companies); 
+  const companiesStore = useSelector((state: any) => state.companies);
 
   const invoices = async () => {
     const res = await http_client(Storage.getStorage("auth").token).post(
@@ -136,6 +136,7 @@ const OrderShow = () => {
                     onClick={invoices}
                     document={
                       <FactureDocument
+                        companyId={companiesStore.currentCompany.id ?? undefined}
                         invoice={invoice}
                         order={order}
                         orderProducts={orderProducts}

@@ -20,6 +20,7 @@ import UserService from "../../../service/UserService";
 import { BiUserPlus } from "react-icons/bi";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import UserPrint from "../../../templates/Userprint";
+import { useSelector } from "react-redux";
 
 type TypeUserList = {};
 
@@ -40,6 +41,8 @@ const UserList: React.FC<TypeUserList> = () => {
   const [activations, setActivations] = useState(false);
 
   const navigate = useNavigate();
+
+  const companiesStore = useSelector((state: any) => state.companies);
 
   const filteredItems = users.filter(
     (item) =>
@@ -364,8 +367,9 @@ const UserList: React.FC<TypeUserList> = () => {
 
       <div className="mx-auto max-w-7xl py-4 sm:px-6 lg:px-8">
         <div className="flex font-bold items-center">
+ 
           <PDFDownloadLink
-            document={<UserPrint users={users} />}
+            document={<UserPrint companyId={companiesStore.currentCompany.id} users={users} />}
             fileName="liste-des-utilisateurs.pdf"
             className="text-sm text-white px-4 rounded-md bg-gray-700 py-2"
           >
@@ -373,6 +377,7 @@ const UserList: React.FC<TypeUserList> = () => {
             <BsPrinterFill size={16} className="inline-block mr-1" />
             Imprimer la liste des utilisateurs
           </PDFDownloadLink>
+
         </div>
       </div>
 

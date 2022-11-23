@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Page, Text, View, Document, StyleSheet, Image } from "@react-pdf/renderer";
 import Order from "../../Model/Order";
-import { formatCurrency, formatDate } from "../../utils/function";
+import { formatCurrency, formatDate, user } from "../../utils/function";
 
 import DefaultImage from '../../assets/img/logo/logo3.png'
 import Invoice from "../../Model/Invoice";
@@ -9,6 +9,7 @@ import { baseURL } from "../../utils/axios-custum";
 import Product from "../../Model/Product";
 import moment from "moment";
 import HeaderInvoice from "../../molecules/HeaderInvoice";
+import NewHeaderInvoice from "../../molecules/NewHeaderInvoice";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -152,6 +153,7 @@ type OrderPrintProps = {
   className ?:  string,
   orders ?: Order[],
   products ?: Product[],
+  companyId ?: string
 };
 
 const API_STORAGE_URL = `${baseURL}/storage`;
@@ -160,6 +162,7 @@ const OrderPrint: FC<OrderPrintProps> = ({
   className='',
   products = [],
   orders = [],
+  companyId
 }) => {
 
   const getProductNameWithId = (id: string): Product|null => {
@@ -170,7 +173,8 @@ const OrderPrint: FC<OrderPrintProps> = ({
     <Document>
       <Page wrap size="A4" style={styles.page}>
 
-        <HeaderInvoice />
+        {/* <HeaderInvoice /> */}
+        <NewHeaderInvoice companyId={companyId ? companyId : user().company_id} />
 
         <View style={styles.tableTile}><Text style={{ padding: 5 }}>Liste des commandes | {moment().format('MMMM Do YYYY')}</Text></View>
         <View style={styles.table}>

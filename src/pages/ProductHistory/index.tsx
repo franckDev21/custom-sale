@@ -161,7 +161,7 @@ const ProductHistory:React.FC<TypeProductHistory> = () => {
     >
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center">
-          <PDFDownloadLink  document={<HistoriesPrint histories={histories} />} fileName="liste-entree_sortie.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
+          <PDFDownloadLink  document={<HistoriesPrint companyId={companiesStore.currentCompany.id || undefined} histories={histories} />} fileName="liste-entree_sortie.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
             Imprimer l’historiques des entrées sorties produits
           </PDFDownloadLink >
           <Link to='/products/history/all' className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></Link>

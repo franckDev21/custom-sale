@@ -146,6 +146,7 @@ type TypeDocument = {
   order?: Order;
   orderProducts?: OrderProduct[];
   invoice?: Invoice;
+  companyId?: string;
 };
 
 // const API_STORAGE_URL = `${baseURL}/storage`;
@@ -155,11 +156,12 @@ const FactureDocument: FC<TypeDocument> = ({
   order = {},
   orderProducts = [],
   invoice = {},
+  companyId 
 }) => {
   return (
     <Document>
       <Page wrap size="A4" style={styles.page}>
-        <NewHeaderInvoice companyId={user().company_id} />
+        <NewHeaderInvoice companyId={companyId ? companyId : user().company_id} />
 
         <View style={styles.header}>
           <View style={styles.head}>

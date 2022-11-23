@@ -280,8 +280,8 @@ const CustomerList: FC<TypeCustomerList> = () => {
       </React.Fragment>
 
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        <div className="flex space-x-4 font-bold items-center">
-          <PDFDownloadLink document={<CustomerPrint customers={users} />} fileName="liste-des-clients.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
+        <div className="flex space-x-4 font-bold items-center">  
+          <PDFDownloadLink document={<CustomerPrint companyId={companiesStore.currentCompany.id || undefined} customers={users} />} fileName="liste-des-clients.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
             Imprimer la liste des clients
           </PDFDownloadLink >
         </div>

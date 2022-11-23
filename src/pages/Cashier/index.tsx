@@ -287,7 +287,7 @@ const Cashier: React.FC<TypeCashier> = () => {
           <div className="ml-4 w-[90%] font-bold text-2xl text-[#ac3265] flex items-center justify-end">
           {(UserService.getUser().company_id || companiesStore.currentCompany)&& 
             <div className='flex justify-between space-x-2 '>
-              <PDFDownloadLink document={<CashierPrint cashiers={cashiers} total={totalCash.montant} />} fileName="caisse.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
+              <PDFDownloadLink document={<CashierPrint companyId={companiesStore.currentCompany.id || undefined} cashiers={cashiers} total={totalCash.montant} />} fileName="caisse.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
                 Imprimer l'état de la caisse
               </PDFDownloadLink >
               <button onClick={_ => {

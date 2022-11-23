@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Page, Text, View, Document, StyleSheet, Image } from "@react-pdf/renderer";
-import { formatCurrency, formatDate } from "../../utils/function";
+import { formatCurrency, formatDate, user } from "../../utils/function";
 
 import DefaultImage from '../../assets/img/default-product.png'
 import { baseURL } from "../../utils/axios-custum";
@@ -8,6 +8,7 @@ import moment from "moment";
 import Customer from "../../Model/Customer";
 import Cash from "../../Model/Cash";
 import HeaderInvoice from "../../molecules/HeaderInvoice";
+import NewHeaderInvoice from "../../molecules/NewHeaderInvoice";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -158,6 +159,7 @@ type CashierPrintProps = {
   className ?:  string,
   cashiers ?: Cash[],
   total ?: string
+  companyId ?: string
 };
 
 const API_STORAGE_URL = `${baseURL}/storage`;
@@ -165,13 +167,15 @@ const API_STORAGE_URL = `${baseURL}/storage`;
 const CashierPrint: FC<CashierPrintProps> = ({
   className='',
   cashiers = [],
-  total = 0
+  total = 0,
+  companyId
 }) => {
   return (
     <Document>
       <Page wrap size="A4" style={styles.page}>
 
-        <HeaderInvoice />
+        {/* <HeaderInvoice /> */}
+        <NewHeaderInvoice companyId={companyId ? companyId : user().company_id} />
 
         <View style={styles.tableTile2}><Text style={{ padding: 5 }}>Total en caisse : {formatCurrency(parseInt(total?.toString() || '0',10),'XAF')}</Text></View>
         <View style={styles.tableTile}><Text style={{ padding: 5 }}>Liste des entrées et sorties en caisse | {moment().format('MMMM Do YYYY')}</Text></View>

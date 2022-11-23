@@ -1,206 +1,263 @@
 import React, { FC } from "react";
-import { Page, Text, View, Document, StyleSheet, Image } from "@react-pdf/renderer";
-import { formatCurrency, formatDate } from "../../utils/function";
+import {
+  Page,
+  Text,
+  View,
+  Document,
+  StyleSheet,
+} from "@react-pdf/renderer";
+import { formatCurrency, formatDate, user } from "../../utils/function";
 
-import DefaultImage from '../../assets/img/logo/logo3.png'
+
 import { baseURL } from "../../utils/axios-custum";
 import Product from "../../Model/Product";
 import moment from "moment";
-import HeaderInvoice from "../../molecules/HeaderInvoice";
+import NewHeaderInvoice from "../../molecules/NewHeaderInvoice";
 
 // Create styles
 const styles = StyleSheet.create({
   page: {
-    flexDirection:'column',
-    fontSize: 13
+    flexDirection: "column",
+    fontSize: 13,
   },
   header: {
     padding: 8,
-    display: 'flex',
-    justifyContent : 'space-between',
-    flexDirection: 'row',
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "row",
   },
-  image : {
-    width : 130,
-    height : 130,
+  image: {
+    width: 130,
+    height: 130,
     // backgroundColor: "#E4E4E4",
   },
-  right : {
-    width: '80%',
+  right: {
+    width: "80%",
     // backgroundColor : 'green',
-    height : 130,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+    height: 130,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
     padding: 10,
-    textAlign: 'center'
+    textAlign: "center",
   },
-  rightBottom : {
+  rightBottom: {
     marginBottom: 10,
-    textAlign: 'center',
-    padding: 5
+    textAlign: "center",
+    padding: 5,
   },
-  head : {
+  head: {
     // backgroundColor: 'yellow',
-    width: '100%',
-    display: 'flex',
-    padding: 8
+    width: "100%",
+    display: "flex",
+    padding: 8,
   },
-  content : {
+  content: {
     maxWidth: 200,
-    width: '100%',
-    alignSelf: 'flex-end',
-    marginLeft: 'auto',
+    width: "100%",
+    alignSelf: "flex-end",
+    marginLeft: "auto",
     // backgroundColor: 'pink'
   },
-  date : {
-    width: '100%'
+  date: {
+    width: "100%",
   },
-  customer : {
-    width: '100%',
+  customer: {
+    width: "100%",
     maxWidth: 200,
     // backgroundColor : 'red',
     minHeight: 50,
     border: 1,
-    marginTop: 5
+    marginTop: 5,
   },
-  tableTile : {
-    width: '100%',
+  tableTile: {
+    width: "100%",
     maxWidth: 500,
     // backgroundColor: 'violet',
     minHeight: 15,
     marginTop: 4,
-    textDecoration: 'underline',
+    textDecoration: "underline",
     fontSize: 14,
   },
-  tableTh:{
-    fontWeight: 'semibold',
-    width: '14.12%',
+  tableTh: {
+    fontWeight: "semibold",
+    width: "14.12%",
     padding: 4,
-    borderLeft:1,
-    borderBottom: 1,
-    borderTop: 1,
-    minHeight: 30
-  },
-  tableThLast:{
-    fontWeight: 'semibold',
-    width: '14.12%',
-    padding: 4,
-    borderLeft:1,
+    borderLeft: 1,
     borderBottom: 1,
     borderTop: 1,
     minHeight: 30,
-    borderRight: 1
   },
-  tableThFirst:{
-    fontWeight: 'semibold',
-    width: '14.12%',
+  tableThLast: {
+    fontWeight: "semibold",
+    width: "14.12%",
     padding: 4,
-    borderLeft:1,
+    borderLeft: 1,
+    borderBottom: 1,
+    borderTop: 1,
+    minHeight: 30,
+    borderRight: 1,
+  },
+  tableThFirst: {
+    fontWeight: "semibold",
+    width: "14.12%",
+    padding: 4,
+    borderLeft: 1,
     borderBottom: 1,
     borderTop: 1,
     minHeight: 30,
     borderLeftWidth: 1,
-    borderLeftColor: '#000',
+    borderLeftColor: "#000",
   },
-  tableChild:{
-    width: '14.12%',
+  tableChild: {
+    width: "14.12%",
     padding: 4,
-    borderLeft:1,
+    borderLeft: 1,
     borderBottom: 1,
     minHeight: 30,
   },
-  tableChildRigth:{
-    width: '14.12%',
+  tableChildRigth: {
+    width: "14.12%",
     padding: 4,
-    borderLeft:1,
+    borderLeft: 1,
     borderBottom: 1,
     minHeight: 30,
-    borderRight: 1
+    borderRight: 1,
   },
   tableTotal: {
-    width: '25%',
+    width: "25%",
     padding: 4,
     minHeight: 30,
-    borderBottom: 1
+    borderBottom: 1,
   },
-  table : {
-    display:'flex',
-    flexWrap: 'wrap',
-    width: '100%',
-    flexDirection: 'row',
-    fontSize: '11px',
+  table: {
+    display: "flex",
+    flexWrap: "wrap",
+    width: "100%",
+    flexDirection: "row",
+    fontSize: "11px",
     marginLeft: 3,
   },
-  signature : {
+  signature: {
     paddingTop: 8,
     paddingRight: 30,
-    width: '100%',
+    width: "100%",
     minHeight: 20,
     marginTop: 70,
-    display: 'flex',
-    textDecoration: 'underline',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  }
+    display: "flex",
+    textDecoration: "underline",
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
 });
 
 type ProductPrintProps = {
-  className ?:  string,
-  products ?: Product[],
+  className?: string;
+  products?: Product[];
+  companyId?: string
 };
 
 const API_STORAGE_URL = `${baseURL}/storage`;
 
 const ProductPrint: FC<ProductPrintProps> = ({
-  className='',
+  className = "",
   products = [],
+  companyId
 }) => {
   return (
     <Document>
       <Page wrap size="A4" style={styles.page}>
 
-        <HeaderInvoice />
+        {/* <HeaderInvoice /> */}
+        <NewHeaderInvoice companyId={companyId ? companyId : user().company_id} />
 
-        <View style={styles.tableTile}><Text style={{ padding: 5 }}>Liste des produits | {moment().format('MMMM Do YYYY')}</Text></View>
+        <View style={styles.tableTile}>
+          <Text style={{ padding: 5 }}>
+            Liste des produits | {moment().format("MMMM Do YYYY")}
+          </Text>
+        </View>
         <View style={styles.table}>
-          <View style={styles.tableThFirst}><Text>Nom du produit</Text></View>
-          <View style={styles.tableTh}><Text>Date</Text></View>
-          <View style={styles.tableTh}><Text>Quantité</Text></View>
-          <View style={styles.tableTh}><Text>En stock ?</Text></View>
-          <View style={styles.tableTh}><Text>Prix unitaire</Text></View>
-          <View style={styles.tableTh}><Text>Fournisseurs</Text></View>
-          <View style={styles.tableThLast}><Text>Categorie</Text></View>
-          
+          <View style={styles.tableThFirst}>
+            <Text>Nom du produit</Text>
+          </View>
+          <View style={styles.tableTh}>
+            <Text>Date</Text>
+          </View>
+          <View style={styles.tableTh}>
+            <Text>Quantité</Text>
+          </View>
+          <View style={styles.tableTh}>
+            <Text>En stock ?</Text>
+          </View>
+          <View style={styles.tableTh}>
+            <Text>Prix unitaire</Text>
+          </View>
+          <View style={styles.tableTh}>
+            <Text>Fournisseurs</Text>
+          </View>
+          <View style={styles.tableThLast}>
+            <Text>Categorie</Text>
+          </View>
 
-          {products.map(item => (
+          {products.map((item) => (
             <React.Fragment key={item.id}>
               <View style={styles.tableChild}>
                 {/* {item.image && <Image src={{ uri: `${API_STORAGE_URL}/${item.image}`, method: 'GET', headers:{"Cache-Control": "no-cache"}, body: '' }} cache={false} />} */}
                 <Text>{item.name}</Text>
               </View>
-              <View style={styles.tableChild}><Text>{formatDate(item.created_at || '')}</Text></View>
+              <View style={styles.tableChild}>
+                <Text>{formatDate(item.created_at || "")}</Text>
+              </View>
               <View style={styles.tableChild}>
                 <Text>
-                {item.qte_en_stock} {item.type_approvisionnement}{(item.qte_en_stock || 0) > 1 && 's'} 
-                {item.product_type?.name === 'VENDU_PAR_NOMBRE_PAR_CONTENEUR' && ` de ${item.nbre_par_carton} et ${item.unite_restante || 0} Unité${(item.unite_restante || 0) > 1 ? 's':''} restante`} 
-                {item.product_type?.name === 'VENDU_PAR_LITRE' && ` de ${item.qte_en_litre} ${item.product_type.unite_de_mesure} et ${item.unite_restante || 0} Unité${(item.unite_restante || 0) > 1 ? 's':''} restante`} 
-                {item.product_type?.name === 'VENDU_PAR_KG' && ` de ${item.poids} ${item.product_type.unite_de_mesure} et ${item.unite_restante || 0} Unité${(item.unite_restante || 0) > 1 ? 's':''} restante`} 
+                  {item.qte_en_stock} {item.type_approvisionnement}
+                  {(item.qte_en_stock || 0) > 1 && "s"}
+                  {item.product_type?.name ===
+                    "VENDU_PAR_NOMBRE_PAR_CONTENEUR" &&
+                    ` de ${item.nbre_par_carton} et ${
+                      item.unite_restante || 0
+                    } Unité${
+                      (item.unite_restante || 0) > 1 ? "s" : ""
+                    } restante`}
+                  {item.product_type?.name === "VENDU_PAR_LITRE" &&
+                    ` de ${item.qte_en_litre} ${
+                      item.product_type.unite_de_mesure
+                    } et ${item.unite_restante || 0} Unité${
+                      (item.unite_restante || 0) > 1 ? "s" : ""
+                    } restante`}
+                  {item.product_type?.name === "VENDU_PAR_KG" &&
+                    ` de ${item.poids} ${
+                      item.product_type.unite_de_mesure
+                    } et ${item.unite_restante || 0} Unité${
+                      (item.unite_restante || 0) > 1 ? "s" : ""
+                    } restante`}
                 </Text>
               </View>
-              <View style={styles.tableChild}><Text>{item.is_stock ? 'Oui':'Non'}</Text></View>
-              <View style={styles.tableChild}><Text>{formatCurrency(parseInt(item.prix_unitaire?.toString() || '0',10),'XAF')}</Text></View>
-              <View style={styles.tableChild}><Text>{item.product_supplier?.name}</Text></View>
-              <View style={styles.tableChildRigth}><Text>{item.category?.name}</Text></View>
+              <View style={styles.tableChild}>
+                <Text>{item.is_stock ? "Oui" : "Non"}</Text>
+              </View>
+              <View style={styles.tableChild}>
+                <Text>
+                  {formatCurrency(
+                    parseInt(item.prix_unitaire?.toString() || "0", 10),
+                    "XAF"
+                  )}
+                </Text>
+              </View>
+              <View style={styles.tableChild}>
+                <Text>{item.product_supplier?.name}</Text>
+              </View>
+              <View style={styles.tableChildRigth}>
+                <Text>{item.category?.name}</Text>
+              </View>
             </React.Fragment>
           ))}
-          
-          
         </View>
 
-        <View style={styles.signature}><Text style={{ textAlign:'right' }}>La Direction</Text></View>
-
+        <View style={styles.signature}>
+          <Text style={{ textAlign: "right" }}>La Direction</Text>
+        </View>
       </Page>
     </Document>
   );

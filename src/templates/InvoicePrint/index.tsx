@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Page, Text, View, Document, StyleSheet, Image } from "@react-pdf/renderer";
 import Order from "../../Model/Order";
-import { formatCurrency, formatDate } from "../../utils/function";
+import { formatCurrency, formatDate, user } from "../../utils/function";
 
 import DefaultImage from '../../assets/img/logo/logo3.png'
 import Invoice from "../../Model/Invoice";
@@ -9,6 +9,7 @@ import { baseURL } from "../../utils/axios-custum";
 import Product from "../../Model/Product";
 import moment from "moment";
 import HeaderInvoice from "../../molecules/HeaderInvoice";
+import NewHeaderInvoice from "../../molecules/NewHeaderInvoice";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -151,12 +152,14 @@ const styles = StyleSheet.create({
 type InvoicePrintProps = {
   className ?:  string,
   invoices ?: Invoice[],
+  companyId ?: string
 };
 
 
 const InvoicePrint: FC<InvoicePrintProps> = ({
   className='',
   invoices = [],
+  companyId
 }) => {
 
 
@@ -164,7 +167,8 @@ const InvoicePrint: FC<InvoicePrintProps> = ({
     <Document>
       <Page wrap size="A4" style={styles.page}>
 
-        <HeaderInvoice />
+         {/* <HeaderInvoice /> */}
+         <NewHeaderInvoice companyId={companyId ? companyId : user().company_id} />
 
         <View style={styles.tableTile}><Text style={{ padding: 5 }}>Liste des factures | {moment().format('MMMM Do YYYY')}</Text></View>
         
