@@ -56,7 +56,7 @@ const Setting: React.FC<TypeSetting> = () => {
 
   const companiesStore = useSelector((state: any) => state.companies);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const filteredItems = categories.filter(
     (item) =>
@@ -105,11 +105,14 @@ const Setting: React.FC<TypeSetting> = () => {
 
   const confirmDeleteTwo = () => {
     setShowModalTwo(false);
-
     setDeletingTwo(true);
     // delete order
     http_client(Storage.getStorage("auth").token)
-      .delete(`${CREATE_SUPPLIERS_URL}/${currentIdSuppliers}`)
+      .delete(
+        companiesStore.currentCompany
+          ? `${CREATE_SUPPLIERS_URL}/${currentIdSuppliers}?id=${companiesStore?.currentCompany?.id}`
+          : `${CREATE_SUPPLIERS_URL}/${currentIdSuppliers}`
+      )
       .then((res) => {
         setDeletingTwo(false);
         deleteSuppliers(currentIdSuppliers || "1");
@@ -393,10 +396,10 @@ const Setting: React.FC<TypeSetting> = () => {
   };
 
   const reload = () => {
-    if(roleIs('admin') && !companiesStore?.currentCompany){
-      navigate('/dashboard')
+    if (roleIs("admin") && !companiesStore?.currentCompany) {
+      navigate("/dashboard");
     }
-    
+
     Promise.all([
       http_client(Storage.getStorage("auth").token).get(
         companiesStore.currentCompany

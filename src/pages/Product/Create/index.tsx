@@ -26,6 +26,7 @@ const GET_CATEGORIES_URL = "categories";
 const GET_PRODUCT_TYPE_URL = "products/types";
 const GET_PRODUCT_SUPPLIER_URL = "products/suppliers";
 const CREATE_PRODUCT_URL = "products";
+const CREATE_SUPPLIERS_URL = "product-suppliers";
 
 const ProductCreate: FC<TypeProductCreate> = () => {
   const [product, setProduct] = useState<Product>({});
@@ -39,6 +40,11 @@ const ProductCreate: FC<TypeProductCreate> = () => {
   );
   const [productTypes, setProductTypes] = useState<ProductType[]>([]);
   const [urlImg, setUrlImg] = useState("");
+  const [categorieInputFile, setCategorieInputFile] = useState<string>("");
+  const [fournisseurInputFile, setFournisseurInputFile] = useState<string>("");
+  const [sendingOne, setSendingOne] = useState(false);
+  const [sendingTwo, setSendingTwo] = useState(false);
+  const [reloadState, setReloadState] = useState(false);
 
   const companiesStore = useSelector((state: any) => state.companies);
 
@@ -143,6 +149,85 @@ const ProductCreate: FC<TypeProductCreate> = () => {
         setProduct({ ...product, product_supplier_id: e.target.value });
         break;
     }
+  };
+
+  const saveNewCategorie = (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
+    console.log("click");
+    setSendingOne(true);
+    http_client(Storage.getStorage("auth").token)
+      .post(
+        companiesStore.currentCompany
+          ? `${GET_CATEGORIES_URL}?id=${companiesStore?.currentCompany?.id}`
+          : GET_CATEGORIES_URL,
+        { name: categorieInputFile }
+      )
+      .then((res) => {
+        reload();
+        setSendingOne(false);
+      })
+      .catch((err) => {
+        setSendingOne(false);
+        console.log(err);
+      });
+  };
+
+  const saveNewFournisseur = (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
+    console.log("click");
+    setSendingTwo(true);
+    http_client(Storage.getStorage("auth").token)
+      .post(
+        companiesStore.currentCompany
+          ? `${CREATE_SUPPLIERS_URL}?id=${companiesStore?.currentCompany?.id}`
+          : CREATE_SUPPLIERS_URL,
+        {
+          name: fournisseurInputFile,
+        }
+      )
+      .then((res) => {
+        setSendingTwo(false);
+        reload();
+      })
+      .catch((err) => {
+        setSendingTwo(false);
+        console.log(err);
+      });
+  };
+
+  const reload = () => {
+    setReloadState(false);
+
+    Promise.all([
+      http_client(Storage.getStorage("auth").token).get(
+        companiesStore.currentCompany
+          ? `${GET_CATEGORIES_URL}?id=${companiesStore?.currentCompany?.id}`
+          : GET_CATEGORIES_URL
+      ),
+      http_client(Storage.getStorage("auth").token).get(GET_PRODUCT_TYPE_URL),
+      http_client(Storage.getStorage("auth").token).get(
+        companiesStore.currentCompany
+          ? `${GET_PRODUCT_SUPPLIER_URL}?id=${companiesStore?.currentCompany?.id}`
+          : GET_PRODUCT_SUPPLIER_URL
+      ),
+    ])
+      .then((res: any) => {
+        setReloadState(true);
+        setLoading(false);
+
+        setCategories(res[0].data);
+
+        setProductTypes(res[1].data);
+        setProductSuppliers(res[2].data);
+
+        setUrlImg(DefaultProductImage);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -446,23 +531,47 @@ const ProductCreate: FC<TypeProductCreate> = () => {
               >
                 Categorie
               </label>
-              <select
-                required
-                onChange={handleOnchange}
-                value={product.category_id || ""}
-                name="category_id"
-                id="category_id"
-                className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500"
-              >
-                <option value="" className="text-gray-300">
-                  -- Sélectionner la catégorie de produit --
-                </option>
-                {categories.map((categoriy) => (
-                  <option value={categoriy.id} key={categoriy.id}>
-                    {categoriy.name}
+              {categories.length >= 1 ? (
+                <select
+                  required
+                  onChange={handleOnchange}
+                  value={product.category_id || ""}
+                  name="category_id"
+                  id="category_id"
+                  className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500"
+                >
+                  <option value="" className="text-gray-300">
+                    -- Sélectionner la catégorie de produit --
                   </option>
-                ))}
-              </select>
+                  {categories.map((categoriy) => (
+                    <option value={categoriy.id} key={categoriy.id}>
+                      {categoriy.name}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <div className=" flex justify-between">
+                  <input
+                    value={categorieInputFile || ""}
+                    onChange={(e) => setCategorieInputFile(e.target.value)}
+                    type="text"
+                    placeholder="Ajouter une nouvelle catégorie"
+                    className="placeholder:text-gray-300 w-[70%] focus:ring-0 text-sm ring-0 bg-slate-100 border-none outline-none placeholder:italic rounded-md "
+                  />
+                  <button
+                    onClick={saveNewCategorie}
+                    className={`${
+                      (!categorieInputFile || sendingOne) && "disabled"
+                    } w-[30%] px-2 bg-green-400 rounded-tr-md flex justify-center items-center rounded-br-md text-white`}
+                  >
+                    {sendingOne ? (
+                      <Loader className=" text-lg" />
+                    ) : (
+                      "Enregistrer"
+                    )}
+                  </button>
+                </div>
+              )}
             </div>
 
             <div className="w-1/2">
@@ -472,23 +581,48 @@ const ProductCreate: FC<TypeProductCreate> = () => {
               >
                 Fournisseur
               </label>
-              <select
-                required
-                onChange={handleOnchange}
-                value={product.product_supplier_id || ""}
-                name="product_supplier_id"
-                id="product_supplier_id"
-                className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500"
-              >
-                <option value="" className="text-gray-300">
-                  -- Sélectionner le fournisseur du produit --
-                </option>
-                {productSuppliers.map((supplier) => (
-                  <option value={supplier.id} key={supplier.id}>
-                    {supplier.name}
+
+              {productSuppliers.length >= 1 ? (
+                <select
+                  required
+                  onChange={handleOnchange}
+                  value={product.product_supplier_id || ""}
+                  name="product_supplier_id"
+                  id="product_supplier_id"
+                  className="placeholder:text-gray-300 w-full text-sm ring-0 focus:ring-4 ring-gray-700 bg-slate-100 border-none outline-none placeholder:italic rounded-md focus:ring-gray-500"
+                >
+                  <option value="" className="text-gray-300">
+                    -- Sélectionner le fournisseur du produit --
                   </option>
-                ))}
-              </select>
+                  {productSuppliers.map((supplier) => (
+                    <option value={supplier.id} key={supplier.id}>
+                      {supplier.name}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <div className=" flex justify-between">
+                  <input
+                    value={fournisseurInputFile || ""}
+                    onChange={(e) => setFournisseurInputFile(e.target.value)}
+                    type="text"
+                    placeholder="Ajouter un nouveau fournisseur"
+                    className="placeholder:text-gray-300 w-[70%] focus:ring-0 text-sm ring-0 bg-slate-100 border-none outline-none placeholder:italic rounded-md "
+                  />
+                  <button
+                    onClick={saveNewFournisseur}
+                    className={`${
+                      (!fournisseurInputFile || sendingTwo) && "disabled"
+                    } w-[30%] px-2 bg-green-400 rounded-tr-md flex justify-center items-center rounded-br-md text-white`}
+                  >
+                    {sendingTwo ? (
+                      <Loader className=" text-lg" />
+                    ) : (
+                      "Enregistrer"
+                    )}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
           <div className="mt-3 flex justify-end">
