@@ -170,7 +170,7 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
       .catch((err) => {
         setLoading(false);
       });
-  }, [id,navigate,companiesStore]);
+  }, [id, navigate, companiesStore]);
 
   return (
     <DashboardLayout

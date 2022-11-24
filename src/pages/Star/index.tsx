@@ -183,12 +183,14 @@ const Star: FC<TypeStar> = () => {
           })
           .catch(err => {
             console.log(err);
+            toast.error(err.response?.data?.message || err.message)
             setSending(false);
           })
       })
       .catch((err: any) => {
         setSending(false)
         setErrForm(err.response.data.message)
+        toast.error(err.response?.data?.message || err.message)
         console.log(err)
       })
     

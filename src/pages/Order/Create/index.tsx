@@ -41,7 +41,7 @@ const OrderCreate = () => {
 
   const companiesStore = useSelector((state: any) => state.companies);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const commander = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -305,7 +305,7 @@ const OrderCreate = () => {
       setLoading(false);
     };
     fetUsers();
-  }, [companiesStore.currentCompany, showClientForm,navigate]);
+  }, [companiesStore.currentCompany, showClientForm, navigate]);
 
   return (
     <DashboardLayout
