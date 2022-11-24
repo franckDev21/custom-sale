@@ -45,7 +45,11 @@ const OrderShow = () => {
     setSending(true);
     // delete order
     http_client(Storage.getStorage("auth").token)
-      .post(companiesStore.currentCompany? `${BAY_ORDER_URL}/${id}?id=${companiesStore.currentCompany.id}`:`${BAY_ORDER_URL}/${id}`)
+      .post(
+        companiesStore.currentCompany
+          ? `${BAY_ORDER_URL}/${id}?id=${companiesStore?.currentCompany?.id}`
+          : `${BAY_ORDER_URL}/${id}`
+      )
       .then((res) => {
         setSending(false);
         if (res.data.message) {
@@ -136,7 +140,9 @@ const OrderShow = () => {
                     onClick={invoices}
                     document={
                       <FactureDocument
-                        companyId={companiesStore.currentCompany.id ?? undefined}
+                        companyId={
+                          companiesStore?.currentCompany?.id ?? undefined
+                        }
                         invoice={invoice}
                         order={order}
                         orderProducts={orderProducts}

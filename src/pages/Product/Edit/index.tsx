@@ -44,7 +44,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
 
   const { id } = useParams();
 
-  const companiesStore = useSelector((state: any) => state.companies); 
+  const companiesStore = useSelector((state: any) => state.companies);
 
   const formRef = useRef(null);
 
@@ -67,14 +67,19 @@ const ProductEdit: FC<TypeProductEdit> = () => {
     let formData = new FormData(formRef?.current || undefined);
 
     setSending(true);
-    http_client(Storage.getStorage("auth").token) 
+    http_client(Storage.getStorage("auth").token)
       .post(`${EDIT_PRODUCT_URL}/${id}`, formData)
       .then((res) => {
         setSending(false);
         toast.success(res.data.message);
         setLoading(true);
         let id = window.setTimeout(() => {
-          navigate(`/products/show/${product.id}/${product.name?.split(' ').join('-').toLowerCase()}`);
+          navigate(
+            `/products/show/${product.id}/${product.name
+              ?.split(" ")
+              .join("-")
+              .toLowerCase()}`
+          );
           window.clearTimeout(id);
         }, 6000);
       })
@@ -140,13 +145,21 @@ const ProductEdit: FC<TypeProductEdit> = () => {
   };
 
   useEffect(() => {
-    Promise.all([ 
-      http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_CATEGORIES_URL}?id=${companiesStore.currentCompany.id}`:GET_CATEGORIES_URL),
+    Promise.all([
+      http_client(Storage.getStorage("auth").token).get(
+        companiesStore.currentCompany
+          ? `${GET_CATEGORIES_URL}?id=${companiesStore?.currentCompany?.id}`
+          : GET_CATEGORIES_URL
+      ),
       http_client(Storage.getStorage("auth").token).get(GET_PRODUCT_TYPE_URL),
       http_client(Storage.getStorage("auth").token).get(
-        companiesStore.currentCompany ?  `${GET_PRODUCT_SUPPLIER_URL}?id=${companiesStore.currentCompany.id}`:GET_PRODUCT_SUPPLIER_URL
+        companiesStore.currentCompany
+          ? `${GET_PRODUCT_SUPPLIER_URL}?id=${companiesStore?.currentCompany?.id}`
+          : GET_PRODUCT_SUPPLIER_URL
       ),
-      http_client(Storage.getStorage("auth").token).get(`${GET_PRODUIT_URL}/${id}`)
+      http_client(Storage.getStorage("auth").token).get(
+        `${GET_PRODUIT_URL}/${id}`
+      ),
     ])
       .then((res: any) => {
         setLoading(false);
@@ -157,10 +170,10 @@ const ProductEdit: FC<TypeProductEdit> = () => {
         setProduct(res[3].data);
 
         setUrlImg(DefaultProductImage);
-        if((res[3].data as Product).image){
-          setUrlImg(`${API_STORAGE_URL}/${res[3].data.image}`)
+        if ((res[3].data as Product).image) {
+          setUrlImg(`${API_STORAGE_URL}/${res[3].data.image}`);
         }
-        setCurrentType((res[3].data as Product).product_type?.name || '')
+        setCurrentType((res[3].data as Product).product_type?.name || "");
       })
       .catch((err) => {
         console.log(err);
@@ -174,10 +187,20 @@ const ProductEdit: FC<TypeProductEdit> = () => {
       headerContent={
         <>
           <div className="ml-4 w-[68%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
-            {!loading && <>
-              <span>| Edition du produit <span className="text-gray-700">{product.name}</span></span>
-              <Link to='/products/create' className="text-white px-4 py-2 rounded-md bg-green-600 text-sm">Ajouter un nouveau produit</Link>
-            </>}
+            {!loading && (
+              <>
+                <span>
+                  | Edition du produit{" "}
+                  <span className="text-gray-700">{product.name}</span>
+                </span>
+                <Link
+                  to="/products/create"
+                  className="text-white px-4 py-2 rounded-md bg-green-600 text-sm"
+                >
+                  Ajouter un nouveau produit
+                </Link>
+              </>
+            )}
           </div>
         </>
       }
@@ -188,8 +211,18 @@ const ProductEdit: FC<TypeProductEdit> = () => {
         className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8"
       >
         {!loading ? (
-          <div className={`max-w-5xl bg-white p-5 rounded-md mx-auto relative overflow-hidden`}>
-            <Link to={`/products/show/${product.id}/${product.name?.split(' ').join('-').toLowerCase()}`} className=" absolute top-0 right-0 px-4 py-2 bg-green-400 text-white"><FaEye size={17} /></Link>
+          <div
+            className={`max-w-5xl bg-white p-5 rounded-md mx-auto relative overflow-hidden`}
+          >
+            <Link
+              to={`/products/show/${product.id}/${product.name
+                ?.split(" ")
+                .join("-")
+                .toLowerCase()}`}
+              className=" absolute top-0 right-0 px-4 py-2 bg-green-400 text-white"
+            >
+              <FaEye size={17} />
+            </Link>
             <div className="flex space-x-4 mb-4">
               <label
                 htmlFor="image"
@@ -223,7 +256,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                 <textarea
                   onChange={handleOnchange}
                   name="description"
-                  value={product.description || ''}
+                  value={product.description || ""}
                   placeholder="Enter your product description here .... "
                   id="description"
                   cols={10}
@@ -274,7 +307,12 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                 </div>
               </div>
             </div>
-            <div className={`flex space-x-4 mb-4 ${(product.qte_en_stock || 0) > 0 && 'disabled p-2 border-4 bg-slate-50 select-none'}`}>
+            <div
+              className={`flex space-x-4 mb-4 ${
+                (product.qte_en_stock || 0) > 0 &&
+                "disabled p-2 border-4 bg-slate-50 select-none"
+              }`}
+            >
               <div className="w-1/2">
                 <label
                   htmlFor="product_type_id"
@@ -309,8 +347,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                       htmlFor="poids"
                       className=" inline-block mb-1 text-sm"
                     >
-                      Poids{" "}
-                      <span className="text-sm italic">(Kg,g)</span>
+                      Poids <span className="text-sm italic">(Kg,g)</span>
                     </label>
                     <input
                       onChange={handleOnchange}
@@ -332,7 +369,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                     htmlFor="qte_en_litre"
                     className=" inline-block mb-1 text-sm"
                   >
-                    Entrer quantité en litre {" "}
+                    Entrer quantité en litre{" "}
                     <span className="text-sm italic">(L,ml)</span>
                   </label>
                   <input
@@ -357,7 +394,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                         htmlFor="nbre_par_carton"
                         className=" inline-block mb-1 text-sm"
                       >
-                        Nombre d'élément par conteneur 
+                        Nombre d'élément par conteneur
                       </label>
                       <input
                         onChange={handleOnchange}
@@ -377,8 +414,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
                         htmlFor="poids"
                         className=" inline-block mb-1 text-sm"
                       >
-                        Poids{" "}
-                        <span className="text-sm italic">(Kg,g)</span>
+                        Poids <span className="text-sm italic">(Kg,g)</span>
                       </label>
                       <input
                         onChange={handleOnchange}

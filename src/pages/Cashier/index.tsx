@@ -204,7 +204,7 @@ const Cashier: React.FC<TypeCashier> = () => {
     e.preventDefault()
     setSending2(true)
     
-    http_client(Storage.getStorage("auth").token).post(companiesStore.currentCompany ? `${CREATE_OUTPUT_URL}?id=${companiesStore.currentCompany.id}`:`${CREATE_OUTPUT_URL}`,dataOutputForm)
+    http_client(Storage.getStorage("auth").token).post(companiesStore.currentCompany ? `${CREATE_OUTPUT_URL}?id=${companiesStore?.currentCompany?.id}`:`${CREATE_OUTPUT_URL}`,dataOutputForm)
       .then(res => {
         setSending2(false)
         if(res.data.message){
@@ -230,7 +230,7 @@ const Cashier: React.FC<TypeCashier> = () => {
     setErrorMessage('')
 
     setSending(true)
-    http_client(Storage.getStorage("auth").token).post(companiesStore.currentCompany? `${CREATE_INTPUT_URL}?id=${companiesStore.currentCompany.id}`:`${CREATE_INTPUT_URL}`,dataInputForm)
+    http_client(Storage.getStorage("auth").token).post(companiesStore.currentCompany? `${CREATE_INTPUT_URL}?id=${companiesStore?.currentCompany?.id}`:`${CREATE_INTPUT_URL}`,dataInputForm)
       .then(res => {
         reloadData().then((res2:any) => {
           setSending(false)
@@ -249,8 +249,8 @@ const Cashier: React.FC<TypeCashier> = () => {
   const reloadData = async () => {
     return new Promise((resolve,reject) => {
       Promise.all([
-        http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_CASHIERS_URL}?id=${companiesStore.currentCompany.id}`:`${GET_CASHIERS_URL}`),
-        http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_TOTALCASH_URL}?id=${companiesStore.currentCompany.id}`:`${GET_TOTALCASH_URL}`)
+        http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_CASHIERS_URL}?id=${companiesStore?.currentCompany?.id}`:`${GET_CASHIERS_URL}`),
+        http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_TOTALCASH_URL}?id=${companiesStore?.currentCompany?.id}`:`${GET_TOTALCASH_URL}`)
         ]).then(res => {
             setCashiers(res[0].data);
             setTotalCash(res[1].data)
@@ -267,8 +267,8 @@ const Cashier: React.FC<TypeCashier> = () => {
 
   useEffect(() => { 
     Promise.all([
-      http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_CASHIERS_URL}?id=${companiesStore.currentCompany.id}`:`${GET_CASHIERS_URL}`),
-      http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_TOTALCASH_URL}?id=${companiesStore.currentCompany.id}`:`${GET_TOTALCASH_URL}`)
+      http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_CASHIERS_URL}?id=${companiesStore?.currentCompany?.id}`:`${GET_CASHIERS_URL}`),
+      http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_TOTALCASH_URL}?id=${companiesStore?.currentCompany?.id}`:`${GET_TOTALCASH_URL}`)
     ]).then(res => {
         setCashiers(res[0].data);
         setTotalCash(res[1].data)
@@ -287,7 +287,7 @@ const Cashier: React.FC<TypeCashier> = () => {
           <div className="ml-4 w-[90%] font-bold text-2xl text-[#ac3265] flex items-center justify-end">
           {(UserService.getUser().company_id || companiesStore.currentCompany)&& 
             <div className='flex justify-between space-x-2 '>
-              <PDFDownloadLink document={<CashierPrint companyId={companiesStore.currentCompany.id || undefined} cashiers={cashiers} total={totalCash.montant} />} fileName="caisse.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
+              <PDFDownloadLink document={<CashierPrint companyId={companiesStore?.currentCompany?.id || undefined} cashiers={cashiers} total={totalCash.montant} />} fileName="caisse.pdf" className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block mr-1' /> 
                 Imprimer l'état de la caisse
               </PDFDownloadLink >
               <button onClick={_ => {

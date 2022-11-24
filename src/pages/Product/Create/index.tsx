@@ -65,7 +65,7 @@ const ProductCreate: FC<TypeProductCreate> = () => {
     http_client(Storage.getStorage("auth").token)
       .post(
         companiesStore.currentCompany
-          ? `${CREATE_PRODUCT_URL}?id=${companiesStore.currentCompany.id}`
+          ? `${CREATE_PRODUCT_URL}?id=${companiesStore?.currentCompany?.id}`
           : CREATE_PRODUCT_URL,
         formData
       )
@@ -148,13 +148,13 @@ const ProductCreate: FC<TypeProductCreate> = () => {
     Promise.all([
       http_client(Storage.getStorage("auth").token).get(
         companiesStore.currentCompany
-          ? `${GET_CATEGORIES_URL}?id=${companiesStore.currentCompany.id}`
+          ? `${GET_CATEGORIES_URL}?id=${companiesStore?.currentCompany?.id}`
           : GET_CATEGORIES_URL
       ),
       http_client(Storage.getStorage("auth").token).get(GET_PRODUCT_TYPE_URL),
       http_client(Storage.getStorage("auth").token).get(
         companiesStore.currentCompany
-          ? `${GET_PRODUCT_SUPPLIER_URL}?id=${companiesStore.currentCompany.id}`
+          ? `${GET_PRODUCT_SUPPLIER_URL}?id=${companiesStore?.currentCompany?.id}`
           : GET_PRODUCT_SUPPLIER_URL
       ),
     ])

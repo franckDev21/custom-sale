@@ -30,7 +30,7 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
   const [showModal, setShowModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  const companiesStore = useSelector((state: any) => state.companies); 
+  const companiesStore = useSelector((state: any) => state.companies);
 
   const filteredItems = invoices.filter(
     (item) =>
@@ -207,7 +207,9 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
   useEffect(() => {
     const fetchInvoices = async () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
-        companiesStore.currentCompany? `${GET_INVOICES}?id=${companiesStore.currentCompany.id}`:GET_INVOICES
+        companiesStore.currentCompany
+          ? `${GET_INVOICES}?id=${companiesStore?.currentCompany?.id}`
+          : GET_INVOICES
       );
       setInvoices(res.data.data);
       setLoading(false);
@@ -282,7 +284,12 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center">
           <PDFDownloadLink
-            document={<InvoicePrint companyId={companiesStore.currentCompany.id || undefined} invoices={invoices} />}
+            document={
+              <InvoicePrint
+                companyId={companiesStore?.currentCompany?.id || undefined}
+                invoices={invoices}
+              />
+            }
             fileName="liste-des-factures.pdf"
             className="text-sm text-white px-4 rounded-md bg-gray-700 py-2"
           >

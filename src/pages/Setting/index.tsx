@@ -1,49 +1,53 @@
-import { Modal } from 'flowbite-react'
-import React, { useState,useEffect , FormEvent, ChangeEvent } from 'react'
-import DataTable, { TableColumn } from 'react-data-table-component'
-import { BsPlusLg, BsPrinterFill } from 'react-icons/bs'
-import { FaTimes, FaTrash } from 'react-icons/fa'
-import { HiOutlineExclamationCircle, HiRefresh } from 'react-icons/hi'
-import { useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
-import Loader from '../../atoms/Loader'
-import Category from '../../Model/Category'
-import ProductSupplier from '../../Model/ProductSupplier'
-import Storage from '../../service/Storage'
-import DashboardLayout from '../../templates/DashboardLayout'
-import { http_client } from '../../utils/axios-custum'
-import { formatDate } from '../../utils/function'
+import { Modal } from "flowbite-react";
+import React, { useState, useEffect, FormEvent, ChangeEvent } from "react";
+import DataTable, { TableColumn } from "react-data-table-component";
+import { BsPlusLg, BsPrinterFill } from "react-icons/bs";
+import { FaTimes, FaTrash } from "react-icons/fa";
+import { HiOutlineExclamationCircle, HiRefresh } from "react-icons/hi";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import Loader from "../../atoms/Loader";
+import Category from "../../Model/Category";
+import ProductSupplier from "../../Model/ProductSupplier";
+import Storage from "../../service/Storage";
+import DashboardLayout from "../../templates/DashboardLayout";
+import { http_client } from "../../utils/axios-custum";
+import { formatDate } from "../../utils/function";
 
-type TypeSetting = {}
+type TypeSetting = {};
 
 type TypeSupplier = {
-  name ?: string,
-  address ?: string,
-  tel ?: string,
-  email ?: string,
-}
+  name?: string;
+  address?: string;
+  tel?: string;
+  email?: string;
+};
 
 const GET_CATEGORIES_URL = "categories";
 const GET_PRODUCT_SUPPLIER_URL = "product-suppliers";
-const CREATE_SUPPLIERS_URL = 'product-suppliers'
+const CREATE_SUPPLIERS_URL = "product-suppliers";
 
-const Setting:React.FC<TypeSetting> = () => {
-
-  const [categories,setCategories] = useState<Category[]>([])
-  const [productSupplies,setProductSupplies] = useState<ProductSupplier[]>([])
+const Setting: React.FC<TypeSetting> = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [productSupplies, setProductSupplies] = useState<ProductSupplier[]>([]);
   const [loading, setLoading] = useState(true);
   const [sendingOne, setSendingOne] = useState(false);
   const [sendingTwo, setSendingTwo] = useState(false);
   const [showFormCategory, setShowFormCategory] = useState(false);
   const [showFormSupplier, setShowFormSupplier] = useState(false);
-  const [categorieInput, setCategorieInput] = useState('');
-  const [supplierForm,setSupplierForm] = useState<TypeSupplier>({})
+  const [categorieInput, setCategorieInput] = useState("");
+  const [supplierForm, setSupplierForm] = useState<TypeSupplier>({});
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
   const [filterTextTwo, setFilterTextTwo] = useState("");
-  const [resetPaginationToggleTwo, setResetPaginationToggleTwo] = useState(false);
-  const [currentIdCategory, setCurrentIdCategory] = useState<string | null>(null);
-  const [currentIdSuppliers, setCurrentIdSuppliers] = useState<string | null>(null);
+  const [resetPaginationToggleTwo, setResetPaginationToggleTwo] =
+    useState(false);
+  const [currentIdCategory, setCurrentIdCategory] = useState<string | null>(
+    null
+  );
+  const [currentIdSuppliers, setCurrentIdSuppliers] = useState<string | null>(
+    null
+  );
   const [showModal, setShowModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showModalTwo, setShowModalTwo] = useState(false);
@@ -54,25 +58,24 @@ const Setting:React.FC<TypeSetting> = () => {
   const filteredItems = categories.filter(
     (item) =>
       (item?.created_at &&
-        item.created_at.toLowerCase().includes(filterText.toLowerCase()))  ||
-      (item?.name &&
-        item.name.toLowerCase().includes(filterText.toLowerCase())) 
+        item.created_at.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item?.name && item.name.toLowerCase().includes(filterText.toLowerCase()))
   );
 
   const filteredItemsTwo = productSupplies.filter(
     (item) =>
       (item?.name &&
-        item.name.toLowerCase().includes(filterTextTwo.toLowerCase()))  ||
+        item.name.toLowerCase().includes(filterTextTwo.toLowerCase())) ||
       (item?.address &&
-        item.address.toLowerCase().includes(filterTextTwo.toLowerCase()))  ||
+        item.address.toLowerCase().includes(filterTextTwo.toLowerCase())) ||
       (item?.email &&
-        item.email.toLowerCase().includes(filterTextTwo.toLowerCase()))  ||
+        item.email.toLowerCase().includes(filterTextTwo.toLowerCase())) ||
       (item?.tel &&
-        item.tel.toLowerCase().includes(filterTextTwo.toLowerCase()))  ||
+        item.tel.toLowerCase().includes(filterTextTwo.toLowerCase())) ||
       (item?.created_at &&
-        item.created_at.toLowerCase().includes(filterTextTwo.toLowerCase()))  ||
+        item.created_at.toLowerCase().includes(filterTextTwo.toLowerCase())) ||
       (item?.name &&
-        item.name.toLowerCase().includes(filterTextTwo.toLowerCase())) 
+        item.name.toLowerCase().includes(filterTextTwo.toLowerCase()))
   );
 
   const confirmDelete = () => {
@@ -85,9 +88,9 @@ const Setting:React.FC<TypeSetting> = () => {
       .then((res) => {
         setDeleting(false);
         deleteCategory(currentIdCategory || "1");
-        if(res.data.message){
+        if (res.data.message) {
           toast.success(res.data.message);
-        }else{
+        } else {
           toast.error(res.data.error);
         }
       })
@@ -95,7 +98,7 @@ const Setting:React.FC<TypeSetting> = () => {
         setDeleting(false);
         console.log(err);
       });
-  }
+  };
 
   const confirmDeleteTwo = () => {
     setShowModalTwo(false);
@@ -107,9 +110,9 @@ const Setting:React.FC<TypeSetting> = () => {
       .then((res) => {
         setDeletingTwo(false);
         deleteSuppliers(currentIdSuppliers || "1");
-        if(res.data.message){
+        if (res.data.message) {
           toast.success(res.data.message);
-        }else{
+        } else {
           toast.error(res.data.error);
         }
       })
@@ -117,15 +120,17 @@ const Setting:React.FC<TypeSetting> = () => {
         setDeletingTwo(false);
         console.log(err);
       });
-  }
+  };
 
   const deleteCategory = (id: string) => {
     let categoriesFilter = categories.filter((category) => category.id !== id);
     setCategories(categoriesFilter);
   };
 
-  const deleteSuppliers= (id: string) => {
-    let suppliersFilter = productSupplies.filter((supplier) => supplier.id !== id);
+  const deleteSuppliers = (id: string) => {
+    let suppliersFilter = productSupplies.filter(
+      (supplier) => supplier.id !== id
+    );
     setProductSupplies(suppliersFilter);
   };
 
@@ -231,10 +236,14 @@ const Setting:React.FC<TypeSetting> = () => {
 
   const columns: TableColumn<Category>[] = [
     {
-      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Date de création</span>,
-      cell: (row) => <span className="">
-        {formatDate(row.created_at || "")|| "Aucun"}
-      </span>,
+      name: (
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">
+          Date de création
+        </span>
+      ),
+      cell: (row) => (
+        <span className="">{formatDate(row.created_at || "") || "Aucun"}</span>
+      ),
       sortable: true,
     },
     {
@@ -243,13 +252,12 @@ const Setting:React.FC<TypeSetting> = () => {
           Nom de la catégorie
         </span>
       ),
-      selector: (row) => `${row.name}` || '',
+      selector: (row) => `${row.name}` || "",
     },
     {
       name: "",
       cell: (row) => (
         <h1 className=" flex items-center justify-center">
-          
           <button
             onClick={(_) => onClick(row.id || "1")}
             className="font-medium ml-1 text-red-500 w-8 h-8 justify-center items-center  bg-red-100 rounded-md inline-flex dark:text-red-500 hover:underline"
@@ -263,10 +271,14 @@ const Setting:React.FC<TypeSetting> = () => {
 
   const columnsTwo: TableColumn<ProductSupplier>[] = [
     {
-      name: <span className="  font-bold text-xs text-[#ac3265] uppercase">Date de création</span>,
-      cell: (row) => <span className="">
-        {formatDate(row.created_at || "")|| "Aucun"}
-      </span>,
+      name: (
+        <span className="  font-bold text-xs text-[#ac3265] uppercase">
+          Date de création
+        </span>
+      ),
+      cell: (row) => (
+        <span className="">{formatDate(row.created_at || "") || "Aucun"}</span>
+      ),
       sortable: true,
     },
     {
@@ -275,7 +287,7 @@ const Setting:React.FC<TypeSetting> = () => {
           category name
         </span>
       ),
-      selector: (row) => `${row.name}` || '',
+      selector: (row) => `${row.name}` || "",
     },
     {
       name: (
@@ -283,7 +295,7 @@ const Setting:React.FC<TypeSetting> = () => {
           email
         </span>
       ),
-      selector: (row) => row.email || 'Aucun',
+      selector: (row) => row.email || "Aucun",
     },
     {
       name: (
@@ -291,21 +303,18 @@ const Setting:React.FC<TypeSetting> = () => {
           address
         </span>
       ),
-      selector: (row) => row.address || 'Aucun',
+      selector: (row) => row.address || "Aucun",
     },
     {
       name: (
-        <span className=" font-bold text-xs text-[#ac3265] uppercase">
-          tel
-        </span>
+        <span className=" font-bold text-xs text-[#ac3265] uppercase">tel</span>
       ),
-      selector: (row) => row.tel || 'Aucun',
+      selector: (row) => row.tel || "Aucun",
     },
     {
       name: "",
       cell: (row) => (
         <h1 className=" flex items-center justify-center">
-          
           <button
             onClick={(_) => onClickTwo(row.id || "1")}
             className="font-medium ml-1 text-red-500 w-8 h-8 justify-center items-center  bg-red-100 rounded-md inline-flex dark:text-red-500 hover:underline"
@@ -318,78 +327,99 @@ const Setting:React.FC<TypeSetting> = () => {
   ];
 
   const handleSubmitOne = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setSendingOne(true)
-    http_client(Storage.getStorage("auth").token).post(companiesStore.currentCompany ? `${GET_CATEGORIES_URL}?id=${companiesStore.currentCompany.id}`:GET_CATEGORIES_URL,{name: categorieInput})
-      .then(res => {
-        setSendingOne(false)
-        toast.success(res.data.message)
-        setCategorieInput('')
-        reload()
+    e.preventDefault();
+    setSendingOne(true);
+    http_client(Storage.getStorage("auth").token)
+      .post(
+        companiesStore.currentCompany
+          ? `${GET_CATEGORIES_URL}?id=${companiesStore?.currentCompany?.id}`
+          : GET_CATEGORIES_URL,
+        { name: categorieInput }
+      )
+      .then((res) => {
+        setSendingOne(false);
+        toast.success(res.data.message);
+        setCategorieInput("");
+        reload();
       })
-      .catch(err => {
-        setSendingOne(false)
+      .catch((err) => {
+        setSendingOne(false);
         console.log(err);
-      })
-  }
+      });
+  };
 
   const handleSubmitTwo = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setSendingTwo(true)
-    http_client(Storage.getStorage("auth").token).post(companiesStore.currentCompany ? `${CREATE_SUPPLIERS_URL}?id=${companiesStore.currentCompany.id}`:CREATE_SUPPLIERS_URL,supplierForm)
-      .then(res => {
-        setSendingTwo(false)
-        toast.success(res.data.message)
-        setSupplierForm({})
-        reload()
+    e.preventDefault();
+    setSendingTwo(true);
+    http_client(Storage.getStorage("auth").token)
+      .post(
+        companiesStore.currentCompany
+          ? `${CREATE_SUPPLIERS_URL}?id=${companiesStore?.currentCompany?.id}`
+          : CREATE_SUPPLIERS_URL,
+        supplierForm
+      )
+      .then((res) => {
+        setSendingTwo(false);
+        toast.success(res.data.message);
+        setSupplierForm({});
+        reload();
       })
-      .catch(err => {
-        setSendingTwo(false)
+      .catch((err) => {
+        setSendingTwo(false);
         console.log(err);
-      })
-  }
+      });
+  };
 
-  const handleOnchange = (e: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
+  const handleOnchange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     switch (e.target.name) {
-      case 'name':
-        setSupplierForm({...supplierForm,name : e.target.value})
+      case "name":
+        setSupplierForm({ ...supplierForm, name: e.target.value });
         break;
-      case 'address':
-        setSupplierForm({...supplierForm,address : e.target.value})
+      case "address":
+        setSupplierForm({ ...supplierForm, address: e.target.value });
         break;
-      case 'tel':
-        setSupplierForm({...supplierForm,tel : e.target.value})
+      case "tel":
+        setSupplierForm({ ...supplierForm, tel: e.target.value });
         break;
-      case 'email':
-        setSupplierForm({...supplierForm,email : e.target.value})
+      case "email":
+        setSupplierForm({ ...supplierForm, email: e.target.value });
         break;
     }
-  }
+  };
 
   const reload = () => {
     Promise.all([
-      http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_CATEGORIES_URL}?id=${companiesStore.currentCompany.id}`:GET_CATEGORIES_URL),
-      http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_PRODUCT_SUPPLIER_URL}?id=${companiesStore.currentCompany.id}`:GET_PRODUCT_SUPPLIER_URL),
-    ]).then((res: any) => {
-      setLoading(false)
+      http_client(Storage.getStorage("auth").token).get(
+        companiesStore.currentCompany
+          ? `${GET_CATEGORIES_URL}?id=${companiesStore?.currentCompany?.id}`
+          : GET_CATEGORIES_URL
+      ),
+      http_client(Storage.getStorage("auth").token).get(
+        companiesStore.currentCompany
+          ? `${GET_PRODUCT_SUPPLIER_URL}?id=${companiesStore?.currentCompany?.id}`
+          : GET_PRODUCT_SUPPLIER_URL
+      ),
+    ])
+      .then((res: any) => {
+        setLoading(false);
 
-      setCategories(res[0].data)
-      setProductSupplies(res[1].data)
-    })
-    .catch(err => {
-      console.log(err);
-      setLoading(false)
-    });
-  }
+        setCategories(res[0].data);
+        setProductSupplies(res[1].data);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  };
 
   useEffect(() => {
-    reload()
-  },[])
+    reload();
+  }, []);
 
   return (
-    <DashboardLayout
-      title='Paramètre'
-    >
+    <DashboardLayout title="Paramètre">
       <React.Fragment>
         <Modal
           show={showModal || deleting}
@@ -397,12 +427,12 @@ const Setting:React.FC<TypeSetting> = () => {
           popup={true}
           onClose={onClose}
         >
-        <Modal.Header />
+          <Modal.Header />
           <Modal.Body>
             <div className="text-center">
               <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              voulez vous vraiment supprimer cette catégorie ?
+                voulez vous vraiment supprimer cette catégorie ?
               </h3>
               <div className="flex justify-center gap-4">
                 <button
@@ -436,12 +466,12 @@ const Setting:React.FC<TypeSetting> = () => {
           popup={true}
           onClose={onCloseTwo}
         >
-        <Modal.Header />
+          <Modal.Header />
           <Modal.Body>
             <div className="text-center">
               <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 " />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              Voulez vous vraiment supprimer ce fournisseur ?
+                Voulez vous vraiment supprimer ce fournisseur ?
               </h3>
               <div className="flex justify-center gap-4">
                 <button
@@ -470,27 +500,70 @@ const Setting:React.FC<TypeSetting> = () => {
 
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center mb-4">
-          <h1 className='text-3xl text-primary font-bold'>Liste des categories |</h1>
+          <h1 className="text-3xl text-primary font-bold">
+            Liste des categories |
+          </h1>
           <div className="flex space-x-4 font-bold items-center">
-            <button onClick={() => setShowFormCategory(!showFormCategory)} className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <BsPlusLg size={16} className='inline-block  mr-1' />Ajouter une nouvelle catégorie</button>
-            <button  className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block  mr-1' />Imprimer la liste des catégories </button>
-            <button  className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></button>
+            <button
+              onClick={() => setShowFormCategory(!showFormCategory)}
+              className="text-sm text-white px-4 rounded-md bg-green-700 py-2"
+            >
+              {" "}
+              <BsPlusLg size={16} className="inline-block  mr-1" />
+              Ajouter une nouvelle catégorie
+            </button>
+            <button className="text-sm text-white px-4 rounded-md bg-gray-700 py-2">
+              {" "}
+              <BsPrinterFill size={16} className="inline-block  mr-1" />
+              Imprimer la liste des catégories{" "}
+            </button>
+            <button className="text-sm text-[#ac3265] px-4 rounded-md bg-white py-2">
+              {" "}
+              <HiRefresh size={20} />
+            </button>
           </div>
         </div>
-        
-        {showFormCategory && 
-          <form onSubmit={handleSubmitOne} className='p-4 bg-white rounded-md text-lg mb-4'>
-            <label htmlFor="name" className='flex space-y-3 flex-col relative'>
+
+        {showFormCategory && (
+          <form
+            onSubmit={handleSubmitOne}
+            className="p-4 bg-white rounded-md text-lg mb-4"
+          >
+            <label htmlFor="name" className="flex space-y-3 flex-col relative">
               <span>Nom de la catégorie</span>
               <div className="flex justify-start space-x-3">
-                <input required value={categorieInput} onChange={e => setCategorieInput(e.target.value)} type="text" placeholder='Nom de la catégorie' className='px-4 w-[40%] rounded-md py-2 bg-gray-100'   />
-                <button type='submit' className={`bg-green-400 ${!categorieInput && 'disabled select-none'} hover:bg-green-600 transition text-white px-4 py-2 uppercase font-bold rounded-md flex items-center`}>{sendingOne ? <Loader className='text-lg inline-block' />:'Sauvegarder'}</button>
+                <input
+                  required
+                  value={categorieInput}
+                  onChange={(e) => setCategorieInput(e.target.value)}
+                  type="text"
+                  placeholder="Nom de la catégorie"
+                  className="px-4 w-[40%] rounded-md py-2 bg-gray-100"
+                />
+                <button
+                  type="submit"
+                  className={`bg-green-400 ${
+                    !categorieInput && "disabled select-none"
+                  } hover:bg-green-600 transition text-white px-4 py-2 uppercase font-bold rounded-md flex items-center`}
+                >
+                  {sendingOne ? (
+                    <Loader className="text-lg inline-block" />
+                  ) : (
+                    "Sauvegarder"
+                  )}
+                </button>
               </div>
-              <span onClick={() => setShowFormCategory(false)} title='Close' className=' absolute -top-4 right-0 bg-red-100 p-2 rounded-md transition text-red-500 cursor-pointer hover:bg-red-500 hover:text-white'><FaTimes /></span>
+              <span
+                onClick={() => setShowFormCategory(false)}
+                title="Close"
+                className=" absolute -top-4 right-0 bg-red-100 p-2 rounded-md transition text-red-500 cursor-pointer hover:bg-red-500 hover:text-white"
+              >
+                <FaTimes />
+              </span>
             </label>
           </form>
-        }
-        
+        )}
+
         {!loading ? (
           <>
             <DataTable
@@ -511,38 +584,101 @@ const Setting:React.FC<TypeSetting> = () => {
             <Loader />
           </div>
         )}
-
       </div>
 
       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 font-bold items-center mb-4 mt-10">
-          <h1 className='text-3xl text-primary font-bold'>Liste des fournisseurs |</h1>
+          <h1 className="text-3xl text-primary font-bold">
+            Liste des fournisseurs |
+          </h1>
           <div className="flex space-x-4 font-bold items-center">
-            <button onClick={() => setShowFormSupplier(!showFormSupplier)} className='text-sm text-white px-4 rounded-md bg-green-700 py-2'> <BsPlusLg size={16} className='inline-block  mr-1' />Ajouter un nouveau fournisseur</button>
-            <button  className='text-sm text-white px-4 rounded-md bg-gray-700 py-2'> <BsPrinterFill size={16} className='inline-block  mr-1' />Imprimer la liste des fournisseurs</button>
-            <button  className='text-sm text-[#ac3265] px-4 rounded-md bg-white py-2'> <HiRefresh size={20} /></button>
+            <button
+              onClick={() => setShowFormSupplier(!showFormSupplier)}
+              className="text-sm text-white px-4 rounded-md bg-green-700 py-2"
+            >
+              {" "}
+              <BsPlusLg size={16} className="inline-block  mr-1" />
+              Ajouter un nouveau fournisseur
+            </button>
+            <button className="text-sm text-white px-4 rounded-md bg-gray-700 py-2">
+              {" "}
+              <BsPrinterFill size={16} className="inline-block  mr-1" />
+              Imprimer la liste des fournisseurs
+            </button>
+            <button className="text-sm text-[#ac3265] px-4 rounded-md bg-white py-2">
+              {" "}
+              <HiRefresh size={20} />
+            </button>
           </div>
         </div>
-  
-        {showFormSupplier && 
-          <form onSubmit={handleSubmitTwo} className='p-4 bg-white rounded-md text-lg mb-4'>
-            <label htmlFor="name" className='flex space-y-3 flex-col relative'>
+
+        {showFormSupplier && (
+          <form
+            onSubmit={handleSubmitTwo}
+            className="p-4 bg-white rounded-md text-lg mb-4"
+          >
+            <label htmlFor="name" className="flex space-y-3 flex-col relative">
               <span>Création d’un nouveau fournisseur</span>
               <div className="flex justify-start space-x-3">
-                <input required value={supplierForm.name || ''} onChange={handleOnchange} type="text" name='name' placeholder='Nom' className='px-4 w-1/2 rounded-md py-2 bg-gray-100'   />
-                <input  value={supplierForm.address || ''} onChange={handleOnchange} type="address" name='address' placeholder='address (optionnel)' className='px-4 w-1/2 placeholder:italic rounded-md py-2 bg-gray-100'   />
+                <input
+                  required
+                  value={supplierForm.name || ""}
+                  onChange={handleOnchange}
+                  type="text"
+                  name="name"
+                  placeholder="Nom"
+                  className="px-4 w-1/2 rounded-md py-2 bg-gray-100"
+                />
+                <input
+                  value={supplierForm.address || ""}
+                  onChange={handleOnchange}
+                  type="address"
+                  name="address"
+                  placeholder="address (optionnel)"
+                  className="px-4 w-1/2 placeholder:italic rounded-md py-2 bg-gray-100"
+                />
               </div>
               <div className="flex justify-start space-x-3 mt-3">
-                <input  value={supplierForm.email || ''} onChange={handleOnchange} name='email' type="email" placeholder='email (optionnel)' className='px-4 placeholder:italic w-1/2 rounded-md py-2 bg-gray-100'   />
-                <input  value={supplierForm.tel || ''} onChange={handleOnchange} type="tel" name='tel' placeholder='tel (optionnel)' className='px-4 placeholder:italic w-1/2 rounded-md py-2 bg-gray-100'   />
+                <input
+                  value={supplierForm.email || ""}
+                  onChange={handleOnchange}
+                  name="email"
+                  type="email"
+                  placeholder="email (optionnel)"
+                  className="px-4 placeholder:italic w-1/2 rounded-md py-2 bg-gray-100"
+                />
+                <input
+                  value={supplierForm.tel || ""}
+                  onChange={handleOnchange}
+                  type="tel"
+                  name="tel"
+                  placeholder="tel (optionnel)"
+                  className="px-4 placeholder:italic w-1/2 rounded-md py-2 bg-gray-100"
+                />
               </div>
-              <span onClick={() => setShowFormSupplier(false)} title='Close' className=' absolute -top-4 right-0 bg-red-100 p-2 rounded-md transition text-red-500 cursor-pointer hover:bg-red-500 hover:text-white'><FaTimes /></span>
+              <span
+                onClick={() => setShowFormSupplier(false)}
+                title="Close"
+                className=" absolute -top-4 right-0 bg-red-100 p-2 rounded-md transition text-red-500 cursor-pointer hover:bg-red-500 hover:text-white"
+              >
+                <FaTimes />
+              </span>
 
-              <button type='submit' className={`bg-green-400 ${(!supplierForm.name) && 'disabled select-none'} self-start hover:bg-green-600 transition text-white px-4 py-2 uppercase font-bold rounded-md flex items-center`}>{sendingTwo ? <Loader className='text-lg inline-block' />:'Sauvegarder'}</button>
+              <button
+                type="submit"
+                className={`bg-green-400 ${
+                  !supplierForm.name && "disabled select-none"
+                } self-start hover:bg-green-600 transition text-white px-4 py-2 uppercase font-bold rounded-md flex items-center`}
+              >
+                {sendingTwo ? (
+                  <Loader className="text-lg inline-block" />
+                ) : (
+                  "Sauvegarder"
+                )}
+              </button>
             </label>
           </form>
-
-        }
+        )}
 
         {!loading ? (
           <>
@@ -566,7 +702,7 @@ const Setting:React.FC<TypeSetting> = () => {
         )}
       </div>
     </DashboardLayout>
-  )
-}
+  );
+};
 
-export default Setting
+export default Setting;

@@ -59,7 +59,12 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
     setSending(true);
     // add inPut
     http_client(Storage.getStorage("auth").token)
-      .post(companiesStore.currentCompany ? `${POST_SUPPLY_URL}/${id}/input/supply?id=${companiesStore.currentCompany.id}`:`${POST_SUPPLY_URL}/${id}/input/supply`, dataInputForm)
+      .post(
+        companiesStore.currentCompany
+          ? `${POST_SUPPLY_URL}/${id}/input/supply?id=${companiesStore?.currentCompany?.id}`
+          : `${POST_SUPPLY_URL}/${id}/input/supply`,
+        dataInputForm
+      )
       .then((res) => {
         setSending(false);
         setShowInputModal(false);
@@ -81,7 +86,12 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
 
     // add inPut
     http_client(Storage.getStorage("auth").token)
-      .post(companiesStore.currentCompany ? `${POST_SUPPLY_URL}/${id}/output/?id=${companiesStore.currentCompany.id}`:`${POST_SUPPLY_URL}/${id}/output/`, dataOutputForm)
+      .post(
+        companiesStore.currentCompany
+          ? `${POST_SUPPLY_URL}/${id}/output/?id=${companiesStore?.currentCompany?.id}`
+          : `${POST_SUPPLY_URL}/${id}/output/`,
+        dataOutputForm
+      )
       .then((res) => {
         setSending2(false);
         setShowOutputModal(false);

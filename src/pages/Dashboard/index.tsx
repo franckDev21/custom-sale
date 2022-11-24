@@ -98,7 +98,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
         : roleIs("super")
         ? DASHBOARD_SUPER_USER_URL
         : companiesStore.currentCompany
-        ? `${DASHBOARD_URL}?id=${companiesStore.currentCompany.id}`
+        ? `${DASHBOARD_URL}?id=${companiesStore?.currentCompany?.id}`
         : DASHBOARD_URL;
     http_client(Storage.getStorage("auth").token)
       .get(url)
@@ -137,7 +137,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
     if (roleIs("admin") && companiesStore.currentCompany) {
       console.log("change");
 
-      let url = `${DASHBOARD_URL}?id=${companiesStore.currentCompany.id}`;
+      let url = `${DASHBOARD_URL}?id=${companiesStore?.currentCompany?.id}`;
       http_client(Storage.getStorage("auth").token)
         .get(url)
         .then((res) => {
