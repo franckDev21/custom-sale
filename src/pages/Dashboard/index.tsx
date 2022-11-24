@@ -214,7 +214,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
                 }  justify-start text-sm border-4 border-[#7e3151] items-center space-x-2 rounded px-2 py-1 text-white bg-[#ac3265] w-auto ml-3`}
               >
                 <FaEye className="mr-2" />
-                Voir mes différentes boutiques
+                Voir mes différentes entreprises
               </Link>
 
               <Link

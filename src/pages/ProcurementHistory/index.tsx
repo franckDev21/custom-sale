@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import DataTable, { TableColumn } from "react-data-table-component";
 import { BsPrinterFill } from "react-icons/bs";
 import { HiRefresh } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Storage from "../../service/Storage";
 import DashboardLayout from "../../templates/DashboardLayout";
 import { baseURL, http_client } from "../../utils/axios-custum";
 import DefautProductImage from "../../assets/img/default-product.png";
-import { formatCurrency, formatDate } from "../../utils/function";
+import { formatCurrency, formatDate, roleIs } from "../../utils/function";
 import Loader from "../../atoms/Loader";
 import Procurement from "../../Model/Procurement";
 import { PDFDownloadLink } from "@react-pdf/renderer";
@@ -26,6 +26,8 @@ const ProcurementHistory: React.FC<TypeProcurementHistory> = () => {
   const [procurements, setProcurements] = useState<Procurement[]>([]);
 
   const companiesStore = useSelector((state: any) => state.companies);
+
+  const navigate = useNavigate()
 
   const filteredItems = procurements.filter(
     (item) =>
@@ -177,6 +179,10 @@ const ProcurementHistory: React.FC<TypeProcurementHistory> = () => {
   ];
 
   useEffect(() => {
+    if (roleIs("admin") && !companiesStore?.currentCompany) {
+      navigate("/dashboard");
+    }
+
     const fetUsers = async () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
         companiesStore.currentCompany
@@ -187,7 +193,8 @@ const ProcurementHistory: React.FC<TypeProcurementHistory> = () => {
       setLoading(false);
     };
     fetUsers();
-  }, []);
+
+  }, [navigate,companiesStore]);
 
   return (
     <DashboardLayout title="Historique d'approvisionnement">
@@ -208,7 +215,7 @@ const ProcurementHistory: React.FC<TypeProcurementHistory> = () => {
             Imprimer l'historique d'approvisionnement
           </PDFDownloadLink>
           <Link
-            to="/approvisionnement"
+            to="/products/procurements"
             className="text-sm text-[#ac3265] px-4 rounded-md bg-white py-2"
           >
             {" "}

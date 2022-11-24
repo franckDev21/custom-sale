@@ -11,7 +11,7 @@ import axiosCustum, { baseURL, http_client } from "../../../utils/axios-custum";
 import Storage from "../../../service/Storage";
 import { toast } from "react-toastify";
 import DataTable, { TableColumn } from "react-data-table-component";
-import { formatDate, formatCurrency } from "../../../utils/function";
+import { formatDate, formatCurrency, roleIs } from "../../../utils/function";
 import { Modal } from "flowbite-react";
 import Loader from "../../../atoms/Loader";
 import { BiPencil } from "react-icons/bi";
@@ -344,6 +344,11 @@ const ProducList: FC<TypeProducList> = () => {
   };
 
   useEffect(() => {
+    
+    if(roleIs('admin') && !companiesStore?.currentCompany){
+      navigate('/dashboard')
+    }
+
     const fetUsers = async () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
         companiesStore.currentCompany

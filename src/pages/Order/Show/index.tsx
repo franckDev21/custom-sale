@@ -8,7 +8,7 @@ import DashboardLayout from "../../../templates/DashboardLayout";
 import { baseURL, http_client } from "../../../utils/axios-custum";
 import DefautProductImage from "../../../assets/img/default-product.png";
 import OrderProduct from "../../../Model/OrderProduct";
-import { formatCurrency } from "../../../utils/function";
+import { formatCurrency, roleIs } from "../../../utils/function";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import FactureDocument from "../../../templates/FactureDocument";
 import { BsPrinterFill } from "react-icons/bs";
@@ -67,6 +67,11 @@ const OrderShow = () => {
   };
 
   useEffect(() => {
+    
+    if (roleIs("admin") && !companiesStore?.currentCompany) {
+      navigate("/dashboard");
+    }
+
     const fetOrders = async () => {
       const res = await Promise.all([
         http_client(Storage.getStorage("auth").token).get(
@@ -82,8 +87,10 @@ const OrderShow = () => {
       setInvoice(res[1].data.data);
       setLoading(false);
     };
+
     fetOrders();
-  }, [id]);
+
+  }, [id,navigate,companiesStore]);
 
   return (
     <DashboardLayout

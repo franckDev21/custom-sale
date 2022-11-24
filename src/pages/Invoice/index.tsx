@@ -6,7 +6,7 @@ import { BsPrinterFill } from "react-icons/bs";
 import { FaEye, FaShoppingCart, FaTrash } from "react-icons/fa";
 import { HiOutlineExclamationCircle, HiRefresh } from "react-icons/hi";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../../atoms/Loader";
 import Invoice from "../../Model/Invoice";
@@ -15,7 +15,7 @@ import UserService from "../../service/UserService";
 import DashboardLayout from "../../templates/DashboardLayout";
 import InvoicePrint from "../../templates/InvoicePrint";
 import { http_client } from "../../utils/axios-custum";
-import { formatDate } from "../../utils/function";
+import { formatDate, roleIs } from "../../utils/function";
 
 type TypeInvoiceList = {};
 
@@ -31,6 +31,8 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
   const [deleting, setDeleting] = useState(false);
 
   const companiesStore = useSelector((state: any) => state.companies);
+
+  const navigate = useNavigate();
 
   const filteredItems = invoices.filter(
     (item) =>
@@ -205,6 +207,10 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
   ];
 
   useEffect(() => {
+    if (roleIs("admin") && !companiesStore?.currentCompany) {
+      navigate("/dashboard");
+    }
+
     const fetchInvoices = async () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
         companiesStore.currentCompany
@@ -215,7 +221,7 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
       setLoading(false);
     };
     fetchInvoices();
-  }, []);
+  }, [companiesStore, navigate]);
 
   return (
     <DashboardLayout

@@ -15,6 +15,7 @@ import {
   extraiText,
   formatCurrency,
   formatDate,
+  roleIs,
 } from "../../../utils/function";
 
 type TypeProductDetail = {};
@@ -156,6 +157,10 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
   };
 
   useEffect(() => {
+    if (roleIs("admin") && !companiesStore?.currentCompany) {
+      navigate("/dashboard");
+    }
+
     http_client(Storage.getStorage("auth").token)
       .get(`${GET_PRODUIT_URL}/${id}`)
       .then((res) => {
@@ -165,7 +170,7 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
       .catch((err) => {
         setLoading(false);
       });
-  }, [id]);
+  }, [id,navigate,companiesStore]);
 
   return (
     <DashboardLayout

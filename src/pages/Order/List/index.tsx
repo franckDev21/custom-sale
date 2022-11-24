@@ -12,7 +12,7 @@ import {
 import { HiOutlineExclamationCircle, HiRefresh } from "react-icons/hi";
 import { ImSearch } from "react-icons/im";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../../../atoms/Loader";
 import Order from "../../../Model/Order";
@@ -43,6 +43,8 @@ const OrderList = () => {
   const [deleting, setDeleting] = useState(false);
 
   const companiesStore = useSelector((state: any) => state.companies);
+
+  const navigate = useNavigate()
 
   const filteredItems = orders.filter(
     (item) =>
@@ -323,6 +325,10 @@ const OrderList = () => {
   ];
 
   useEffect(() => {
+    if (roleIs("admin") && !companiesStore?.currentCompany) {
+      navigate("/dashboard");
+    }
+
     const fetOrders = async () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
         companiesStore.currentCompany
@@ -339,7 +345,7 @@ const OrderList = () => {
       setLoading(false);
     };
     fetOrders();
-  }, []);
+  }, [navigate,companiesStore]);
 
   return (
     <DashboardLayout

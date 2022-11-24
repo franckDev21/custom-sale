@@ -159,7 +159,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ type = "user" }) => {
               className="p-5 max-w-4xl mx-auto rounded-lg  bg-white relative"
             >
               <Link
-                to="/users"
+                to="/dashboard"
                 className="text-3xl inline-block text-[#ac3265] hover:text-gray-700"
               >
                 <HiOutlineArrowNarrowLeft />

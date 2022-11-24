@@ -5,6 +5,7 @@ import { BsPlusLg, BsPrinterFill } from "react-icons/bs";
 import { FaTimes, FaTrash } from "react-icons/fa";
 import { HiOutlineExclamationCircle, HiRefresh } from "react-icons/hi";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../../atoms/Loader";
 import Category from "../../Model/Category";
@@ -12,7 +13,7 @@ import ProductSupplier from "../../Model/ProductSupplier";
 import Storage from "../../service/Storage";
 import DashboardLayout from "../../templates/DashboardLayout";
 import { http_client } from "../../utils/axios-custum";
-import { formatDate } from "../../utils/function";
+import { formatDate, roleIs } from "../../utils/function";
 
 type TypeSetting = {};
 
@@ -54,6 +55,8 @@ const Setting: React.FC<TypeSetting> = () => {
   const [deletingTwo, setDeletingTwo] = useState(false);
 
   const companiesStore = useSelector((state: any) => state.companies);
+
+  const navigate = useNavigate()
 
   const filteredItems = categories.filter(
     (item) =>
@@ -390,6 +393,10 @@ const Setting: React.FC<TypeSetting> = () => {
   };
 
   const reload = () => {
+    if(roleIs('admin') && !companiesStore?.currentCompany){
+      navigate('/dashboard')
+    }
+    
     Promise.all([
       http_client(Storage.getStorage("auth").token).get(
         companiesStore.currentCompany

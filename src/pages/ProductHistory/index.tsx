@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import DataTable, { TableColumn } from "react-data-table-component";
 import { BsPrinterFill } from "react-icons/bs";
 import { HiRefresh } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ProductHistoryModel from "../../Model/ProductHistory";
 import Storage from "../../service/Storage";
 import DashboardLayout from "../../templates/DashboardLayout";
 import { baseURL, http_client } from "../../utils/axios-custum";
 import DefautProductImage from "../../assets/img/default-product.png";
-import { formatDate } from "../../utils/function";
+import { formatDate, roleIs } from "../../utils/function";
 import { FaEye } from "react-icons/fa";
 import Loader from "../../atoms/Loader";
 import { PDFDownloadLink } from "@react-pdf/renderer";
@@ -27,6 +27,8 @@ const ProductHistory: React.FC<TypeProductHistory> = () => {
   const [histories, setHistories] = useState<ProductHistoryModel[]>([]);
 
   const companiesStore = useSelector((state: any) => state.companies);
+
+  const navigate = useNavigate()
 
   const filteredItems = histories.filter(
     (item) =>
@@ -198,6 +200,11 @@ const ProductHistory: React.FC<TypeProductHistory> = () => {
   ];
 
   useEffect(() => {
+
+    if (roleIs("admin") && !companiesStore?.currentCompany) {
+      navigate("/dashboard");
+    }
+
     const fetUsers = async () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
         companiesStore.currentCompany
@@ -208,7 +215,7 @@ const ProductHistory: React.FC<TypeProductHistory> = () => {
       setLoading(false);
     };
     fetUsers();
-  }, []);
+  }, [navigate,companiesStore]);
 
   return (
     <DashboardLayout title="Historiques E/S">

@@ -4,7 +4,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { HiOutlineSearch } from "react-icons/hi";
 import { TiTimes } from "react-icons/ti";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../../../atoms/Loader";
 import Customer from "../../../Model/Customer";
@@ -14,7 +14,7 @@ import CustomerForm from "../../../molecules/CustomerForm";
 import Storage from "../../../service/Storage";
 import DashboardLayout from "../../../templates/DashboardLayout";
 import { baseURL, http_client } from "../../../utils/axios-custum";
-import { formatCurrency, pttc } from "../../../utils/function";
+import { formatCurrency, pttc, roleIs } from "../../../utils/function";
 
 const GET_MY_CUSTOMERS = "/customers"; // changer et recuperer seulement les clients du user connecter
 const GET_PRODUCTS = "/products"; // changer et recuperer seulement les clients du user connecter
@@ -40,6 +40,8 @@ const OrderCreate = () => {
   const CREATE_ORDER_URL = "orders";
 
   const companiesStore = useSelector((state: any) => state.companies);
+
+  const navigate = useNavigate()
 
   const commander = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -281,6 +283,9 @@ const OrderCreate = () => {
   }, [addNewClientState]);
 
   useEffect(() => {
+    if (roleIs("admin") && !companiesStore?.currentCompany) {
+      navigate("/dashboard");
+    }
     const fetUsers = async () => {
       const res = await Promise.all([
         http_client(Storage.getStorage("auth").token).get(
@@ -300,7 +305,7 @@ const OrderCreate = () => {
       setLoading(false);
     };
     fetUsers();
-  }, [companiesStore.currentCompany, showClientForm]);
+  }, [companiesStore.currentCompany, showClientForm,navigate]);
 
   return (
     <DashboardLayout

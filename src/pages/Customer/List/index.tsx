@@ -17,7 +17,7 @@ import UserService from "../../../service/UserService";
 import CustomerPrint from "../../../templates/CustomerPrint";
 import DashboardLayout from "../../../templates/DashboardLayout";
 import { http_client } from "../../../utils/axios-custum";
-import { formatDate } from "../../../utils/function";
+import { formatDate, roleIs } from "../../../utils/function";
 
 type TypeCustomerList = {};
 
@@ -201,6 +201,10 @@ const CustomerList: FC<TypeCustomerList> = () => {
   ];
 
   useEffect(() => {
+    if(roleIs('admin') && !companiesStore?.currentCompany){
+      navigate('/dashboard')
+    }
+
     const fetUsers = async () => {
       const res = await http_client(Storage.getStorage("auth").token).get(
         companiesStore.currentCompany

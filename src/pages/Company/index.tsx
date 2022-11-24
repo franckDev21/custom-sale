@@ -180,7 +180,12 @@ const Company: FC<TypeCompany> = () => {
 
           dispatch(setAuth(Storage.getStorage("auth")));
 
-          navigate(`/companies/${res.data.company_id}/view`);
+          let id = window.setTimeout(() => {
+            navigate(`/companies`);
+            window.clearTimeout(id);
+          }, 6000);
+
+          
         })
         .catch((err) => {
           console.log(err);

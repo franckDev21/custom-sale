@@ -4,6 +4,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AppLayout from "../AppLayout";
 import Company from "../../Model/Company";
+import { Link } from "react-router-dom";
+import { HiOutlineArrowNarrowLeft } from "react-icons/hi";
 
 type TypeDashboardLayout = {
   children?: React.ReactNode;
@@ -46,6 +48,14 @@ const DashboardLayout: React.FC<TypeDashboardLayout> = ({
           {headerContent && headerContent}
         </div>
       </header>
+      <div className="mx-auto max-w-7xl pt-3 sm:px-6 lg:px-8">
+        <Link
+            to="/dashboard"
+            className="text-3xl inline-block text-[#ac3265] hover:text-gray-700"
+          >
+          <HiOutlineArrowNarrowLeft />
+        </Link>
+      </div>
 
       <main>{children}</main>
 

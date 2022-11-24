@@ -18,6 +18,7 @@ import Loader from "../../../atoms/Loader";
 import Product from "../../../Model/Product";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { roleIs } from "../../../utils/function";
 
 type TypeProductCreate = {};
 
@@ -145,6 +146,10 @@ const ProductCreate: FC<TypeProductCreate> = () => {
   };
 
   useEffect(() => {
+    if (roleIs("admin") && !companiesStore?.currentCompany) {
+      navigate("/dashboard");
+    }
+
     Promise.all([
       http_client(Storage.getStorage("auth").token).get(
         companiesStore.currentCompany
@@ -172,7 +177,7 @@ const ProductCreate: FC<TypeProductCreate> = () => {
         console.log(err);
         setLoading(false);
       });
-  }, [companiesStore.currentCompany]);
+  }, [companiesStore.currentCompany, navigate]);
 
   return (
     <DashboardLayout

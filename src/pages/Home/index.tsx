@@ -3,10 +3,14 @@ import Banner from "../../molecules/Banner";
 import { Link } from "react-router-dom";
 import DashImage from "../../assets/img/dash.svg";
 import Auth from "../../service/Auth";
+import { useSelector } from "react-redux";
 
 type typeHome = {};
 
 const Home: React.FC<typeHome> = () => {
+
+  const auth = useSelector((state: any) => state.auth);
+
   return (
     <>
       <Banner
@@ -26,9 +30,9 @@ const Home: React.FC<typeHome> = () => {
             des ressources humaines .
           </p>
 
-          {Auth.isLogin() ? (
+          {(Auth.isLogin() || auth.token) ? (
             <div className="ml-4 text-lg mt-10">
-              
+
             </div>
           ) : (
             <div className="ml-4 text-lg mt-10">

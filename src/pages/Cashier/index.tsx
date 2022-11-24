@@ -3,14 +3,14 @@ import React, { useState, FormEvent, useEffect, ChangeEvent } from 'react'
 import { GiMoneyStack } from 'react-icons/gi'
 import { BsPrinterFill } from 'react-icons/bs'
 import { FaEye, FaMinus, FaPlus } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Loader from '../../atoms/Loader'
 import Cash from '../../Model/Cash'
 import TotalCash from '../../Model/TotalCash'
 import Storage from '../../service/Storage'
 import DashboardLayout from '../../templates/DashboardLayout'
 import { http_client } from '../../utils/axios-custum'
-import { formatCurrency, formatDate } from '../../utils/function'
+import { formatCurrency, formatDate, roleIs } from '../../utils/function'
 import DataTable, { TableColumn } from 'react-data-table-component'
 import { AiOutlineToTop, AiOutlineVerticalAlignBottom } from 'react-icons/ai'
 import { toast } from 'react-toastify'
@@ -50,6 +50,8 @@ const Cashier: React.FC<TypeCashier> = () => {
   const [errorMessage,setErrorMessage] = useState('')
 
   const companiesStore = useSelector((state: any) => state.companies); 
+
+  const navigate = useNavigate()
 
   const filteredItems = cashiers.filter(
     (item) =>
@@ -266,6 +268,10 @@ const Cashier: React.FC<TypeCashier> = () => {
   }
 
   useEffect(() => { 
+    if (roleIs("admin") && !companiesStore?.currentCompany) {
+      navigate("/dashboard");
+    }
+
     Promise.all([
       http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_CASHIERS_URL}?id=${companiesStore?.currentCompany?.id}`:`${GET_CASHIERS_URL}`),
       http_client(Storage.getStorage("auth").token).get(companiesStore.currentCompany ? `${GET_TOTALCASH_URL}?id=${companiesStore?.currentCompany?.id}`:`${GET_TOTALCASH_URL}`)
@@ -277,7 +283,8 @@ const Cashier: React.FC<TypeCashier> = () => {
       setLoading(false)
       console.log(err);
     })
-  },[])
+
+  },[companiesStore,navigate])
 
   return (
     <DashboardLayout

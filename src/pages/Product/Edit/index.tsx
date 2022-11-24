@@ -19,6 +19,7 @@ import Product from "../../../Model/Product";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { roleIs } from "../../../utils/function";
 
 type TypeProductEdit = {};
 
@@ -145,6 +146,10 @@ const ProductEdit: FC<TypeProductEdit> = () => {
   };
 
   useEffect(() => {
+    if (roleIs("admin") && !companiesStore?.currentCompany) {
+      navigate("/dashboard");
+    }
+
     Promise.all([
       http_client(Storage.getStorage("auth").token).get(
         companiesStore.currentCompany
@@ -179,7 +184,7 @@ const ProductEdit: FC<TypeProductEdit> = () => {
         console.log(err);
         setLoading(false);
       });
-  }, [id]);
+  }, [id, navigate, companiesStore]);
 
   return (
     <DashboardLayout

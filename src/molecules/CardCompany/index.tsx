@@ -71,12 +71,12 @@ const CardCompany: React.FC<CardCompanyProps> = ({
             voir la boutique
           </Link>
 
-          <Link
+         {companyActive && <Link
             to={`/companies/${companyId}/dashoard`}
             className="px-2 uppercase py-1.5 rounded-md bg-gray-700 text-white text-xs"
           >
             Dashboard
-          </Link>
+          </Link>}
         </div>
       )}
     </div>

@@ -2,7 +2,7 @@ import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import { HiOutlineArrowNarrowLeft } from "react-icons/hi";
 import { useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../../../atoms/Loader";
 import Customer from "../../../Model/Customer";
@@ -10,6 +10,7 @@ import Storage from "../../../service/Storage";
 import UserService from "../../../service/UserService";
 import DashboardLayout from "../../../templates/DashboardLayout";
 import { http_client } from "../../../utils/axios-custum";
+import { roleIs } from "../../../utils/function";
 
 type TypeAddCustomer = {};
 
@@ -24,6 +25,8 @@ const AddCustomer: FC<TypeAddCustomer> = () => {
   const [customer, setCustomer] = useState<Customer>({});
 
   const companiesStore = useSelector((state: any) => state.companies);
+
+  const navigate = useNavigate()
 
   const { action } = useParams();
 
@@ -105,6 +108,10 @@ const AddCustomer: FC<TypeAddCustomer> = () => {
   };
 
   useEffect(() => {
+    if (roleIs("admin") && !companiesStore?.currentCompany) {
+      navigate("/dashboard");
+    }
+
     if (action && Number.isInteger(parseInt(action, 10))) {
       setEditiong(true);
       http_client(Storage.getStorage("auth").token)
@@ -122,7 +129,7 @@ const AddCustomer: FC<TypeAddCustomer> = () => {
           console.log(err);
         });
     }
-  }, [action]);
+  }, [action,companiesStore,navigate]);
 
   return (
     <DashboardLayout
