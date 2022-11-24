@@ -68,7 +68,7 @@ const CardCompany: React.FC<CardCompanyProps> = ({
             to={`${companyId}/view`}
             className="px-2 uppercase py-1.5 rounded-md bg-primary text-white text-xs"
           >
-            voir la boutique
+            voir l'entreprise
           </Link>
 
          {companyActive && <Link
