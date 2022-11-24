@@ -255,7 +255,7 @@ const OrderCreate = () => {
       setLoading(false);
     };
     fetUsers();
-  }, [companiesStore.currentCompany]);
+  }, [companiesStore.currentCompany,showClientForm]);
 
   return (
     <DashboardLayout
