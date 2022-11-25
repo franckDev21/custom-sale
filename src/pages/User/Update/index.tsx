@@ -187,14 +187,14 @@ const EditUser: React.FC<EditUserProps> = ({ type = "user" }) => {
             } font-bold text-2xl text-[#ac3265] flex items-center justify-between`}
           >
             <span>
-              | Ajouter un{" "}
+              |
               {type === "admin"
-                ? "nouveau administrateur"
+                ? "Ajouter un nouveau administrateur"
                 : id
                 ? `Mise à jour de l’utilisateur ${user.firstname} ${user.lastname}`
                 : adminId
                 ? `Mise à jour de l’administrateur ${user.firstname} ${user.lastname}`
-                : "nouvelle utilisateur"}{" "}
+                : "Ajouter un nouvelle utilisateur"}{" "}
             </span>
           </div>
         </>
