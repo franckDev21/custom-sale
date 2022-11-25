@@ -90,7 +90,7 @@ const ProductDetail: React.FC<TypeProductDetail> = () => {
       .post(
         companiesStore.currentCompany
           ? `${POST_SUPPLY_URL}/${id}/output/?id=${companiesStore?.currentCompany?.id}`
-          : `${POST_SUPPLY_URL}/${id}/output/`,
+          : `${POST_SUPPLY_URL}/${id}/output`,
         dataOutputForm
       )
       .then((res) => {
