@@ -225,7 +225,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
                 Créer une entreprise <BsPlusLg />
               </Link>
 
-              {(companiesFromAdmin >= 1 || companiesStore.currentCompany) && (
+              {/* {(companiesFromAdmin >= 1 || companiesStore.currentCompany) && (
                 <button
                   onClick={() => onClick()}
                   className={`flex justify-start text-sm border-4 border-cyan-700 items-center space-x-2 rounded px-2 py-1 text-white bg-cyan-700 hover:bg-cyan-800 transition w-auto ml-3`}
@@ -233,7 +233,7 @@ const Dashboard: React.FC<TypeDashboard> = () => {
                   <MdAdminPanelSettings className=" text-2xl mr-2" /> gérer mes
                   différentes entreprise
                 </button>
-              )}
+              )} */}
             </>
           )}
         </>

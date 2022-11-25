@@ -70,13 +70,13 @@ const DashbordCompany: React.FC<DashbordCompanyProps> = () => {
       title="page d'administration"
       headerContent={
         <>
-          <button
+          {/* <button
             onClick={() => dispatch(setCurrentCompany(company))}
             className={`flex justify-start text-sm border-4 border-cyan-700 items-center space-x-2 rounded px-2 py-1 text-white bg-cyan-700 hover:bg-cyan-800 transition w-auto ml-3`}
           >
             <MdAdminPanelSettings className=" text-2xl mr-2" /> gérer ma
             boutique
-          </button>
+          </button> */}
         </>
       }
     >
