@@ -15,4 +15,4 @@ export const http_client = (token: string) =>
   });
 
 // export const baseURL = `http://localhost:8000`;
-export const baseURL = `https://gm-smart-api.gbionik.com`
+export const baseURL = `https://gm-smart-api.gbionik.com` 

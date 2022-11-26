@@ -143,8 +143,8 @@ const ProductHistory: React.FC<TypeProductHistory> = () => {
       ),
       cell: (row) => (
         <span>
-          {row.quantite} {row.is_unite && "Unité"}
-          {!row.is_unite && row.product?.type_approvisionnement}
+          {row.quantite} {row.is_unite ? "Unité":""}
+          {!row.is_unite ? row.product?.type_approvisionnement: ''}
           {(row.quantite || 0) > 0 && "s"}
         </span>
       ),

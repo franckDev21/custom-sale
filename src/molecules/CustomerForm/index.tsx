@@ -144,6 +144,24 @@ const CustomerForm: React.FC<TypeCustomerForm> = ({
           />
         </div>
       </div>
+      <div className="flex justify-between mb-5">
+        <div className="flex w-1/2 mr-2 flex-col justify-start items-start">
+          <span>
+            <label className="font-bold mb-2 inline-block">Tél </label>{" "}
+            <span className="text-gray-400 text-sm italic font-normal">
+              {" "}
+            </span>
+          </span>
+          <input
+            name="tel"
+            onChange={handleOnchange}
+            value={customer.tel || ""}
+            type="tel"
+            placeholder="Téléphone"
+            className="px-6 w-full py-2 bg-gray-100 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-gray-600 outline-none border-none"
+          />
+        </div>
+      </div>
       <div className="text-center mt-6 flex justify-center">
         <span
           onClick={(_) => onClickBack(false)}
