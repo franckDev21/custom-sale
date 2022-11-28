@@ -127,7 +127,7 @@ const ProcurementHistory: React.FC<TypeProcurementHistory> = () => {
     {
       name: (
         <span className="  font-bold text-xs text-[#ac3265] uppercase">
-          DATE DE L'APPROVIONNEMENT
+          DATE D'APPROVISIONNEMENT
         </span>
       ),
       cell: (row) => (
@@ -145,7 +145,7 @@ const ProcurementHistory: React.FC<TypeProcurementHistory> = () => {
         <span>
           {row.quantite} {row.is_unite ? "Unité":''}
           {!row.is_unite ? row.product?.type_approvisionnement : ''}
-          {(row.quantite || 0) > 0 && "s"}
+          {(row.quantite || 0) > 1 && "s"}
         </span>
       ),
       sortable: true,

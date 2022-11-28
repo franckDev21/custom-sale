@@ -205,7 +205,7 @@ const UserList: React.FC<TypeUserList> = () => {
         <h1 className=" flex items-center justify-center">
           <a
             href="/"
-            className="font-medium ml-2 text-base text-green-500 p-2 bg-green-100 rounded-full inline-block dark:text-green-500 hover:underline"
+            className="font-medium disabled opacity-25 ml-2 text-base text-green-500 p-2 bg-green-100 rounded-full inline-block dark:text-green-500 hover:underline"
           >
             <MdOutgoingMail />
           </a>

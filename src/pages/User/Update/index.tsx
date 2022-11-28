@@ -173,28 +173,30 @@ const EditUser: React.FC<EditUserProps> = ({ type = "user" }) => {
 
   return (
     <DashboardLayout
-      titleClass={type === "admin" ? "w-[35%]" : ""}
+      titleClass={type === "admin" ? "w-[35%]" : "w-[36%]"}
       title={
         type === "admin"
           ? "Gestion des administrateurs "
+          : adminId
+          ? "Gestion des administrateurs"
           : "Gestion des utilisateurs"
       }
       headerContent={
         <>
           <div
             className={`ml-4 ${
-              type === "admin" ? "w-[60%]" : "w-[70%]"
+              type === "admin" ? "w-[60%]" : "w-[65%]"
             } font-bold text-2xl text-[#ac3265] flex items-center justify-between`}
           >
             <span>
               |
               {type === "admin"
-                ? "Ajouter un nouveau administrateur"
+                ? " Ajouter un nouveau administrateur"
                 : id
-                ? `Mise à jour de l’utilisateur ${user.firstname} ${user.lastname}`
+                ? ` Mise à jour de l’utilisateur ${user.firstname} ${user.lastname}`
                 : adminId
-                ? `Mise à jour de l’administrateur ${user.firstname} ${user.lastname}`
-                : "Ajouter un nouvelle utilisateur"}{" "}
+                ? ` Mise à jour de l’administrateur ${user.firstname} ${user.lastname}`
+                : " Ajouter un nouvelle utilisateur"}{" "}
             </span>
           </div>
         </>

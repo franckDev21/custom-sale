@@ -111,8 +111,6 @@ const AdminUser: React.FC<TypeAdminUser> = () => {
         GET_ADMIN_URL
       );
       setUsers(res.data);
-      console.log(res.data);
-
       setLoading(false);
     };
     fetUsers();

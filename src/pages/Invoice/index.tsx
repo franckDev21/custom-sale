@@ -160,7 +160,11 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
       ),
       cell: (row) => (
         <div className="flex justify-start items-start flex-col py-3">
-          <Link className=" underline font-semibold" to="/">
+          <Link className=" underline font-semibold" to={`/orders/show/${row.order?.id}/${row.order?.reference
+              ?.toString()
+              .split(" ")
+              .join("-")
+              .toLowerCase()}`}>
             Voir la commande
           </Link>
           <p>
@@ -230,7 +234,7 @@ const InvoiceList: React.FC<TypeInvoiceList> = () => {
         <>
           <div className="ml-4 w-[74%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
             <div className="flex justify-between space-x-2 ">
-              {UserService.getUser().company_id && (
+              {UserService.getUser().company_id && !roleIs('caissier') && (
                 <Link
                   to="/orders/create"
                   className="text-sm text-white px-4 rounded-md bg-green-700 py-2"

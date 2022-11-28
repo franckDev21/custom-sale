@@ -28,7 +28,7 @@ const ProductHistory: React.FC<TypeProductHistory> = () => {
 
   const companiesStore = useSelector((state: any) => state.companies);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const filteredItems = histories.filter(
     (item) =>
@@ -143,9 +143,9 @@ const ProductHistory: React.FC<TypeProductHistory> = () => {
       ),
       cell: (row) => (
         <span>
-          {row.quantite} {row.is_unite ? "Unité":""}
-          {!row.is_unite ? row.product?.type_approvisionnement: ''}
-          {(row.quantite || 0) > 0 && "s"}
+          {row.quantite} {row.is_unite ? "Unité" : ""}
+          {!row.is_unite ? row.product?.type_approvisionnement : ""}
+          {(row.quantite || 0) > 1 && "s"}
         </span>
       ),
       sortable: true,
@@ -200,7 +200,6 @@ const ProductHistory: React.FC<TypeProductHistory> = () => {
   ];
 
   useEffect(() => {
-
     if (roleIs("admin") && !companiesStore?.currentCompany) {
       navigate("/dashboard");
     }
@@ -215,7 +214,7 @@ const ProductHistory: React.FC<TypeProductHistory> = () => {
       setLoading(false);
     };
     fetUsers();
-  }, [navigate,companiesStore]);
+  }, [navigate, companiesStore]);
 
   return (
     <DashboardLayout title="Historiques E/S">

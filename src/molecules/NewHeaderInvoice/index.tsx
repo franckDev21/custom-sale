@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     fontSize: 35,
     fontWeight: "extrabold",
     paddingRight: 7,
+    maxWidth: 300
   },
   text: {
     fontSize: 12,

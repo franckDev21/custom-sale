@@ -145,7 +145,7 @@ const CustomerForm: React.FC<TypeCustomerForm> = ({
         </div>
       </div>
       <div className="flex justify-between mb-5">
-        <div className="flex w-1/2 mr-2 flex-col justify-start items-start">
+        <div className="flex w-full mr-2 flex-col justify-start items-start">
           <span>
             <label className="font-bold mb-2 inline-block">Tél </label>{" "}
             <span className="text-gray-400 text-sm italic font-normal">
@@ -153,6 +153,7 @@ const CustomerForm: React.FC<TypeCustomerForm> = ({
             </span>
           </span>
           <input
+            required
             name="tel"
             onChange={handleOnchange}
             value={customer.tel || ""}
