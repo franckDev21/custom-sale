@@ -153,7 +153,7 @@ const ProductHistory: React.FC<TypeProductHistory> = () => {
     {
       name: (
         <span className="  font-bold text-xs text-[#ac3265] uppercase">
-          AUTEUR DE LATRANSACTION
+          AUTEUR DE LA TRANSACTION
         </span>
       ),
       cell: (row) => (
