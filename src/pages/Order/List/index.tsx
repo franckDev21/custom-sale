@@ -44,7 +44,7 @@ const OrderList = () => {
 
   const companiesStore = useSelector((state: any) => state.companies);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const filteredItems = orders.filter(
     (item) =>
@@ -345,7 +345,7 @@ const OrderList = () => {
       setLoading(false);
     };
     fetOrders();
-  }, [navigate,companiesStore]);
+  }, [navigate, companiesStore]);
 
   return (
     <DashboardLayout

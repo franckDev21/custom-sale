@@ -78,7 +78,7 @@ const AdminUserDetail: React.FC<AdminUserDetailProps> = () => {
         <>
           <div className="ml-4 w-[70%] font-bold text-2xl text-[#ac3265] flex items-center justify-between">
             <span>
-              | Liste des boutiques de : {adminUser.firstname}{" "}
+              | Liste des entreprises de : {adminUser.firstname}{" "}
               {adminUser.lastname}{" "}
             </span>
           </div>

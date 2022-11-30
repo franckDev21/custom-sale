@@ -278,6 +278,8 @@ const Cashier: React.FC<TypeCashier> = () => {
     ]).then(res => {
         setCashiers(res[0].data);
         setTotalCash(res[1].data)
+        console.log(res[1].data);
+        
         setLoading(false);
     }).catch(err => {
       setLoading(false)
